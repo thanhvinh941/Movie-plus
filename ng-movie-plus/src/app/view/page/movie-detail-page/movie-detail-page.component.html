@@ -1,0 +1,4 @@
+<div *ngIf="movie$ | async as movie; else loading">
+  {{movie | json}}
+</div>
+<ng-template #loading>Loading...</ng-template>

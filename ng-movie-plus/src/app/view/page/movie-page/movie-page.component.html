@@ -1,0 +1,22 @@
+<div nz-row *ngIf="movie$ | async as movies; else loading">
+  <ng-container *ngFor="let movie of movies">
+    <nz-card
+      nz-col
+      style="width: 300px"
+      nzTitle="{{ movie.name }}"
+      [nzActions]="[showTime]"
+    >
+      {{ movie.description }}
+    </nz-card>
+    <ng-template #showTime>
+      <a
+        nz-button
+        nzType="primary"
+        routerLink="/movie/{{ movie.id }}"
+      >
+        Detail
+      </a>
+    </ng-template>
+  </ng-container>
+</div>
+<ng-template #loading>Loading...</ng-template>

@@ -5,16 +5,12 @@
       <li nz-menu-item>
         <a routerLink="/">Home</a>
         </li>
-      <li nz-menu-item><a routerLink="/ticket">Ticket</a></li>
+      <li nz-menu-item><a routerLink="/movie">Movie</a></li>
       <li nz-menu-item>nav 3</li>
     </ul>
   </nz-header>
   <nz-content>
-    <nz-breadcrumb>
-      <nz-breadcrumb-item>Home</nz-breadcrumb-item>
-      <nz-breadcrumb-item>List</nz-breadcrumb-item>
-      <nz-breadcrumb-item>App</nz-breadcrumb-item>
-    </nz-breadcrumb>
+    <app-breadcrumb></app-breadcrumb>
     <router-outlet></router-outlet>
   </nz-content>
   <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>

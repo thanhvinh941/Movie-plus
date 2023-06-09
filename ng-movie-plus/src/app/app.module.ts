@@ -11,8 +11,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgZorroAntdModule } from './common/ng-zorro-antd.module';
-import { HomePageComponent } from './page/home-page/home-page.component';
-import { TicketPageComponent } from './page/ticket-page/ticket-page.component'
+import { HomePageComponent } from './view/page/home-page/home-page.component';
+import { TicketPageComponent } from './view/page/ticket-page/ticket-page.component';
+import { MoviePageComponent } from './view/page/movie-page/movie-page.component';
+import { MovieDetailPageComponent } from './view/page/movie-detail-page/movie-detail-page.component';
+import { BreadcrumbComponent } from './view/common/breadcrumb/breadcrumb.component';
 
 registerLocaleData(vi);
 
@@ -20,7 +23,10 @@ registerLocaleData(vi);
   declarations: [
     AppComponent,
     HomePageComponent,
-    TicketPageComponent
+    TicketPageComponent,
+    MoviePageComponent,
+    MovieDetailPageComponent,
+    BreadcrumbComponent
   ],
   imports: [
     BrowserModule,
