@@ -15,8 +15,13 @@ public class SchedulerConfig {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-	@Scheduled(fixedRate = 500)
+	@Scheduled(fixedRate = 500000)
 	public void reportCurrentTime() {
-		log.info("The time is now {}", dateFormat.format(new Date()));
+		log.info("reportCurrentTime The time is now {}", dateFormat.format(new Date()));
+	}
+	
+	@Scheduled(cron = "0 0 * * * *", zone = "Asia/Ho_Chi_Minh")
+	public void reportCurrentTime2() {
+		log.info("reportCurrentTime2 The time is now {}", dateFormat.format(new Date()));
 	}
 }
