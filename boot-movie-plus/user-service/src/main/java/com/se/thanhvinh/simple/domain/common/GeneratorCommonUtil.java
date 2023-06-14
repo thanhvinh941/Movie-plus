@@ -13,7 +13,7 @@ public class GeneratorCommonUtil {
 		response.setStatus(1);
 		response.setErrors(List.of());
 		
-		return writeValueAsString(response);
+		return ObjectMapperCommonUtil.writeValueAsString(response);
 	}
 	
 	public static String getResponseBodyError(List<String> errors) {
@@ -22,14 +22,7 @@ public class GeneratorCommonUtil {
 		response.setStatus(1);
 		response.setErrors(errors);
 		
-		return writeValueAsString(response);
+		return ObjectMapperCommonUtil.writeValueAsString(response);
 	}
 	
-	public static String writeValueAsString(Object object) {
-		try {
-			return new ObjectMapper().writeValueAsString(object);
-		} catch (Exception e) {
-			return "";
-		}
-	}
 }
