@@ -13,8 +13,16 @@ spring:
     port: 5672
     username: admin
     password: Zaq12wsx1234
-
+  security:
+    user:
+      name: admin
+      password: passw@rd
+      
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+      
+logging:
+  level:
+    org.springframework.security.web: DEBUG
