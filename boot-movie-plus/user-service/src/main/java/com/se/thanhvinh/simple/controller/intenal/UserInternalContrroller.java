@@ -15,6 +15,7 @@ import com.se.thanhvinh.simple.domain.common.ObjectMapperCommonUtil;
 import com.se.thanhvinh.simple.domain.entity.User;
 import com.se.thanhvinh.simple.domain.payload.request.GetInternalApiRequest;
 import com.se.thanhvinh.simple.domain.payload.request.InsertIntenalApiRequest;
+import com.se.thanhvinh.simple.domain.payload.request.UpdateInternalApiRequest;
 import com.se.thanhvinh.simple.domain.service.UserInternalService;
 
 import jakarta.validation.Valid;
@@ -44,6 +45,16 @@ public class UserInternalContrroller {
 			List<User> userRequest = ObjectMapperCommonUtil.convertValue(request.getRecord(), new TypeReference<List<User>>() {});
 			List<Integer> userIds = userInternalService.doInsertUser(userRequest);
 			return GeneratorCommonUtil.getResponseBodySuccess(userIds);
+		} catch (Exception e) {
+			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
+		}
+	}
+	
+	@PostMapping("/updateUser")
+	public @ResponseBody String updateUser(@Valid @RequestBody UpdateInternalApiRequest request) {
+		try {
+			Integer userId = userInternalService.doUpdateUser(request);
+			return GeneratorCommonUtil.getResponseBodySuccess(userId);
 		} catch (Exception e) {
 			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
 		}
