@@ -18,6 +18,10 @@ spring:
           max-attempts: 6
           max-interval: 10s
           multiplier: 2
+  redis:
+    database: 0
+    timeout: 6000
+    
   messages:
     basename: messages,messages_system
     encoding: UTF-8

@@ -31,9 +31,8 @@ public class Verify {
 	private String token;
 	
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private Boolean delFlg;
+    private Boolean validFlg;
 	
-	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT TIMESTAMPADD(HOUR, 1, CURRENT_TIMESTAMP)")
 	private LocalDateTime expirationTime;
 	
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")

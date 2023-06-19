@@ -11,12 +11,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "users", 
+		indexes = { @Index(name = "auth_user_index", columnList = "id, email", unique = true)})
 public class User {
 
 	@Id
@@ -38,6 +40,9 @@ public class User {
 
 	@JsonIgnore
 	private String password;
+	
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+    private Boolean validFlg;
 	
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private Boolean delFlg;
