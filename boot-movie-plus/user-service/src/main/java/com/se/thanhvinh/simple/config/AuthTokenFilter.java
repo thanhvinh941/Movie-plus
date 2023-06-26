@@ -1,16 +1,17 @@
 package com.se.thanhvinh.simple.config;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.se.thanhvinh.simple.domain.common.ObjectMapperCommonUtil;
 import com.se.thanhvinh.simple.domain.service.JwtUtil;
 import com.se.thanhvinh.simple.domain.service.UserDetailsService;
 
@@ -23,47 +24,51 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
 
+	public static final String CSRF_COOKIE_NAME = "XSRF-TOKEN";
+	
+	@Autowired
+	private AuthenticationHelper authenticationHelper;
+	
 	@Autowired
 	private JwtUtil jwtUtils;
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		try {
-			String jwt = parseJwt(request);
-			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-				String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
-				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-				log.info("UserDetails {}", ObjectMapperCommonUtil.writeValueAsString(userDetails));
-				UserCredentials userCredentials = new UserCredentials();
-				UsernamePasswordAuthenticationToken authentication = 
-						new UsernamePasswordAuthenticationToken(
-								userDetails, 
-								userCredentials, 
-								userDetails.getAuthorities());
-				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-			}
-		} catch (Exception e) {
-			logger.error("Cannot set user authentication: {}", e);
-		}
-
+		
+		Authentication authentication = authenticationHelper.getAuthentication(request);
+		
+//		// Get authorization header and validate
+//        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+//        if (header.isEmpty() || !header.startsWith("Bearer ")) {
+//        	filterChain.doFilter(request, response);
+//            return;
+//        }
+//        
+//     // Get jwt token and validate
+//        final String token = header.split(" ")[1].trim();
+//        if (!jwtUtils.validateJwtToken(token)) {
+//        	filterChain.doFilter(request, response);
+//            return;
+//        }
+//        
+//        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUtils.getUserNameFromJwtToken(token));
+//        UsernamePasswordAuthenticationToken
+//	        authentication = new UsernamePasswordAuthenticationToken(
+//	            userDetails, null,
+//	            userDetails == null ?
+//	                List.of() : userDetails.getAuthorities()
+//	        );
+//	
+//	    authentication.setDetails(
+//	        new WebAuthenticationDetailsSource().buildDetails(request)
+//	    );
+	
+	    SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);
-	}
-
-	private String parseJwt(HttpServletRequest request) {
-		String headerAuth = request.getHeader("Authorization");
-
-		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-			return headerAuth.substring(7);
-		}
-
-		return null;
 	}
 
 }

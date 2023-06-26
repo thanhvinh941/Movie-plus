@@ -20,7 +20,7 @@ public class UserAuthenticationFailureHandler implements AuthenticationFailureHa
 			AuthenticationException exception) throws IOException, ServletException {
 		log.info("AuthenticationFailureHandler - Authentication: {}", ObjectMapperCommonUtil.writeValueAsString(exception));
 		// TODO Auto-generated method stub
-		
+		// TODO store User Login in to login_failed_log
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,7 +28,7 @@ public class UserPrincipal implements UserDetails {
 	@JsonIgnore
 	private String password;
 
-	public static UserPrincipal buid(UserDto user) {
+	public static UserPrincipal buid(User user) {
 		UserPrincipal userDetailsImpl = new UserPrincipal();
 		BeanUtils.copyProperties(user, userDetailsImpl);
 		
