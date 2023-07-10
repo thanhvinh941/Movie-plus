@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Movie } from 'src/app/common/data/movie';
 import { MovieService } from '../../service/movie-service.service';
 import { Router } from '@angular/router';
@@ -10,12 +10,20 @@ import { Router } from '@angular/router';
   styleUrls: ['./movie-page.component.css']
 })
 export class MoviePageComponent implements OnInit{
-  movie$!: Observable<Movie[]>;
+
+  private movieEvent$ = new BehaviorSubject<Movie[] | null>(null);
+  public movie$ = this.movieEvent$.asObservable();
+
+  pageIndex$ : number = 1;
+  pageSize$ : number = 50;
+  total$ : number = 1234;
 
   constructor(private readonly _movieService : MovieService, private router: Router){}
 
   ngOnInit(): void {
-    this.movie$ = this._movieService.getAllMovie();
+    this._movieService.getAllMovie().subscribe(movies => {
+      this.movieEvent$.next(movies);
+    })
   }
 
 }
