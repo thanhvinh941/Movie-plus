@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, filter } from 'rxjs';
-import { Breadcrumb } from '../data/breadcrumb';
+import { Breadcrumb } from '../../common/data/breadcrumb';
 import { ActivatedRouteSnapshot, Data, NavigationEnd, Router } from '@angular/router';
 
 @Injectable({

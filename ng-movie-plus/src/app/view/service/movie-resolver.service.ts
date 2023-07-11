@@ -13,6 +13,6 @@ export class MovieResolverService implements Resolve<Movie> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Movie>{
     const id = route.params['movieId'];
-    return this._movieService.getMovie(id);
+    return this._movieService.getMovieDetail(id);
   }
 }

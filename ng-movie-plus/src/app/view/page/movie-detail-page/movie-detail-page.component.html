@@ -1,4 +1,18 @@
 <div *ngIf="movie$ | async as movie; else loading">
+  <nz-layout>
+    <nz-content>
+      <div>
+        <nz-carousel [nzEffect]="effect">
+          <div class="carousel-content" nz-carousel-content *ngFor="let index of movie.banner">
+            <img class="carousel-content_bannerImage" nz-image width="200px" nzSrc="{{index.bannerUrl}}" alt="" />
+          </div>
+        </nz-carousel>
+        <div>
+
+        </div>
+      </div>
+    </nz-content>
+  </nz-layout>
   {{movie | json}}
 </div>
 <ng-template #loading>Loading...</ng-template>

@@ -1,0 +1,13 @@
+.carousel-content_bannerImage {
+    max-height: 50vh;
+    width: auto;
+    margin: auto;
+}
+
+.carousel-content{
+    width: 100%;
+}
+
+[nz-carousel-content] {
+    overflow: hidden;
+}
