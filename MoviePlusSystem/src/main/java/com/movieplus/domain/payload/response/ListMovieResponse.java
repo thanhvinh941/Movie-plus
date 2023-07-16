@@ -21,10 +21,10 @@ public class ListMovieResponse {
 		
 		private String movieName;
 		
+		private String movieSubName;
+		
 		private String image;
 	
-		private double rating;
-		
 		@JsonFormat(pattern = "yyyy-MM-dd")
 		private LocalDate realestAt;
 	}
