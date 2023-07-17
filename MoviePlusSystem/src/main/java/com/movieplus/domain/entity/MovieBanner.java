@@ -8,5 +8,6 @@ import lombok.Setter;
 public class MovieBanner {
 
 	private String id;
-	private String src;
+	private String movieId;
+	private String bannerSrc;
 }

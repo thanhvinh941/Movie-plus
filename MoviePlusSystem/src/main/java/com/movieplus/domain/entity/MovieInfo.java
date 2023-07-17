@@ -1,7 +1,6 @@
 package com.movieplus.domain.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class MovieInfo {
 	private String image;
 	private String thumnail;
 	private String productionId;
-	private LocalDate realestAt;
-	private LocalDateTime registAt;
-	private LocalDateTime updateAt;
+	private int yearReleaseAt;
+	private LocalDate registAt;
+	private LocalDate updateAt;
 }

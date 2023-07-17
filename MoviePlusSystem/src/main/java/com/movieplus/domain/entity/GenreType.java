@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Genre {
+public class GenreType {
 
 	private String id;
 	private String genreKbn;

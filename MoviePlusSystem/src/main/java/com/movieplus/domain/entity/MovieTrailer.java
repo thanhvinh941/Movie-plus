@@ -8,6 +8,7 @@ import lombok.Setter;
 public class MovieTrailer {
 
 	private String id;
+	private String movieId;
 	private String trailerUrl;
 	private String trailerTitle;
 }

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ListMovieRequest {
+public class GetMovieListRequest {
 	private String term;
 	private int pageNumber;
 	private int pageSize;

@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ListMovieResponse {
+public class GetMovieListResponse {
 
 	private List<Movie> movies;
 	

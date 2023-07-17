@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MovieResponse {
+public class RetrieveMovieResponse {
 	
 	private String id;
 	

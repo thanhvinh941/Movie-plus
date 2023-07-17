@@ -8,5 +8,6 @@ import lombok.Setter;
 public class MovieGenre {
 
 	private String id;
+	private String movieId;
 	private String genreId;
 }
