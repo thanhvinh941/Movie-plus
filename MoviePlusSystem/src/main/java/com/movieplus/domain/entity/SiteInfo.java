@@ -14,10 +14,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="movie_banner")
-public class MovieBanner {
+@Table(name="site_info")
+public class SiteInfo {
 
-	
 	@Id
     @GeneratedValue
     @UuidGenerator(style = Style.TIME)
@@ -25,8 +24,8 @@ public class MovieBanner {
 	private String id;
 	
 	@Column(nullable = false)
-	private String movieId;
-	
+	private String siteName;
+
 	@Column(nullable = false)
-	private String bannerSrc;
+	private String localtion;
 }

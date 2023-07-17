@@ -14,19 +14,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="movie_banner")
-public class MovieBanner {
+@Table(name="production_info")
+public class ProductionInfo {
 
-	
 	@Id
     @GeneratedValue
     @UuidGenerator(style = Style.TIME)
     @Column(name = "id", updatable = false, nullable = false)
 	private String id;
 	
-	@Column(nullable = false)
-	private String movieId;
-	
-	@Column(nullable = false)
-	private String bannerSrc;
+	private String productionName;
 }
