@@ -1,6 +1,6 @@
 package com.movieplus.domain.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
@@ -18,29 +18,36 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="booking_info")
-public class BookingInfo {
-	
+@Table(name ="user_info")
+public class UserInfo {
+
 	@Id
     @GeneratedValue
     @UuidGenerator(style = Style.TIME)
     @Column(name = "id", updatable = false, nullable = false)
 	private String id;
+	@Column(nullable = false)
+	private String username;
+	
+	private String fName;
+	
+	private String lName;
 	
 	@Column(nullable = false)
-	private String userId;
+	private String email;
+	@Column(nullable = false)
+	private String password;
+	
+	private String imageUrl;
 	
 	@Column(nullable = false)
-	private String showTimeId;
-	
-	@Column(nullable = false)
-	private Integer bookingKbn;
+	private Byte isEmailVerify;
 
 	@Column(nullable = false)
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime registTime;
+	private LocalDate registTime;
 	
 	@Column(nullable = false)
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime updateTime;
+	private LocalDate updateTime;
 }
