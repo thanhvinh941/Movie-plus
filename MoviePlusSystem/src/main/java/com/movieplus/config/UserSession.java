@@ -3,10 +3,11 @@ package com.movieplus.config;
 import lombok.Data;
 
 @Data
-public class UserCredentials{
-	private String accessToken;
+public class UserSession {
 	private String id;
+	private String username;
+	private String fName;
+	private String lName;
 	private String email;
-	private String name;
 	private String imageUrl;
 }
