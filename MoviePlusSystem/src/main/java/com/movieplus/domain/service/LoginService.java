@@ -4,6 +4,6 @@ import com.movieplus.controller.LoginController.LoginRequest;
 
 public interface LoginService {
 
-	String doLogin(LoginRequest loginRequest);
+	String doLogin(LoginRequest loginRequest) throws Exception;
 
 }
