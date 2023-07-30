@@ -32,10 +32,6 @@ public class MovieInfo {
 	
 	private String movieSubName;
 	
-	private String starrings;
-	
-	private String creators;
-	
 	@Column(nullable = false)
 	private long durationMin;
 	
@@ -50,11 +46,11 @@ public class MovieInfo {
 	@Column(nullable = false)
 	private int yearReleaseAt;
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	private LocalDate registAt;
+	private LocalDate registTime;
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	private LocalDate updateAt;
+	private LocalDate updateTime;
 }

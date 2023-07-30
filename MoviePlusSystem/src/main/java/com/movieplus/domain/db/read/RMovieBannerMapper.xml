@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movieplus.domain.db.read.RMovieBannerMapper">
+<resultMap id="ResultMap" type="java.util.LinkedHashMap">
+	<id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id" />
+	<result column="movie_id" jdbcType="VARCHAR" javaType="java.lang.String" property="movieId" />
+	<result column="banner_src" jdbcType="VARCHAR" javaType="java.lang.String" property="bannerSrc" />
+</resultMap>
+<select id="selectWhere"
+	parameterType="String"
+	resultMap="ResultMap">
+    SELECT
+    	id,
+    	movie_id,
+    	bannerSrc
+    FROM 
+    	movie_banner
+    WHERE
+		${where}
+</select>
+</mapper>

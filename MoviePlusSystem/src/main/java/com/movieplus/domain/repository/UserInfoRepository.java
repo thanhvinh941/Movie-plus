@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.movieplus.domain.entity.UserInfo;
 
-public interface UserRepository extends JpaRepository<UserInfo, String>{
+public interface UserInfoRepository extends JpaRepository<UserInfo, String>{
 
 }

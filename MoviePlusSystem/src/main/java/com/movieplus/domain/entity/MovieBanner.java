@@ -17,7 +17,6 @@ import lombok.Setter;
 @Table(name="movie_banner")
 public class MovieBanner {
 
-	
 	@Id
     @GeneratedValue
     @UuidGenerator(style = Style.TIME)

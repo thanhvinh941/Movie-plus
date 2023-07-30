@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movieplus.domain.db.read.RMovieInfoMapper">
+<resultMap id="ResultMap" type="java.util.LinkedHashMap">
+	<id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id" />
+	<result column="movie_name" jdbcType="VARCHAR" javaType="java.lang.String" property="movieName" />
+	<result column="movie_sub_name" jdbcType="VARCHAR" javaType="java.lang.String" property="movieSubName" />
+	<result column="starrings" jdbcType="VARCHAR" javaType="java.lang.String" property="starrings" />
+	<result column="creators" jdbcType="VARCHAR" javaType="java.lang.String" property="creators" />
+	<result column="duration_min" jdbcType="INTEGER" property="durationMin" />
+	<result column="description" jdbcType="VARCHAR" javaType="java.lang.String" property="description" />
+	<result column="thumnail" jdbcType="VARCHAR" javaType="java.lang.String" property="thumnail" />
+	<result column="production_id" jdbcType="INTEGER" javaType="java.lang.Byte" property="productionId" />
+	<result column="year_release_at" jdbcType="INTEGER" javaType="java.lang.Byte" property="yearReleaseAt" />
+	<result column="regist_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDate" property="registTime" />
+	<result column="update_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDate" property="updateTime" />
+</resultMap>
+<select id="selectWhere"
+	parameterType="String"
+	resultMap="ResultMap">
+    SELECT
+    	id,
+    	movie_name,
+    	movie_sub_name, 
+    	starrings,
+    	creators,
+    	duration_min,
+    	description,
+		thumnail,
+		production_id,
+		year_release_at,
+		regist_time,
+		update_time
+    FROM 
+    	movie_info
+    WHERE
+		${where}
+	<foreach item="orderBy" collection="orderBys" open="ORDER BY " separator=", ">
+		#{orderby}
+	</foreach>
+		
+	<if test="limit > 0">
+		LIMIT #{limit}
+	</if>
+	<if test="offset > 0">
+		OFFSET #{offset}
+	</if>
+	
+</select>
+</mapper>

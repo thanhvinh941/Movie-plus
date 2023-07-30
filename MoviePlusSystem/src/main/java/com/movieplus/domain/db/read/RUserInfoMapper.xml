@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="jp.careco.carshare_service.domain.db.read.mapper.RTMileageSlideMapper">
+<mapper namespace="com.movieplus.domain.db.read.RUserInfoMapper">
 <resultMap id="ResultMap" type="java.util.LinkedHashMap">
 	<id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id" />
 	<result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="username" />
@@ -9,7 +9,7 @@
 	<result column="email" jdbcType="VARCHAR" javaType="java.lang.String" property="email" />
 	<result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="password" />
 	<result column="image_url" jdbcType="VARCHAR" javaType="java.lang.String" property="imageUrl" />
-	<result column="is_email_verify" jdbcType="INTEGER" javaType="java.lang.Byte" property="isEmailVerify" />
+	<result column="email_valid_flag" jdbcType="INTEGER" javaType="java.lang.Byte" property="emailValidFlag" />
 	<result column="regist_time" jdbcType="TIMESTAMP" javaType="java.lang.String" property="registTime" />
 	<result column="update_time" jdbcType="TIMESTAMP" javaType="java.lang.String" property="updateTime" />
 </resultMap>
@@ -24,11 +24,12 @@
     	email,
     	password,
     	image_url,
-    	is_email_verify,
+    	email_valid_flag,
 		regist_time,
 		update_time
     FROM 
     	user_info
-	${where}
+    WHERE
+		${where}
 </select>
 </mapper>

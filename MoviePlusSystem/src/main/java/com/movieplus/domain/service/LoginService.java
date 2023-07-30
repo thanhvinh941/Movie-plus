@@ -1,9 +1,9 @@
 package com.movieplus.domain.service;
 
-import com.movieplus.controller.LoginController.LoginRequest;
+import com.movieplus.domain.payload.request.LoginRequest;
 
 public interface LoginService {
 
-	String doLogin(LoginRequest loginRequest) throws Exception;
+	Object doLogin(LoginRequest loginRequest) throws Exception;
 
 }

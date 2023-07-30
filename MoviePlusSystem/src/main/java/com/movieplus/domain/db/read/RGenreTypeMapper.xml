@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movieplus.domain.db.read.RGenreTypeMapper">
+<resultMap id="ResultMap" type="java.util.LinkedHashMap">
+	<id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id" />
+	<result column="genre_kbn" jdbcType="INTEGER" javaType="java.lang.Byte" property="genreKbn" />
+	<result column="display_name" jdbcType="VARCHAR" javaType="java.lang.String" property="displayName" />
+	<result column="order_score" jdbcType="INTEGER" javaType="java.lang.Integer" property="orderScore" />
+</resultMap>
+<select id="selectWhere"
+	parameterType="String"
+	resultMap="ResultMap">
+    SELECT
+    	id,
+    	genre_kbn,
+    	display_name, 
+    	order_score
+    FROM 
+    	genre_type
+    WHERE
+		${where}
+	<if test="orderBys.size > 0">	
+	ORDER BY <foreach item="orderBy" collection="orderBys" separator=", ">${orderBy}</foreach>
+	</if>
+	<if test="limit > 0">
+		LIMIT #{limit}
+	</if>
+	<if test="offset > 0">
+		OFFSET #{offset}
+	</if>
+</select>
+</mapper>

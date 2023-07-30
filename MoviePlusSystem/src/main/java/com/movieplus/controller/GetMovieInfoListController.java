@@ -9,17 +9,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movieplus.domain.payload.GetMovieListRequest;
-
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/movie")
 @RequiredArgsConstructor
-public class MovieController {
+public class GetMovieInfoListController {
 
-	private final ObjectMapper objectMapper;
+	@Data
+	public static class GetMovieListRequest{
+		private String genreTypeId;
+		private String productionId;
+	}
 	
 	@PostMapping("/list-movie")
 	public String getAllListMovies(@RequestBody GetMovieListRequest request) throws IOException {

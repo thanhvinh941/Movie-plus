@@ -41,13 +41,13 @@ public class UserInfo {
 	private String imageUrl;
 	
 	@Column(nullable = false)
-	private Byte isEmailVerify;
+	private Byte emailValidFlag;
 
 	@Column(nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate registTime;
 	
 	@Column(nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate updateTime;
 }

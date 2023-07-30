@@ -24,10 +24,10 @@ public class GenreType {
 	private String id;
 	
 	@Column(nullable = false)
-	private String genreKbn;
+	private Byte genreKbn;
 	
 	@Column(nullable = false)
 	private String displayName;
 	
-	private String orderScore;
+	private Integer orderScore;
 }

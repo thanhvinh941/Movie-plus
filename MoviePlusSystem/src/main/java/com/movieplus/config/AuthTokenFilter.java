@@ -2,6 +2,7 @@ package com.movieplus.config;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		
 		// Get authorization header and validate
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header.isEmpty() || !header.startsWith("Bearer ")) {
+        if (Objects.isNull(header) || header.isEmpty() || !header.startsWith("Bearer ")) {
         	filterChain.doFilter(request, response);
             return;
         }
