@@ -21,6 +21,8 @@ public class GetMovieInfoListController {
 	public static class GetMovieListRequest{
 		private String genreTypeId;
 		private String productionId;
+		private String directorId;
+		private String starId;
 	}
 	
 	@PostMapping("/list-movie")
