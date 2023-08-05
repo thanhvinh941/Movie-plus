@@ -21,15 +21,15 @@ import lombok.extern.slf4j.Slf4j;
 public class UserInfoServiceImpl implements UserInfoService {
 	
 	private final String SERVICE_NAME = "UserInfoService";
-	private final RUserInfoMapper rUserInfoMapper;
+	private final RUserInfoMapper mapper;
 	private final ObjectMapper objectMapper;
-	private final UserInfoRepository userInfoRepository;
+	private final UserInfoRepository repository;
 	
 	@Override
 	public UserInfo getUserByUserName(String userName) {
 		try {			
 			String whereCondition = String.format("username = '%s'", userName);
-			List<Map<String, Object>> listUserInfo = rUserInfoMapper.selectWhere(whereCondition);
+			List<Map<String, Object>> listUserInfo = mapper.selectWhere(whereCondition, 0, 0, List.of());
 			if(!listUserInfo.isEmpty()) {				
 				return objectMapper.convertValue(listUserInfo.get(0), UserInfo.class);
 			}
@@ -43,7 +43,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	@Override
 	public List<String> save(List<UserInfo> records) {
 		try {			
-			List<UserInfo> userInfos = userInfoRepository.saveAll(records);
+			List<UserInfo> userInfos = repository.saveAll(records);
 			return userInfos.stream()
 					.map(UserInfo::getId)
 					.collect(Collectors.toList());

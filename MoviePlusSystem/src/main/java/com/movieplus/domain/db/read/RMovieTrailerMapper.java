@@ -8,5 +8,6 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface RMovieTrailerMapper {
-	public List<Map<String, Object>> selectWhere(@Param("where") String where);
+	public List<Map<String, Object>> selectWhere(@Param("where") String where, @Param("limit") int limit,
+			@Param("offset") int offset, @Param("orderBys") List<String> orderBys);
 }

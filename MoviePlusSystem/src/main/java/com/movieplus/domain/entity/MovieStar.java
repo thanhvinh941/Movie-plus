@@ -26,7 +26,7 @@ public class MovieStar {
 	private String movieId;
 	
 	@Column(nullable = false)
-	private Byte starId;
+	private String starId;
 	
 	@Column(nullable = false)
 	private String caster;

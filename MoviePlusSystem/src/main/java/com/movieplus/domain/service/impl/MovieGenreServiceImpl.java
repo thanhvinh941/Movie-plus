@@ -21,14 +21,14 @@ import lombok.RequiredArgsConstructor;
 public class MovieGenreServiceImpl implements MovieGenreService {
 	
 	private final MovieGenreRepository repository;
-	private final RMovieGenreMapper movieGenreMapper;
+	private final RMovieGenreMapper mapper;
 	private final ObjectMapper objectMapper;
 	
 	@Override
 	public List<String> save(List<MovieGenre> records) throws Exception {
 		try {
-			List<MovieGenre> movieInfos = repository.saveAll(records);
-			return movieInfos.stream()
+			List<MovieGenre> movieGenres = repository.saveAll(records);
+			return movieGenres.stream()
 					.map(MovieGenre::getId)
 					.collect(Collectors.toList());
 		} catch (Exception e) {
@@ -39,7 +39,7 @@ public class MovieGenreServiceImpl implements MovieGenreService {
 	@Override
 	public List<MovieGenre> getMovieGenre(GetInternalApiRequest request) throws Exception {
 		try {
-			List<Map<String, Object>> results = movieGenreMapper.selectWhere(request.getConditionStr());
+			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
 			List<MovieGenre> movieGenres = objectMapper.convertValue(results, new TypeReference<List<MovieGenre>>() {});
 			return movieGenres;
 		} catch (Exception e) {

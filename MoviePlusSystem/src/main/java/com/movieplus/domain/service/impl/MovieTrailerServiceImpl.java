@@ -20,14 +20,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MovieTrailerServiceImpl implements MovieTrailerService{
 
-	private final MovieTrailerRepository movieTrailerRepository;
-	private final RMovieTrailerMapper movieTrailerMapper;
+	private final MovieTrailerRepository repository;
+	private final RMovieTrailerMapper mapper;
 	private final ObjectMapper objectMapper;
 	
 	@Override
 	public List<String> save(List<MovieTrailer> records) throws Exception {
 		try {
-			List<MovieTrailer> movieTrailers = movieTrailerRepository.saveAll(records);
+			List<MovieTrailer> movieTrailers = repository.saveAll(records);
 			return movieTrailers.stream()
 					.map(MovieTrailer::getId)
 					.collect(Collectors.toList());
@@ -39,7 +39,7 @@ public class MovieTrailerServiceImpl implements MovieTrailerService{
 	@Override
 	public List<MovieTrailer> getMovieTrailer(GetInternalApiRequest request) throws Exception {
 		try {
-			List<Map<String, Object>> results = movieTrailerMapper.selectWhere(request.getConditionStr());
+			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
 			List<MovieTrailer> movieTrailers = objectMapper.convertValue(results, new TypeReference<List<MovieTrailer>>() {});
 			return movieTrailers;
 		} catch (Exception e) {

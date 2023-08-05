@@ -12,12 +12,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserTokenServiceImpl implements UserTokenService {
 
-	private final UserTokenRepository userTokenRepository;
+	private final UserTokenRepository repository;
 	
 	@Override
 	public String save(UserToken userToken) {
 		try {			
-			UserToken token = userTokenRepository.save(userToken);
+			UserToken token = repository.save(userToken);
 			return token.getRefeshToken();
 		} catch (Exception e) {
 			return null;

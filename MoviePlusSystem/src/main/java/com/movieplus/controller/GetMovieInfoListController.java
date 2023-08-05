@@ -3,30 +3,69 @@ package com.movieplus.controller;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.movieplus.domain.common.GeneratorCommonUtil;
+import com.movieplus.domain.payload.response.ApiResponse;
+import com.movieplus.domain.service.GetMovieInfoListService;
+
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @RestController
 @RequestMapping("/api/movie")
 @RequiredArgsConstructor
 public class GetMovieInfoListController {
 
+	private final GetMovieInfoListService getMovieInfoListService;
+	
 	@Data
 	public static class GetMovieListRequest{
-		private String genreTypeId;
-		private String productionId;
-		private String directorId;
-		private String starId;
+		private List<String> genreTypeIds;
+		private String searchTerm;
 	}
 	
-	@PostMapping("/list-movie")
+	@Getter
+	@Setter
+	public static class GetMovieListResponse extends ApiResponse{
+		private List<GenreType> genreType;
+		
+		@Getter
+		@Setter
+		public static class Movie{
+			private String id;
+			private String movieName;
+			private String movieSubName;
+			private String thumnail;
+			private int yearReleaseAt;
+		}
+
+		@Getter
+		@Setter
+		public static class GenreType{
+			private String id;
+			private String displayName;
+			private List<Movie> movies;
+		}
+	}
+	
+	@PostMapping("/getMovieInfoList")
 	public String getAllListMovies(@RequestBody GetMovieListRequest request) throws IOException {
-		return new String(Files.readAllBytes(Paths.get("src/main/resources/data/list-movie.json")));
+		try {
+			GetMovieListResponse response = new GetMovieListResponse();
+			
+			getMovieInfoListService.execute(request, response);
+			
+			return GeneratorCommonUtil.getResponseBodySuccess(response);
+		} catch (Exception e) {
+			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
+		}
 	}
 }

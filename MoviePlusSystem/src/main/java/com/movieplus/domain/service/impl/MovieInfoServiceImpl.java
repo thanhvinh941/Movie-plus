@@ -15,7 +15,9 @@ import com.movieplus.domain.repository.MovieInfoRepository;
 import com.movieplus.domain.service.MovieInfoService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MovieInfoServiceImpl implements MovieInfoService {
@@ -39,11 +41,12 @@ public class MovieInfoServiceImpl implements MovieInfoService {
 	@Override
 	public List<MovieInfo> getMovieInfo(GetInternalApiRequest request) throws Exception {
 		try {
-			List<Map<String, Object>> results = movieInfoMapper.selectWhere(request.getConditionStr());
+			List<Map<String, Object>> results = movieInfoMapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
 			List<MovieInfo> movieInfos = objectMapper.convertValue(results, new TypeReference<List<MovieInfo>>() {});
 			return movieInfos;
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("MovieInfoService ERROR call getMovieInfo", e);
+			throw new Exception(e.getMessage());
 		}
 	}
 

@@ -74,7 +74,7 @@ public class LoginServiceImpl implements LoginService {
 			}
 			UserSession userSession = new UserSession();
 			BeanUtils.copyProperties(userInfo, userSession);
-			redisTemplate.opsForValue().set(accessToken, objectMapper.writeValueAsString(userSession), (new Date()).getTime() + expriration);
+			redisTemplate.opsForValue().set(accessToken, objectMapper.writeValueAsString(userSession));
 			
 			LoginResponse loginResponse = new LoginResponse();
 			loginResponse.setExpirationTime(expriration);

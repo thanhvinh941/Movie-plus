@@ -1,6 +1,7 @@
 package com.movieplus.domain.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
@@ -44,7 +45,7 @@ public class MovieInfo {
 	private String productionId;
 	
 	@Column(nullable = false)
-	private int yearReleaseAt;
+	private Long yearReleaseAt;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
