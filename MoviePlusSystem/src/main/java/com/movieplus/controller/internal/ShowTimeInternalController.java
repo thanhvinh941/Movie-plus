@@ -9,37 +9,36 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.movieplus.domain.common.GeneratorCommonUtil;
-import com.movieplus.domain.entity.MovieBanner;
+import com.movieplus.domain.entity.ShowTime;
 import com.movieplus.domain.payload.request.CreateInternalApiRequest;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
-import com.movieplus.domain.service.MovieBannerService;
+import com.movieplus.domain.service.ShowTimeService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/internal/movie-banner")
-public class MovieBannerInternalController {
+@RequestMapping("/internal/show-time")
+public class ShowTimeInternalController {
 
-	private final MovieBannerService movieBannerService;
+	private final ShowTimeService service;
 	
-	@PostMapping("/insertMovieBanner")
+	@PostMapping("/insertShowTime")
 	@ResponseBody
-	public String insertMovieTrailer(@RequestBody CreateInternalApiRequest<MovieBanner> request) {
+	public String insertShowTime(@RequestBody CreateInternalApiRequest<ShowTime> request) {
 		try {
-
-			List<String> results = movieBannerService.save(request.getRecords());
+			List<String> results = service.save(request.getRecords());
 			return GeneratorCommonUtil.getResponseBodySuccess(results);
 		} catch (Exception e) {
 			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 	
-	@PostMapping("/getMovieBanner")
+	@PostMapping("/getShowTime")
 	@ResponseBody
-	public String getMovieBanner(@RequestBody GetInternalApiRequest request) {
+	public String getShowTime(@RequestBody GetInternalApiRequest request) {
 		try {
-			List<MovieBanner> results = movieBannerService.getMovieBanner(request);
+			List<ShowTime> results = service.getShowTime(request);
 			return GeneratorCommonUtil.getResponseBodySuccess(results);
 		} catch (Exception e) {
 			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
