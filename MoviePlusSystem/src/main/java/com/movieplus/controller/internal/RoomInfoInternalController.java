@@ -9,37 +9,36 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.movieplus.domain.common.GeneratorCommonUtil;
-import com.movieplus.domain.entity.MovieBanner;
+import com.movieplus.domain.entity.RoomInfo;
 import com.movieplus.domain.payload.request.CreateInternalApiRequest;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
-import com.movieplus.domain.service.MovieBannerService;
+import com.movieplus.domain.service.RoomInfoService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/internal/movie-banner")
-public class MovieBannerInternalController {
+@RequestMapping("/internal/room")
+public class RoomInfoInternalController {
 
-	private final MovieBannerService movieBannerService;
+	private final RoomInfoService service;
 	
-	@PostMapping("/insertMovieBanner")
+	@PostMapping("/insertRoomInfo")
 	@ResponseBody
-	public String insertMovieTrailer(@RequestBody CreateInternalApiRequest<MovieBanner> request) {
+	public String insertRoomInfo(@RequestBody CreateInternalApiRequest<RoomInfo> request) {
 		try {
-
-			List<String> results = movieBannerService.save(request.getRecords());
+			List<String> results = service.save(request.getRecords());
 			return GeneratorCommonUtil.getResponseBodySuccess(results);
 		} catch (Exception e) {
 			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 	
-	@PostMapping("/getMovieBanner")
+	@PostMapping("/getRoomInfo")
 	@ResponseBody
-	public String getMovieBanner(@RequestBody GetInternalApiRequest request) {
+	public String getRoomInfo(@RequestBody GetInternalApiRequest request) {
 		try {
-			List<MovieBanner> results = movieBannerService.getMovieBanner(request);
+			List<RoomInfo> results = service.getRoomInfo(request);
 			return GeneratorCommonUtil.getResponseBodySuccess(results);
 		} catch (Exception e) {
 			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));

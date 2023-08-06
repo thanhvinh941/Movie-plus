@@ -3,7 +3,6 @@ package com.movieplus.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +13,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.service.RetrieveMovieInfoService;
 
-import jakarta.annotation.Nonnull;
-import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +23,6 @@ public class RetrieveMovieInfoController {
 	
 	@Data
 	public static class RetrieveMovieInfoRequest{
-		@Nonnull
 		private String movieId;
 	}
 
@@ -50,7 +46,9 @@ public class RetrieveMovieInfoController {
 		@Data
 		public static class ShowTime{
 			private String id;
+			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 			private LocalDateTime startTime;
+			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 			private LocalDateTime endTime;
 		}
 		
@@ -99,7 +97,7 @@ public class RetrieveMovieInfoController {
 	
 	@PostMapping("retrieveMovieInfo")
 	@ResponseBody
-	public String doRetrieveMovieInfo(@Validated @RequestBody RetrieveMovieInfoRequest request) {
+	public String doRetrieveMovieInfo(@RequestBody RetrieveMovieInfoRequest request) {
 		try {
 			RetrieveMovieInfoResponse response = new RetrieveMovieInfoResponse();
 			

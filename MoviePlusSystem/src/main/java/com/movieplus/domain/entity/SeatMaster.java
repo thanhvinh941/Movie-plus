@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="booking_info")
+@Table(name="seat_master")
 public class SeatMaster {
 
 	@Id
@@ -28,10 +28,4 @@ public class SeatMaster {
 	
 	@Column(nullable = false)
 	private int seatColume;
-	
-	@Column(nullable = false)
-	private byte usableStatus;
-	
-	@Column(nullable = false)
-	private String siteInfoId;
 }

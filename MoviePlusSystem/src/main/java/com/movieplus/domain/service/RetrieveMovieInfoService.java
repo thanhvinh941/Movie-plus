@@ -1,5 +1,7 @@
 package com.movieplus.domain.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +18,8 @@ import com.movieplus.domain.entity.MovieGenre;
 import com.movieplus.domain.entity.MovieInfo;
 import com.movieplus.domain.entity.MovieStar;
 import com.movieplus.domain.entity.MovieTrailer;
+import com.movieplus.domain.entity.ShowTime;
+import com.movieplus.domain.entity.SiteInfo;
 import com.movieplus.domain.entity.StarInfo;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
 
@@ -27,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RetrieveMovieInfoService {
 	
+	private final SiteInfoService siteInfoService;
+	private final ShowTimeService showTimeService;
 	private final StarInfoService starInfoService;
 	private final MovieStarService movieStarService;
 	private final GenreTypeService genreTypeService;
@@ -97,7 +103,69 @@ public class RetrieveMovieInfoService {
 				})
 				.collect(Collectors.toList());
 		
-		generatorResponse(movieInfo, responseBanners, responseTrailers, responseGenreTypes, responseDirectorInfo, responseStar, response);
+		List<ShowTime> showTimes = getShowTime(movieInfoId);
+		List<String> siteIds = showTimes.stream()
+				.map(ShowTime::getSiteId)
+				.collect(Collectors.toList());
+		List<SiteInfo> siteInfos = getSiteInfo(siteIds);
+		List<RetrieveMovieInfoResponse.Site> responseSite = siteInfos.stream()
+				.map(s -> {
+					List<ShowTime> showTimeOfSite = showTimes.stream()
+							.filter(st -> st.getSiteId().equals(s.getId()))
+							.collect(Collectors.toList());
+					List<RetrieveMovieInfoResponse.ShowTime> sTimes =  showTimeOfSite.stream()
+							.map(st -> {
+								RetrieveMovieInfoResponse.ShowTime showTime = new RetrieveMovieInfoResponse.ShowTime();
+								BeanUtils.copyProperties(st, showTime);
+								showTime.setEndTime(st.getEndTime());
+								showTime.setStartTime(st.getStartTime());
+								return showTime;
+							})
+							.collect(Collectors.toList());
+					RetrieveMovieInfoResponse.Site site = new RetrieveMovieInfoResponse.Site();
+					BeanUtils.copyProperties(s, site);
+					site.setShowTimes(sTimes);
+					
+					return site;
+				})
+				.collect(Collectors.toList());
+		
+		generatorResponse(movieInfo, responseBanners, responseTrailers, responseGenreTypes, responseDirectorInfo, responseStar, responseSite, response);
+	}
+
+	private List<SiteInfo> getSiteInfo(List<String> siteIds) {
+		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
+
+		String conditionStr = null;
+		if(!siteIds.isEmpty()) {
+			conditionStr = String.format(" id in (%s)", joiningListString(siteIds));
+		}
+		apiRequest.setConditionStr(conditionStr);
+		try {
+			return siteInfoService.getSiteInfo(apiRequest);
+		} catch (Exception e) {
+
+		}
+		return List.of();
+	}
+
+	private List<ShowTime> getShowTime(String movieInfoId) {
+		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
+
+		LocalDate nowStamp = LocalDate.now();
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String nowStr = nowStamp.format(dateTimeFormatter);
+		
+		String conditionStr = null;
+		conditionStr = String.format(" movie_id = '%s' AND start_time >= '%s'", movieInfoId, nowStr);
+		apiRequest.setConditionStr(conditionStr);
+		
+		try {
+			return showTimeService.getShowTime(apiRequest);
+		} catch (Exception e) {
+			log.error("ERROR call getMovieTrailer", e);
+		}
+		return List.of();
 	}
 
 	private void generatorResponse(MovieInfo movieInfo, List<String> responseBanners, 
@@ -105,6 +173,7 @@ public class RetrieveMovieInfoService {
 			List<RetrieveMovieInfoResponse.GenreType> responseGenreTypes, 
 			List<RetrieveMovieInfoResponse.Director> responseDirectorInfo,
 			List<RetrieveMovieInfoResponse.StarInfo> responseStar,
+			List<RetrieveMovieInfoResponse.Site> responseSite,
 			RetrieveMovieInfoResponse response) {
 		
 		BeanUtils.copyProperties(movieInfo, response);
@@ -113,6 +182,7 @@ public class RetrieveMovieInfoService {
 		response.setGenreType(responseGenreTypes);
 		response.setDirectors(responseDirectorInfo);
 		response.setStarInfos(responseStar);
+		response.setSites(responseSite);
 	}
 
 	private List<StarInfo> getStarInfo(List<String> starIds) {
