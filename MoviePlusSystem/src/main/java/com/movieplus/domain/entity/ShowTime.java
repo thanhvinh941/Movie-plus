@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="cinema_type")
+@Table(name="show_time")
 public class ShowTime {
 	
 	@Id
@@ -31,7 +31,10 @@ public class ShowTime {
 	private String movieId;
 	
 	@Column(nullable = false)
-	private Integer siteId;
+	private String siteId;
+	
+	@Column(nullable = false)
+	private String roomId;
 	
 	@Column(nullable = false)
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

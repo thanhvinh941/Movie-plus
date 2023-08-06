@@ -2,12 +2,12 @@ package com.movieplus.domain.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.domain.common.ObjectMapperCommonUtil;
 import com.movieplus.domain.db.read.RMovieBannerMapper;
 import com.movieplus.domain.entity.MovieBanner;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
@@ -15,7 +15,9 @@ import com.movieplus.domain.repository.MovieBannerRepository;
 import com.movieplus.domain.service.MovieBannerService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MovieBannerServiceImpl implements MovieBannerService {
@@ -27,23 +29,26 @@ public class MovieBannerServiceImpl implements MovieBannerService {
 	@Override
 	public List<String> save(List<MovieBanner> records) throws Exception {
 		try {
+			log.info("Do save with request: {}", ObjectMapperCommonUtil.writeValueAsString(records));
 			List<MovieBanner> movieBanners = repository.saveAll(records);
 			return movieBanners.stream()
 					.map(MovieBanner::getId)
-					.collect(Collectors.toList());
+					.toList();
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("ERROR save: {}", e);
+			throw new Exception("Insert records fail");
 		}
 	}
 
 	@Override
-	public List<MovieBanner> getMovieBanner(GetInternalApiRequest request) throws Exception {
+	public List<MovieBanner> getMovieBanner(GetInternalApiRequest request){
 		try {
+			log.info("Do getMovieBanner with request: {}", ObjectMapperCommonUtil.writeValueAsString(request));
 			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
-			List<MovieBanner> movieBanners = objectMapper.convertValue(results, new TypeReference<List<MovieBanner>>() {});
-			return movieBanners;
+			return objectMapper.convertValue(results, new TypeReference<List<MovieBanner>>() {});
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("ERROR getMovieBanner: {}", e);
+			return List.of();
 		}
 	}
 

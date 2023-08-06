@@ -1,0 +1,88 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: Zaq12wsx1234
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: moviedb
+    networks:
+      - movie-plus
+  cache:
+    image: redis:6.2-alpine
+    ports:
+      - '6379:6379'
+    environment:
+      - REDIS_PASSWORD=test
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./static:/usr/share/nginx/html
+    networks:
+      - movie-plus
+  # elasticsearch:
+  #   container_name: elasticsearch-batch
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+  #   environment:
+  #     - http.cors.enabled=true
+  #     - http.cors.allow-origin=*
+  #     - http.cors.allow-methods=OPTIONS,HEAD,GET,POST,PUT,DELETE
+  #     - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+  #     - transport.host=127.0.0.1
+  #     - cluster.name=docker-cluster
+  #     - discovery.type=single-node
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #   ports:
+  #     - 9200:9200
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10k"
+  #       max-file: "10"
+  #   networks:
+  #     - sw
+  # kibana:
+  #   container_name: kibana-batch
+  #   image: docker.elastic.co/kibana/kibana:7.9.3
+  #   environment:
+  #     - "ELASTICSEARCH_URL=http://elasticsearch:9200"
+  #     - "SERVER_NAME=127.0.0.1"
+  #   ports:
+  #     - 5601:5601
+  #   depends_on:
+  #     - elasticsearch
+  #   networks:
+  #     - sw
+  # logstash:
+  #   container_name: logstash-batch
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-logstash
+  #   environment:
+  #     - LOGSTASH_JDBC_URL=jdbc:mysql://mysql:3306/moviedb?useSSL=false
+  #     - LOGSTASH_JDBC_DRIVER=com.mysql.cj.jdbc.Driver
+  #     - LOGSTASH_JDBC_DRIVER_JAR_LOCATION=/usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar
+  #     - LOGSTASH_JDBC_USERNAME=root
+  #     - LOGSTASH_JDBC_PASSWORD=Zaq12wsx1234
+  #     - LOGSTASH_JDBC_QUERY=/usr/share/logstash/logstash-core/lib/mysql-query.sql
+  #     - LOGSTASH_ELASTICSEARCH_HOST=http://elasticsearch:9200
+  #   ports:
+  #     - 9600:9600
+  #     - 5044:5044
+  #   depends_on:
+  #     - mysql
+  #     - elasticsearch
+  #   volumes:
+  #     - ./mysql/mysql-jdbc-input-plugin.conf:/usr/share/logstash/pipeline/logstash.conf
+  #     - ./mysql/mysql-connector-java-8.0.11.jar:/usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar
+  #     - ./mysql/mysql-query.sql:/usr/share/logstash/logstash-core/lib/mysql-query.sql
+  #   networks:
+  #     - sw
+networks:
+  movie-plus:
+    driver: bridge

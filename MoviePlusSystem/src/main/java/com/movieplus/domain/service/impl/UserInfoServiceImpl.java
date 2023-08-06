@@ -2,11 +2,11 @@ package com.movieplus.domain.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.domain.common.ObjectMapperCommonUtil;
 import com.movieplus.domain.db.read.RUserInfoMapper;
 import com.movieplus.domain.entity.UserInfo;
 import com.movieplus.domain.repository.UserInfoRepository;
@@ -41,14 +41,16 @@ public class UserInfoServiceImpl implements UserInfoService {
 	}
 
 	@Override
-	public List<String> save(List<UserInfo> records) {
-		try {			
+	public List<String> save(List<UserInfo> records) throws Exception {
+		try {
+			log.info("Do save with request: {}", ObjectMapperCommonUtil.writeValueAsString(records));
 			List<UserInfo> userInfos = repository.saveAll(records);
 			return userInfos.stream()
 					.map(UserInfo::getId)
-					.collect(Collectors.toList());
+					.toList();
 		} catch (Exception e) {
-			return null;
+			log.error("ERROR save: {}", e);
+			throw new Exception("Insert records fail");
 		}
 	}
 

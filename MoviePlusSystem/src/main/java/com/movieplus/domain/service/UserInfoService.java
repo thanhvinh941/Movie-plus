@@ -8,6 +8,6 @@ public interface UserInfoService {
 
 	UserInfo getUserByUserName(String userName);
 	
-	List<String> save(List<UserInfo> records);
+	List<String> save(List<UserInfo> records) throws Exception;
 
 }

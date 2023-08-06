@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.entity.MovieBanner;
-import com.movieplus.domain.entity.MovieTrailer;
 import com.movieplus.domain.payload.request.CreateInternalApiRequest;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
 import com.movieplus.domain.service.MovieBannerService;

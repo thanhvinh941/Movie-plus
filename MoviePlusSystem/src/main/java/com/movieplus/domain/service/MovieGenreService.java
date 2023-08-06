@@ -9,6 +9,6 @@ public interface MovieGenreService {
 
 	List<String> save(List<MovieGenre> records) throws Exception;
 
-	List<MovieGenre> getMovieGenre(GetInternalApiRequest request) throws Exception;
+	List<MovieGenre> getMovieGenre(GetInternalApiRequest request);
 
 }

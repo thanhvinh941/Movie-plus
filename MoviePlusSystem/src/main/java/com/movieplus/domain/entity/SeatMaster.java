@@ -14,24 +14,24 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="booking_info")
+@Table(name = "seat_master")
 public class SeatMaster {
 
 	@Id
-    @GeneratedValue
-    @UuidGenerator(style = Style.TIME)
-    @Column(name = "id", updatable = false, nullable = false)
+	@GeneratedValue
+	@UuidGenerator(style = Style.TIME)
+	@Column(name = "id", updatable = false, nullable = false)
 	private String id;
-	
+
 	@Column(nullable = false)
-	private int seatRow;
-	
+	private Integer seatRow;
+
 	@Column(nullable = false)
-	private int seatColume;
-	
+	private Integer seatColume;
+
 	@Column(nullable = false)
-	private byte usableStatus;
-	
-	@Column(nullable = false)
-	private String siteInfoId;
+	private Integer seatSize;
+
+	@Column(nullable = false, columnDefinition = "integer default 0")
+	private Integer seatType;
 }

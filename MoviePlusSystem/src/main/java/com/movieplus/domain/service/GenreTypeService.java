@@ -9,6 +9,6 @@ public interface GenreTypeService {
 
 	List<String> save(List<GenreType> records) throws Exception;
 
-	List<GenreType> getGenreType(GetInternalApiRequest request) throws Exception;
+	List<GenreType> getGenreType(GetInternalApiRequest request);
 
 }

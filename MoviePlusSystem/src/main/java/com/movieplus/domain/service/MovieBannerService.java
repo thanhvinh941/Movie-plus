@@ -9,6 +9,6 @@ public interface MovieBannerService {
 
 	List<String> save(List<MovieBanner> records) throws Exception;
 
-	List<MovieBanner> getMovieBanner(GetInternalApiRequest request) throws Exception;
+	List<MovieBanner> getMovieBanner(GetInternalApiRequest request);
 
 }

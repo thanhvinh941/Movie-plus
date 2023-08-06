@@ -7,7 +7,7 @@ import com.movieplus.domain.payload.request.GetInternalApiRequest;
 
 public interface MovieStarService {
 
-	List<MovieStar> getMovieStar(GetInternalApiRequest apiRequest) throws Exception;
+	List<MovieStar> getMovieStar(GetInternalApiRequest apiRequest);
 
 	List<String> save(List<MovieStar> records) throws Exception;
 

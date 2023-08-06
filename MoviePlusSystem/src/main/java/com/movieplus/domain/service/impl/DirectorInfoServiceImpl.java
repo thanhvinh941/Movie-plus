@@ -2,12 +2,12 @@ package com.movieplus.domain.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.domain.common.ObjectMapperCommonUtil;
 import com.movieplus.domain.db.read.RDirectorInfoMapper;
 import com.movieplus.domain.entity.DirectorInfo;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
@@ -29,23 +29,26 @@ public class DirectorInfoServiceImpl implements DirectorInfoService{
 	@Override
 	public List<String> save(List<DirectorInfo> records) throws Exception {
 		try {
+			log.info("Do save with request: {}", ObjectMapperCommonUtil.writeValueAsString(records));
 			List<DirectorInfo> directorInfos = repository.saveAll(records);
 			return directorInfos.stream()
 					.map(DirectorInfo::getId)
-					.collect(Collectors.toList());
+					.toList();
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("ERROR save: {}", e);
+			throw new Exception("Insert records fail");
 		}
 	}
 
 	@Override
-	public List<DirectorInfo> getDirectorInfo(GetInternalApiRequest request) throws Exception {
+	public List<DirectorInfo> getDirectorInfo(GetInternalApiRequest request) {
 		try {
+			log.info("Do getDirectorInfo with request: {}", ObjectMapperCommonUtil.writeValueAsString(request));
 			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
-			List<DirectorInfo> directorInfos = objectMapper.convertValue(results, new TypeReference<List<DirectorInfo>>() {});
-			return directorInfos;
+			return objectMapper.convertValue(results, new TypeReference<List<DirectorInfo>>() {});
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("ERROR getDirectorInfo: {}", e);
+			return List.of();
 		}
 	}
 }

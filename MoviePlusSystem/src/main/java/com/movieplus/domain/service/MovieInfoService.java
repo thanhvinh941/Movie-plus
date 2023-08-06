@@ -9,6 +9,6 @@ public interface MovieInfoService {
 
 	List<String> save(List<MovieInfo> records) throws Exception;
 
-	List<MovieInfo> getMovieInfo(GetInternalApiRequest request) throws Exception;
+	List<MovieInfo> getMovieInfo(GetInternalApiRequest request);
 
 }

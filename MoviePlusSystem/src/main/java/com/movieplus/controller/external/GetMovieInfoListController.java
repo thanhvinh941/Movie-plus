@@ -1,8 +1,6 @@
-package com.movieplus.controller;
+package com.movieplus.controller.external;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,13 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.movieplus.domain.common.GeneratorCommonUtil;
-import com.movieplus.domain.payload.response.ApiResponse;
+import com.movieplus.domain.payload.response.GetMovieListResponse;
 import com.movieplus.domain.service.GetMovieInfoListService;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @RestController
 @RequestMapping("/api/movie")
@@ -30,30 +26,6 @@ public class GetMovieInfoListController {
 	public static class GetMovieListRequest{
 		private List<String> genreTypeIds;
 		private String searchTerm;
-	}
-	
-	@Getter
-	@Setter
-	public static class GetMovieListResponse extends ApiResponse{
-		private List<GenreType> genreType;
-		
-		@Getter
-		@Setter
-		public static class Movie{
-			private String id;
-			private String movieName;
-			private String movieSubName;
-			private String thumnail;
-			private int yearReleaseAt;
-		}
-
-		@Getter
-		@Setter
-		public static class GenreType{
-			private String id;
-			private String displayName;
-			private List<Movie> movies;
-		}
 	}
 	
 	@PostMapping("/getMovieInfoList")

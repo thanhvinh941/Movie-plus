@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.entity.GenreType;
+import com.movieplus.domain.payload.request.CreateInternalApiRequest;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
 import com.movieplus.domain.service.GenreTypeService;
 
@@ -24,9 +25,9 @@ public class GenreTypeInternalController {
 
 	@PostMapping("/insertGenreType")
 	@ResponseBody
-	public String insertMovie(@RequestBody List<GenreType> records) {
+	public String insertMovie(@RequestBody CreateInternalApiRequest<GenreType> request) {
 		try {
-			List<String> results = genreTypeService.save(records);
+			List<String> results = genreTypeService.save(request.getRecords());
 			return GeneratorCommonUtil.getResponseBodySuccess(results);
 		} catch (Exception e) {
 			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
