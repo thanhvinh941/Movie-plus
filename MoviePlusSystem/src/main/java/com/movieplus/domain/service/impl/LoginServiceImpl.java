@@ -32,7 +32,7 @@ public class LoginServiceImpl implements LoginService {
 	@Setter
 	private class LoginResponse{
 		private String accessToken;
-		private int expirationTime;
+		private long accessTokenExpiry;
 		private String refreshToken;
 	}
 	
@@ -77,7 +77,7 @@ public class LoginServiceImpl implements LoginService {
 			redisTemplate.opsForValue().set(accessToken, objectMapper.writeValueAsString(userSession));
 			
 			LoginResponse loginResponse = new LoginResponse();
-			loginResponse.setExpirationTime(expriration);
+			loginResponse.setAccessTokenExpiry(expriration + (new Date()).getTime());
 			loginResponse.setAccessToken(accessToken);
 			loginResponse.setRefreshToken(refreshToken);
 			return loginResponse;
