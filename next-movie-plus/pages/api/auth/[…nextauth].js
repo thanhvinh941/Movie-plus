@@ -39,8 +39,8 @@ const providers = [
                     email: credentials.email
                 });
 
-                if (user.data.accessToken) {
-                    return user.data;
+                if (user) {
+                    return user;
                 }
 
                 return null;
@@ -71,6 +71,9 @@ const callbacks = {
         // If the call arrives after 23 hours have passed, we allow to refresh the token.
         token = refreshAccessToken(token);
         return Promise.resolve(token);
+    },
+    session: async (session, token, user) => {
+        
     }
 }
 

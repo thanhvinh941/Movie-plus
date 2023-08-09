@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.JwtUtil;
 import com.movieplus.config.UserSession;
@@ -23,17 +24,27 @@ import com.movieplus.domain.service.UserTokenService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService {
 	
 	@Getter
 	@Setter
-	private class LoginResponse{
-		private String accessToken;
-		private long accessTokenExpiry;
-		private String refreshToken;
+	public static class LoginResponse{
+		
+		private UserSession user;
+		private Token token;
+		
+		@Getter
+		@Setter
+		public static class Token{			
+			private String accessToken;
+			private long accessTokenExpiry;
+			private String refreshToken;
+		}
 	}
 	
 	private final UserInfoService userInfoService;
@@ -72,14 +83,28 @@ public class LoginServiceImpl implements LoginService {
 			if(!Objects.isNull(userTokenService.save(userToken))){
 				
 			}
+			LoginResponse loginResponse = new LoginResponse();
+
 			UserSession userSession = new UserSession();
 			BeanUtils.copyProperties(userInfo, userSession);
-			redisTemplate.opsForValue().set(accessToken, objectMapper.writeValueAsString(userSession));
 			
-			LoginResponse loginResponse = new LoginResponse();
-			loginResponse.setAccessTokenExpiry(expriration + (new Date()).getTime());
-			loginResponse.setAccessToken(accessToken);
-			loginResponse.setRefreshToken(refreshToken);
+			new Thread(() -> {		
+				try {
+					String userSessionStr = objectMapper.writeValueAsString(userSession);
+					redisTemplate.opsForValue().set(accessToken, userSessionStr);
+				} catch (JsonProcessingException e) {
+					log.error("SET Redis ERROR by key: {}", accessToken, e);
+				}
+			}).start();
+			
+			LoginResponse.Token token = new LoginResponse.Token();
+			token.setAccessTokenExpiry(expriration + (new Date()).getTime());
+			token.setAccessToken(accessToken);
+			token.setRefreshToken(refreshToken);
+			
+			loginResponse.setUser(userSession);
+			loginResponse.setToken(token);
+			
 			return loginResponse;
 		}else {
 			throw new Exception("User not found");
