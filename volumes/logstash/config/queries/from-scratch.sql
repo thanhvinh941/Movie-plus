@@ -1,1 +1,1 @@
-select * from moviedb.movie_info
+SELECT id, movie_name, movie_sub_name, duration_min, year_release_at FROM moviedb.movie_info;
