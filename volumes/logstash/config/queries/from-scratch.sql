@@ -1,0 +1,1 @@
+select * from moviedb.movie_info
