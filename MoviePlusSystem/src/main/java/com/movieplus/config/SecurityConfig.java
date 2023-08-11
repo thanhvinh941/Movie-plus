@@ -28,6 +28,7 @@ public class SecurityConfig {
 			.cors(cors -> cors.disable())
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("/api/movie/**").permitAll()
 						.requestMatchers("/internal/**").permitAll()
 						.requestMatchers("/util/**").permitAll()
 						.anyRequest().authenticated());
