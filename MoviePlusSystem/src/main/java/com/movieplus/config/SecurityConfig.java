@@ -31,6 +31,7 @@ public class SecurityConfig {
 						.requestMatchers("/api/movie/**").permitAll()
 						.requestMatchers("/internal/**").permitAll()
 						.requestMatchers("/util/**").permitAll()
+						.requestMatchers("/webui/**").permitAll()
 						.anyRequest().authenticated());
 
 		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);

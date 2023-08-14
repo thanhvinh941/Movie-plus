@@ -18,7 +18,7 @@ public class GeneratorCommonUtil {
 	public static String getResponseBodyError(List<String> errors) {
 		ApiResponse response = new ApiResponse();
 		response.setData(null);
-		response.setStatus(1);
+		response.setStatus(0);
 		response.setErrors(errors);
 		
 		return ObjectMapperCommonUtil.writeValueAsString(response);
