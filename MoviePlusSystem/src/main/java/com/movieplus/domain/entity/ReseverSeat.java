@@ -25,7 +25,7 @@ public class ReseverSeat {
 	
 	@Column(nullable = false)
 	private String bookingId;
-
+	
 	@Column(nullable = false)
 	private String seatId;
 }

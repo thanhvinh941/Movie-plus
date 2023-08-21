@@ -26,13 +26,15 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
 			.cors(cors -> cors.disable())
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/api/auth/**").permitAll()
-						.requestMatchers("/api/movie/**").permitAll()
-						.requestMatchers("/internal/**").permitAll()
-						.requestMatchers("/util/**").permitAll()
-						.requestMatchers("/webui/**").permitAll()
-						.anyRequest().authenticated());
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/reserve/**").authenticated()
+						.anyRequest().permitAll());
+//						.requestMatchers("/api/auth/**").permitAll()
+//						.requestMatchers("/api/movie/**").permitAll()
+//						.requestMatchers("/api/site/**").permitAll()
+//						.requestMatchers("/internal/**").permitAll()
+//						.requestMatchers("/util/**").permitAll()
+//						.requestMatchers("/webui/**").permitAll()
+//						.anyRequest().authenticated());
 
 		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

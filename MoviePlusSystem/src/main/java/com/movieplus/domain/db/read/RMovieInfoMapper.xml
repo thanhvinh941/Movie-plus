@@ -5,8 +5,6 @@
 		<id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id" />
 		<result column="movie_name" jdbcType="VARCHAR" javaType="java.lang.String" property="movieName" />
 		<result column="movie_sub_name" jdbcType="VARCHAR" javaType="java.lang.String" property="movieSubName" />
-		<result column="starrings" jdbcType="VARCHAR" javaType="java.lang.String" property="starrings" />
-		<result column="creators" jdbcType="VARCHAR" javaType="java.lang.String" property="creators" />
 		<result column="duration_min" jdbcType="INTEGER" property="durationMin" />
 		<result column="description" jdbcType="VARCHAR" javaType="java.lang.String" property="description" />
 		<result column="thumnail" jdbcType="VARCHAR" javaType="java.lang.String" property="thumnail" />
@@ -20,8 +18,6 @@
     	id,
     	movie_name,
     	movie_sub_name, 
-    	starrings,
-    	creators,
     	duration_min,
     	description,
 		thumnail,

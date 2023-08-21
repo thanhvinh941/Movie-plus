@@ -9,30 +9,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.movieplus.domain.common.GeneratorCommonUtil;
-import com.movieplus.domain.payload.response.RetrieveMovieInfoResponse;
-import com.movieplus.domain.service.RetrieveMovieInfoService;
+import com.movieplus.domain.payload.response.RetrieveSiteInfoResponse;
+import com.movieplus.domain.service.RetrieveSiteInfoService;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/movie")
-public class RetrieveMovieInfoController {
-	
-	@Data
-	public static class RetrieveMovieInfoRequest{
-		private String movieId;
+@RequestMapping("/api/site")
+public class RetrieveSiteInfoController {
+
+	@Getter
+	@Setter
+	public static class RetrieveSiteInfoRequest{
+		private String siteId;
 	}
 	
-	private final RetrieveMovieInfoService service;
+	private final RetrieveSiteInfoService service;
 	
-	@PostMapping("/retrieveMovieInfo")
+	@PostMapping("/retrieveSiteInfo")
 	@ResponseBody
-	public String doRetrieveMovieInfo(@RequestBody RetrieveMovieInfoRequest request) {
+	public String doRetrieveSiteInfo(@RequestBody RetrieveSiteInfoRequest request) {
 		try {
-			RetrieveMovieInfoResponse response = new RetrieveMovieInfoResponse();
-			
+			RetrieveSiteInfoResponse response = new RetrieveSiteInfoResponse();
 			service.execute(request, response);
 			return GeneratorCommonUtil.getResponseBodySuccess(response);
 		} catch (Exception e) {
