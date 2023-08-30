@@ -1,6 +1,5 @@
 package com.movieplus.domain.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +13,7 @@ import com.movieplus.domain.service.GenreTypeService;
 import com.movieplus.domain.service.MovieWebUIService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MovieWebUIServiceImpl implements MovieWebUIService {

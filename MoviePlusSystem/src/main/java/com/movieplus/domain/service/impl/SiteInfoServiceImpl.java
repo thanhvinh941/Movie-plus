@@ -2,12 +2,12 @@ package com.movieplus.domain.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.domain.common.ObjectMapperCommonUtil;
 import com.movieplus.domain.db.read.RSiteInfoMapper;
 import com.movieplus.domain.entity.SiteInfo;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
@@ -29,23 +29,26 @@ public class SiteInfoServiceImpl implements SiteInfoService{
 	@Override
 	public List<String> save(List<SiteInfo> records) throws Exception {
 		try {
+			log.info("Do save with request: {}", ObjectMapperCommonUtil.writeValueAsString(records));
 			List<SiteInfo> siteInfos = repository.saveAll(records);
 			return siteInfos.stream()
 					.map(SiteInfo::getId)
-					.collect(Collectors.toList());
+					.toList();
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("ERROR save: {}", e);
+			throw new Exception("Insert records fail");
 		}
 	}
 
 	@Override
 	public List<SiteInfo> getSiteInfo(GetInternalApiRequest request) throws Exception {
 		try {
+			log.info("Do getSiteInfo with request: {}", ObjectMapperCommonUtil.writeValueAsString(request));
 			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
-			List<SiteInfo> siteInfos = objectMapper.convertValue(results, new TypeReference<List<SiteInfo>>() {});
-			return siteInfos;
+			return objectMapper.convertValue(results, new TypeReference<List<SiteInfo>>() {});
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("ERROR getSiteInfo: {}", e);
+			return List.of();
 		}
 	}
 }

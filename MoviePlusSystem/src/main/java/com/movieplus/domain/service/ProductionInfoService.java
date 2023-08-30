@@ -9,6 +9,6 @@ public interface ProductionInfoService {
 
 	List<String> save(List<ProductionInfo> records) throws Exception;
 
-	List<ProductionInfo> getProduction(GetInternalApiRequest request) throws Exception;
+	List<ProductionInfo> getProduction(GetInternalApiRequest request);
 
 }

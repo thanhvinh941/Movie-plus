@@ -9,6 +9,6 @@ public interface MovieTrailerService {
 
 	List<String> save(List<MovieTrailer> records) throws Exception;
 
-	List<MovieTrailer> getMovieTrailer(GetInternalApiRequest request) throws Exception;
+	List<MovieTrailer> getMovieTrailer(GetInternalApiRequest request);
 
 }

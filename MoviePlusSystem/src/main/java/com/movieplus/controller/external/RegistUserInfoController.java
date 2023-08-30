@@ -1,4 +1,4 @@
-package com.movieplus.controller;
+package com.movieplus.controller.external;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import lombok.Setter;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class EntryUserInfoController {
+public class RegistUserInfoController {
 
 	@Getter
 	@Setter

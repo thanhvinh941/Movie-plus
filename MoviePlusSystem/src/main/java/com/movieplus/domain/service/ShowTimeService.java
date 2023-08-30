@@ -9,6 +9,6 @@ public interface ShowTimeService {
 
 	List<String> save(List<ShowTime> records) throws Exception;
 
-	List<ShowTime> getShowTime(GetInternalApiRequest request) throws Exception;
+	List<ShowTime> getShowTime(GetInternalApiRequest request);
 
 }

@@ -1,7 +1,6 @@
 package com.movieplus.domain.common;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -118,7 +117,7 @@ public class GetMovieDetailInfoService {
 
 		String conditionStr = null;
 		if (!starIds.isEmpty()) {
-			conditionStr = String.format(" id in (%s)", joiningListString(starIds));
+			conditionStr = String.format(" id in (%s)", GeneratorCommonUtil.joiningListString(starIds));
 		}
 		apiRequest.setConditionStr(conditionStr);
 		try {
@@ -134,7 +133,7 @@ public class GetMovieDetailInfoService {
 
 		String conditionStr = null;
 		if (!directorIds.isEmpty()) {
-			conditionStr = String.format(" id in (%s)", joiningListString(directorIds));
+			conditionStr = String.format(" id in (%s)", GeneratorCommonUtil.joiningListString(directorIds));
 		}
 		apiRequest.setConditionStr(conditionStr);
 		try {
@@ -150,7 +149,7 @@ public class GetMovieDetailInfoService {
 
 		String conditionStr = null;
 		if (!genresTypeIds.isEmpty()) {
-			conditionStr = String.format(" id in (%s)", joiningListString(genresTypeIds));
+			conditionStr = String.format(" id in (%s)", GeneratorCommonUtil.joiningListString(genresTypeIds));
 		}
 		apiRequest.setConditionStr(conditionStr);
 		apiRequest.setOrderBys(List.of("order_score ASC"));
@@ -250,7 +249,4 @@ public class GetMovieDetailInfoService {
 		return List.of();
 	}
 
-	private String joiningListString(List<String> datas) {
-		return datas.stream().map(data -> "'" + data + "'").collect(Collectors.joining(", "));
-	}
 }

@@ -24,8 +24,9 @@ public class ReseverSeat {
 	private String id;
 	
 	@Column(nullable = false)
-	private String bookingId;
+	private String seatId;
 	
 	@Column(nullable = false)
-	private String seatId;
+	private String bookingId;
+	
 }

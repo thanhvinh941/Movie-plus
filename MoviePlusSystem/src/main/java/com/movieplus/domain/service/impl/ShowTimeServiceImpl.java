@@ -2,12 +2,12 @@ package com.movieplus.domain.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.domain.common.ObjectMapperCommonUtil;
 import com.movieplus.domain.db.read.RShowTimeMapper;
 import com.movieplus.domain.entity.ShowTime;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
@@ -29,23 +29,26 @@ public class ShowTimeServiceImpl implements ShowTimeService{
 	@Override
 	public List<String> save(List<ShowTime> records) throws Exception {
 		try {
+			log.info("Do save with request: {}", ObjectMapperCommonUtil.writeValueAsString(records));
 			List<ShowTime> showTimes = repository.saveAll(records);
 			return showTimes.stream()
 					.map(ShowTime::getId)
-					.collect(Collectors.toList());
+					.toList();
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("ERROR save: {}", e);
+			throw new Exception("Insert records fail");
 		}
 	}
 
 	@Override
-	public List<ShowTime> getShowTime(GetInternalApiRequest request) throws Exception {
+	public List<ShowTime> getShowTime(GetInternalApiRequest request) {
 		try {
+			log.info("Do getShowTime with request: {}", ObjectMapperCommonUtil.writeValueAsString(request));
 			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
-			List<ShowTime> showTimes = objectMapper.convertValue(results, new TypeReference<List<ShowTime>>() {});
-			return showTimes;
+			return objectMapper.convertValue(results, new TypeReference<List<ShowTime>>() {});
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("ERROR getShowTime: {}", e);
+			return List.of();
 		}
 	}
 }

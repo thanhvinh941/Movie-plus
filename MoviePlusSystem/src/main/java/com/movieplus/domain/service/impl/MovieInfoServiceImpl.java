@@ -2,12 +2,12 @@ package com.movieplus.domain.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.domain.common.ObjectMapperCommonUtil;
 import com.movieplus.domain.db.read.RMovieInfoMapper;
 import com.movieplus.domain.entity.MovieInfo;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
@@ -29,24 +29,26 @@ public class MovieInfoServiceImpl implements MovieInfoService {
 	@Override
 	public List<String> save(List<MovieInfo> records) throws Exception {
 		try {
+			log.info("Do save with request: {}", ObjectMapperCommonUtil.writeValueAsString(records));
 			List<MovieInfo> movieInfos = repository.saveAll(records);
 			return movieInfos.stream()
 					.map(MovieInfo::getId)
-					.collect(Collectors.toList());
+					.toList();
 		} catch (Exception e) {
-			throw new Exception();
+			log.error("ERROR save: {}", e);
+			throw new Exception("Insert records fail");
 		}
 	}
 
 	@Override
-	public List<MovieInfo> getMovieInfo(GetInternalApiRequest request) throws Exception {
+	public List<MovieInfo> getMovieInfo(GetInternalApiRequest request) {
 		try {
+			log.info("Do getMovieInfo with request: {}", ObjectMapperCommonUtil.writeValueAsString(request));
 			List<Map<String, Object>> results = movieInfoMapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
-			List<MovieInfo> movieInfos = objectMapper.convertValue(results, new TypeReference<List<MovieInfo>>() {});
-			return movieInfos;
+			return objectMapper.convertValue(results, new TypeReference<List<MovieInfo>>() {});
 		} catch (Exception e) {
-			log.error("MovieInfoService ERROR call getMovieInfo", e);
-			throw new Exception(e.getMessage());
+			log.error("ERROR getMovieInfo: {}", e);
+			return List.of();
 		}
 	}
 

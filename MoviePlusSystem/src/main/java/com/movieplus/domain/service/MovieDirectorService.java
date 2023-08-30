@@ -7,7 +7,7 @@ import com.movieplus.domain.payload.request.GetInternalApiRequest;
 
 public interface MovieDirectorService {
 
-	List<MovieDirector> getMovieDirector(GetInternalApiRequest apiRequest) throws Exception;
+	List<MovieDirector> getMovieDirector(GetInternalApiRequest apiRequest);
 
 	List<String> save(List<MovieDirector> records) throws Exception;
 

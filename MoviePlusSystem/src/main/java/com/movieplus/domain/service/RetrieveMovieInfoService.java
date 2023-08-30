@@ -1,18 +1,19 @@
 package com.movieplus.domain.service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.movieplus.controller.RetrieveMovieInfoController.RetrieveMovieInfoRequest;
+import com.movieplus.controller.external.RetrieveMovieInfoController.RetrieveMovieInfoRequest;
+import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.GetMovieDetailInfoService;
+import com.movieplus.domain.common.GetShowTimeDetailInfoService;
+import com.movieplus.domain.common.MovieConstance.KeyTypeReturn;
 import com.movieplus.domain.common.dto.MovieDetailInfoDto;
 import com.movieplus.domain.common.dto.ShowTimeDto;
-import com.movieplus.domain.entity.ShowTime;
 import com.movieplus.domain.entity.SiteInfo;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
 import com.movieplus.domain.payload.response.RetrieveMovieInfoResponse;
@@ -28,35 +29,21 @@ public class RetrieveMovieInfoService {
 	
 	private final String CLASS_NAME = "RetrieveMovieInfoService";
 	private final SiteInfoService siteInfoService;
-	private final ShowTimeService showTimeService;
 	private final GetMovieDetailInfoService getMovieDetailInfoService;
+	private final GetShowTimeDetailInfoService getShowTimeDetailInfoService;
 	
 	public void execute(RetrieveMovieInfoRequest request, RetrieveMovieInfoResponse response) {
 		String movieInfoId = request.getMovieId();
 		MovieDetailInfoDto movieDetailInfoDto = getMovieDetailInfoService.getMovieDetailInfo(movieInfoId);
-		List<ShowTime> showTimes = getShowTime(movieInfoId);
-		List<String> siteIds = showTimes.stream()
-				.map(ShowTime::getSiteId)
-				.toList();
+		Map<String, List<ShowTimeDto>> showTimeResources = getShowTimeDetailInfoService.getShowTimeDetail(null, movieInfoId, KeyTypeReturn.SITE);
+		Set<String> siteIds = showTimeResources.keySet();
 		List<SiteInfo> siteInfos = getSiteInfo(siteIds);
 		List<RetrieveMovieInfoResponse.Site> responseSite = siteInfos.stream()
 				.map(s -> {
-					List<ShowTime> showTimeOfSite = showTimes.stream()
-							.filter(st -> st.getSiteId().equals(s.getId()))
-							.toList();
-					List<ShowTimeDto> sTimes =  showTimeOfSite.stream()
-							.map(st -> {
-								ShowTimeDto showTime = new ShowTimeDto();
-								BeanUtils.copyProperties(st, showTime);
-								showTime.setEndTime(st.getEndTime());
-								showTime.setStartTime(st.getStartTime());
-								return showTime;
-							})
-							.toList();
+					List<ShowTimeDto> sTimes = showTimeResources.getOrDefault(s.getId(), List.of());
 					RetrieveMovieInfoResponse.Site site = new RetrieveMovieInfoResponse.Site();
 					BeanUtils.copyProperties(s, site);
 					site.setShowTimes(sTimes);
-					
 					return site;
 				})
 				.toList();
@@ -70,13 +57,13 @@ public class RetrieveMovieInfoService {
 		response.setSites(responseSite);
 	}
 
-	private List<SiteInfo> getSiteInfo(List<String> siteIds) {
+	private List<SiteInfo> getSiteInfo(Set<String> siteIds) {
+		if(siteIds.isEmpty()) {
+			return List.of();
+		}
 		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
 
-		String conditionStr = null;
-		if(!siteIds.isEmpty()) {
-			conditionStr = String.format(" id in (%s)", joiningListString(siteIds));
-		}
+		String conditionStr = String.format(" id in (%s)", GeneratorCommonUtil.joiningListString(siteIds));
 		apiRequest.setConditionStr(conditionStr);
 		try {
 			return siteInfoService.getSiteInfo(apiRequest);
@@ -86,26 +73,4 @@ public class RetrieveMovieInfoService {
 		return List.of();
 	}
 
-	private List<ShowTime> getShowTime(String movieInfoId) {
-		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-
-		LocalDate nowStamp = LocalDate.now();
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		String nowStr = nowStamp.format(dateTimeFormatter);
-		
-		String conditionStr = null;
-		conditionStr = String.format(" movie_id = '%s' AND start_time >= '%s'", movieInfoId, nowStr);
-		apiRequest.setConditionStr(conditionStr);
-		
-		try {
-			return showTimeService.getShowTime(apiRequest);
-		} catch (Exception e) {
-			log.error("{} ERROR call getShowTime", CLASS_NAME, e);
-		}
-		return List.of();
-	}
-
-	private String joiningListString(List<String> datas) {
-		return datas.stream().map(data -> "'" + data + "'").collect(Collectors.joining(", "));
-	}
 }

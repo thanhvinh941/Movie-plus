@@ -1,4 +1,4 @@
-package com.movieplus.controller;
+package com.movieplus.controller.external;
 
 import java.util.List;
 

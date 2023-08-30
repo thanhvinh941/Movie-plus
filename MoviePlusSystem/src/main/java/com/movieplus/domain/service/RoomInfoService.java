@@ -7,7 +7,7 @@ import com.movieplus.domain.payload.request.GetInternalApiRequest;
 
 public interface RoomInfoService {
 
-	List<RoomInfo> getRoomInfo(GetInternalApiRequest request) throws Exception;
+	List<RoomInfo> getRoomInfo(GetInternalApiRequest request);
 
 	List<String> save(List<RoomInfo> records) throws Exception;
 

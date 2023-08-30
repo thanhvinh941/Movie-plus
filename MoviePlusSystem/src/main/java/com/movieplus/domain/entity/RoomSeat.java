@@ -26,7 +26,7 @@ public class RoomSeat {
 	private String seatId;
 	
 	@Column(nullable = false)
-	private byte usableStatus;
+	private Integer usableStatus;
 	
 	@Column(nullable = false)
 	private String roomId;

@@ -7,7 +7,7 @@ import com.movieplus.domain.payload.request.GetInternalApiRequest;
 
 public interface DirectorInfoService {
 
-	List<DirectorInfo> getDirectorInfo(GetInternalApiRequest request) throws Exception;
+	List<DirectorInfo> getDirectorInfo(GetInternalApiRequest request);
 
 	List<String> save(List<DirectorInfo> records) throws Exception;
 

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.movieplus.controller.GetMovieInfoListController.GetMovieListRequest;
+import com.movieplus.controller.external.GetMovieInfoListController.GetMovieListRequest;
 import com.movieplus.domain.entity.GenreType;
 import com.movieplus.domain.entity.MovieGenre;
 import com.movieplus.domain.entity.MovieInfo;

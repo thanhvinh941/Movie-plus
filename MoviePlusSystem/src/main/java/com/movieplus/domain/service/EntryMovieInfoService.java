@@ -2,13 +2,12 @@ package com.movieplus.domain.service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.movieplus.controller.EntryMovieInfoController.EntryMovieInfoResponse;
+import com.movieplus.controller.external.EntryMovieInfoController.EntryMovieInfoResponse;
 import com.movieplus.domain.entity.MovieBanner;
 import com.movieplus.domain.entity.MovieGenre;
 import com.movieplus.domain.entity.MovieInfo;
@@ -16,9 +15,7 @@ import com.movieplus.domain.entity.MovieTrailer;
 import com.movieplus.domain.payload.EntryMovieInfoRequest;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EntryMovieInfoService {
@@ -37,9 +34,11 @@ public class EntryMovieInfoService {
 		movieInfo.setRegistTime(LocalDate.now());
 		movieInfo.setUpdateTime(LocalDate.now());
 		try {
-			movieId = movieInfoService.save(List.of(movieInfo)).get(0);
+			synchronized(this){				
+				movieId = movieInfoService.save(List.of(movieInfo)).get(0);
+			}
 		} catch (Exception e) {
-			throw new Exception();
+			throw new Exception(e);
 		}
 		
 		List<MovieTrailer> movieTrailers = request.getTrailers().stream()
@@ -49,11 +48,11 @@ public class EntryMovieInfoService {
 					movieTrailer.setMovieId(movieId);
 					return movieTrailer;
 				})
-				.collect(Collectors.toList());
+				.toList();
 		try {
 			movieTrailerService.save(movieTrailers);
 		} catch (Exception e) {
-			throw new Exception();
+			throw new Exception(e);
 		}
 		
 		List<MovieBanner> movieBanners = request.getBanners().stream()
@@ -62,11 +61,11 @@ public class EntryMovieInfoService {
 					movieBanner.setBannerSrc(banner);
 					movieBanner.setMovieId(movieId);
 					return movieBanner;
-				}).collect(Collectors.toList());
+				}).toList();
 		try {
 			movieBannerService.save(movieBanners);
 		} catch (Exception e) {
-			throw new Exception();
+			throw new Exception(e);
 		}
 		
 		List<MovieGenre> movieGenres = request.getGenreTypeIds().stream()
@@ -76,11 +75,11 @@ public class EntryMovieInfoService {
 					movieGenre.setMovieId(movieId);
 					return movieGenre;
 				})
-				.collect(Collectors.toList());
+				.toList();
 		try {
 			movieGenreService.save(movieGenres);
 		} catch (Exception e) {
-			throw new Exception();
+			throw new Exception(e);
 		}
 	}
 
