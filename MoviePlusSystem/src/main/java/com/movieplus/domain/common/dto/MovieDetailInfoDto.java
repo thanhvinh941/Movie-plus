@@ -16,7 +16,7 @@ public class MovieDetailInfoDto {
 	private List<String> banners;
 	private List<TrailerDto> trailers;
 	private List<GenreTypeDto> genreType;
-	private List<DirectorDto> directors;
-	private List<StarInfoDto> starInfos;
+	private List<DirectorDto> directors; // TODO add type of director
+	private List<StarInfoDto> starInfos; // TODO add caster
 	private ProductionInfoDto productionInfo;
 }

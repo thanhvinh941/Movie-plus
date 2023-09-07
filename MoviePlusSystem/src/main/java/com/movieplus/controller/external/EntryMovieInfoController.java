@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @RestController
-@RequestMapping("/api/movie")
+@RequestMapping("/api/admin/movie")
 @RequiredArgsConstructor
 public class EntryMovieInfoController {
 

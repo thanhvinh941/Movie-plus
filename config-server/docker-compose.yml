@@ -16,6 +16,15 @@ services:
       - '6379:6379'
     environment:
       - REDIS_PASSWORD=test
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./static:/usr/share/nginx/html
+    networks:
+      - movie-plus
   # elasticsearch:
   #   container_name: elasticsearch-batch
   #   image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3

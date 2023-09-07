@@ -12,7 +12,7 @@
                   nz-image
                   width="200px"
                   height="200px"
-                  nzSrc="{{ movie.imageUrl }}"
+                  nzSrc="{{ movie.thumnail }}"
                   alt=""
                 />
                 <nz-rate class="movie-rating" [ngModel]="5" nzDisabled />
@@ -27,19 +27,21 @@
       </ng-container>
     </nz-content>
     <nz-footer>
-      <ng-container *ngIf="total$ > 0; else noMovie" >
+      <ng-container *ngIf="total$ > 0; else noMovie">
         <nz-pagination
           nzShowSizeChanger
           nzShowQuickJumper
-          [nzPageIndex]="(pageIndex$)"
-          [nzTotal]="(total$)"
-          [nzPageSize]="(pageSize$)"
+          [nzPageIndex]="pageIndex$"
+          [nzTotal]="total$"
+          [nzPageSize]="pageSize$"
           [nzShowTotal]="totalTemplate"
         ></nz-pagination>
       </ng-container>
     </nz-footer>
   </nz-layout>
 </div>
-<ng-template #totalTemplate let-range="range" let-total> {{ range[0] }}-{{ range[1] }} of {{ total }} items</ng-template>
+<ng-template #totalTemplate let-range="range" let-total>
+  {{ range[0] }}-{{ range[1] }} of {{ total }} items</ng-template
+>
 <ng-template #loading><nz-spin nzSimple></nz-spin></ng-template>
 <ng-template #noMovie>empty</ng-template>
