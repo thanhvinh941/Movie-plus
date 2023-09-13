@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/internal/movie")
+@RequestMapping("/internal")
 public class MovieGenreInternalController {
 	
 	private String[] logTitle = {"MovieGenre_Internal"};

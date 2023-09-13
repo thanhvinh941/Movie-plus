@@ -23,11 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/internal/movie")
+@RequestMapping("/internal")
 public class GetMovieDetailInfoController {
 	
 	private String[] logTitle = {"COMMON_getMovieDetailInfo"};
-	
 	private final GetMovieDetailInfoService getMovieDetailInfoService;
 	private final MessageManager messageManager;
 	

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movieplus.domain.db.read.RUserInfoMapper">
+	<resultMap id="ResultMap" type="java.util.LinkedHashMap">
+		<id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id" />
+		<result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="username" />
+		<result column="f_name" jdbcType="VARCHAR" javaType="java.lang.String" property="fName" />
+		<result column="l_name" jdbcType="VARCHAR" javaType="java.lang.String" property="lName" />
+		<result column="email" jdbcType="VARCHAR" javaType="java.lang.String" property="email" />
+		<result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="password" />
+		<result column="image_url" jdbcType="VARCHAR" javaType="java.lang.String" property="imageUrl" />
+		<result column="email_valid_flag" jdbcType="INTEGER" javaType="java.lang.Byte" property="emailValidFlag" />
+		<result column="regist_time" jdbcType="TIMESTAMP" javaType="java.lang.String" property="registTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" javaType="java.lang.String" property="updateTime" />
+	</resultMap>
+	<select id="selectWhere" parameterType="String" resultMap="ResultMap">
+		SELECT
+    	id,
+    	username,
+    	f_name, 
+    	l_name,
+    	email,
+    	password,
+    	image_url,
+    	email_valid_flag,
+		regist_time,
+		update_time
+    FROM 
+    	user_info
+		<if test="where != null">
+			WHERE
+		${where}
+			<if test="orderBys != null and orderBys.size > 0">
+				ORDER BY
+				<foreach item="orderBy" collection="orderBys" separator=", ">${orderBy}</foreach>
+			</if>
+			<if test="limit > 0">
+		LIMIT #{limit}
+	</if>
+			<if test="offset > 0">
+		OFFSET #{offset}
+	</if>
+		</if>
+	</select>
+</mapper>
