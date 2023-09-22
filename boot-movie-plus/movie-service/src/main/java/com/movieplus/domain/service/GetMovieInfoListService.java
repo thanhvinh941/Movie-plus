@@ -1,22 +1,32 @@
 package com.movieplus.domain.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.movieplus.controller.external.GetMovieInfoListController.GetMovieListRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.controller.external.GetMovieInfoListByGenreTypeController.GetMovieListRequest;
+import com.movieplus.domain.common.RRelationalRepository;
 import com.movieplus.domain.entity.GenreType;
 import com.movieplus.domain.entity.MovieGenre;
 import com.movieplus.domain.entity.MovieInfo;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
 import com.movieplus.domain.payload.response.GetMovieListResponse;
+import com.movieplus.domain.payload.response.GetMovieListResponse.GenreType.Movie;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -27,9 +37,12 @@ public class GetMovieInfoListService {
 	private final GenreTypeService genreTypeService;
 	private final MovieInfoService movieInfoService;
 	private final MovieGenreService movieGenreService;
-
-	public void execute(GetMovieListRequest request, GetMovieListResponse response) {
+	private final ObjectMapper objectMapper;
+	private final RRelationalRepository relationalRepository;
+	
+	public void execute(GetMovieListRequest request, GetMovieListResponse response) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		List<GenreType> genreTypes = getGenreType(request.getGenreTypeIds());
+		
 		List<String> genreTypeIds = genreTypes.stream().map(GenreType::getId).toList();
 
 		List<MovieGenre> movieGenres = getMovieGenre2(genreTypeIds);

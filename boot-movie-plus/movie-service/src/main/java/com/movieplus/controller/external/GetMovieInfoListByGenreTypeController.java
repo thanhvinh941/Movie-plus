@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
-public class GetMovieInfoListController {
+public class GetMovieInfoListByGenreTypeController {
 
 	private final String[] logTitle = { "GetMovieInfoList" };
 	private final GetMovieInfoListService getMovieInfoListService;

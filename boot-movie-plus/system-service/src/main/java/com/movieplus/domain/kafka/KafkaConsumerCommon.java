@@ -1,9 +1,12 @@
 package com.movieplus.domain.kafka;
 
+import java.util.List;
+
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.domain.common.KafkaListenerRequest;
 import com.movieplus.domain.common.MoviePlusConstance;
@@ -29,7 +32,7 @@ public class KafkaConsumerCommon {
 		switch (topicTarget) {
 			case MoviePlusConstance.KAFKA_ROOM: {
 				String roomId = request.getId();
-				TopicRoomRequest topicRoomRequest = objectMapper.convertValue(request.getData(), TopicRoomRequest.class);
+				List<TopicRoomRequest> topicRoomRequest = objectMapper.convertValue(request.getData(), new TypeReference<List<TopicRoomRequest>>() {});
 				websocketService.sendToTopic(MoviePlusConstance.SOCKET_ROOM, roomId, topicRoomRequest);
 				break;
 			}
