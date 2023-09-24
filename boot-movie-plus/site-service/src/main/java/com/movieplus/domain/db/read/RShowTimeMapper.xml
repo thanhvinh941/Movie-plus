@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movieplus.domain.db.read.RShowTimeMapper">
+	<resultMap id="ResultMap" type="java.util.LinkedHashMap">
+		<id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id" />
+		<result column="movie_id" jdbcType="VARCHAR" javaType="java.lang.String" property="movieId" />
+		<result column="site_id" jdbcType="VARCHAR" javaType="java.lang.String" property="siteId" />
+		<result column="room_id" jdbcType="VARCHAR" javaType="java.lang.String" property="roomId" />
+		<result column="start_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" property="startTime" />
+		<result column="end_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" property="endTime" />
+	</resultMap>
+	<select id="selectWhere" parameterType="String" resultMap="ResultMap">
+		SELECT
+    	id,
+    	movie_id,
+    	site_id,
+    	room_id,
+    	start_time,
+    	end_time
+    FROM 
+    	show_time
+		<if test="where != null">
+			WHERE
+		${where}
+			<if test="orderBys != null and orderBys.size > 0">
+				ORDER BY
+				<foreach item="orderBy" collection="orderBys" separator=", ">${orderBy}</foreach>
+			</if>
+			<if test="limit > 0">
+		LIMIT #{limit}
+	</if>
+			<if test="offset > 0">
+		OFFSET #{offset}
+	</if>
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movieplus.domain.db.read.RStarInfoMapper">
+	<resultMap id="ResultMap" type="java.util.LinkedHashMap">
+		<id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id" />
+		<result column="star_name" jdbcType="VARCHAR" javaType="java.lang.String" property="starName" />
+		<result column="star_description" jdbcType="VARCHAR" javaType="java.lang.String" property="starDescription" />
+		<result column="star_avatar" jdbcType="VARCHAR" javaType="java.lang.String" property="starAvatar" />
+		<result column="nationality" jdbcType="VARCHAR" javaType="java.lang.String" property="nationality" />
+	</resultMap>
+	<select id="selectWhere" parameterType="String" resultMap="ResultMap">
+		SELECT
+    	id,
+    	star_name,
+    	star_description, 
+    	star_avatar,
+    	nationality
+    FROM 
+    	star_info
+		<if test="where != null">
+			WHERE
+		${where}
+			<if test="orderBys != null and orderBys.size > 0">
+				ORDER BY
+				<foreach item="orderBy" collection="orderBys" separator=", ">${orderBy}</foreach>
+			</if>
+			<if test="limit > 0">
+		LIMIT #{limit}
+	</if>
+			<if test="offset > 0">
+		OFFSET #{offset}
+	</if>
+		</if>
+	</select>
+</mapper>
