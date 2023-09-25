@@ -1,6 +1,7 @@
 package com.movieplus.domain.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
@@ -33,6 +34,9 @@ public class UserInfo {
 	
 	private String lName;
 	
+	@Column(columnDefinition = "integer default 0")
+	private Byte isAdmin;
+	
 	@Column(nullable = false)
 	private String email;
 	@Column(nullable = false)
@@ -43,11 +47,17 @@ public class UserInfo {
 	@Column(nullable = false)
 	private Byte emailValidFlag;
 
-	@Column(nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate registTime;
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime registTime;
 	
-	@Column(nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate updateTime;
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime updateTime;
+	
+	@Column(columnDefinition = "VARCHAR(255) default 'postman_update'")
+	private String updateUser;
+	
+	@Column(columnDefinition = "integer default 0")
+	private Byte delFlg;
 }

@@ -33,9 +33,9 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Getter
 	@Setter
-	public static class LoginResponse{
+	public static class LoginResponse<T extends UserSession>{
 		
-		private UserSession user;
+		private T user;
 		private Token token;
 		
 		@Getter
@@ -58,6 +58,7 @@ public class LoginServiceImpl implements LoginService {
 	@Value("${jwt.expriration}")
 	private int expriration;
 	
+	@SuppressWarnings("removal")
 	@Override
 	public LoginResponse doLogin(LoginRequest loginRequest) throws Exception {
 		
@@ -68,6 +69,10 @@ public class LoginServiceImpl implements LoginService {
 		
 		if(userInfo.getEmailValidFlag() == 0) {
 			throw new Exception("User not found");
+		}
+		
+		if((loginRequest.isAdmin() ? new Byte("1") : new Byte("0")).equals(userInfo.getIsAdmin())) {
+			throw new Exception("User no permission");
 		}
 		
 		String userPassword = userInfo.getPassword();
@@ -83,6 +88,7 @@ public class LoginServiceImpl implements LoginService {
 			if(!Objects.isNull(userTokenService.save(userToken))){
 				
 			}
+			
 			LoginResponse loginResponse = new LoginResponse();
 
 			UserSession userSession = new UserSession();

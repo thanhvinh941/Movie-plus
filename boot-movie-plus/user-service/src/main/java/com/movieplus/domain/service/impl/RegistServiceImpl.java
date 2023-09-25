@@ -1,6 +1,7 @@
 package com.movieplus.domain.service.impl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -28,8 +29,8 @@ public class RegistServiceImpl implements RegistService {
 			BeanUtils.copyProperties(request, userInfo);
 			userInfo.setPassword(passwordEncoder.encode(request.getPassword()));
 			userInfo.setEmailValidFlag((byte) 0);
-			userInfo.setUpdateTime(LocalDate.now());
-			userInfo.setRegistTime(LocalDate.now());
+			userInfo.setUpdateTime(LocalDateTime.now());
+			userInfo.setRegistTime(LocalDateTime.now());
 			
 			List<String> userIds = userInfoService.save(List.of(userInfo));
 			
