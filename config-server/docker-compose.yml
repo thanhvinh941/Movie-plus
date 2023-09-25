@@ -7,7 +7,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Zaq12wsx1234
       MYSQL_ROOT_HOST: '%'
-      MYSQL_DATABASE: moviedb
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
     networks:
       - movie-plus
   cache:

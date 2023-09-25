@@ -44,7 +44,7 @@ public class MovieInfoServiceImpl implements MovieInfoService {
 	public List<MovieInfo> getMovieInfo(GetInternalApiRequest request) {
 		try {
 			log.info("Do getMovieInfo with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			List<Map<String, Object>> results = movieInfoMapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
+			List<Map<String, Object>> results = movieInfoMapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), List.of());
 			return objectMapper.convertValue(results, new TypeReference<List<MovieInfo>>() {});
 		} catch (Exception e) {
 			log.error("ERROR getMovieInfo: {}", e);

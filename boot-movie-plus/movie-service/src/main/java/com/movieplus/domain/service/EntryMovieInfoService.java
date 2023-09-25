@@ -1,13 +1,13 @@
 package com.movieplus.domain.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.movieplus.controller.external.EntryMovieInfoController.EntryMovieInfoResponse;
+import com.movieplus.controller.external.operator.RegistMovieInfoController.EntryMovieInfoResponse;
 import com.movieplus.domain.entity.MovieBanner;
 import com.movieplus.domain.entity.MovieGenre;
 import com.movieplus.domain.entity.MovieInfo;
@@ -31,8 +31,8 @@ public class EntryMovieInfoService {
 	public void execute(EntryMovieInfoRequest request, EntryMovieInfoResponse response) throws Exception {
 		MovieInfo movieInfo = new MovieInfo();
 		BeanUtils.copyProperties(request, movieInfo);
-		movieInfo.setRegistTime(LocalDate.now());
-		movieInfo.setUpdateTime(LocalDate.now());
+		movieInfo.setRegistTime(LocalDateTime.now());
+		movieInfo.setUpdateTime(LocalDateTime.now());
 		try {
 			synchronized(this){				
 				movieId = movieInfoService.save(List.of(movieInfo)).get(0);

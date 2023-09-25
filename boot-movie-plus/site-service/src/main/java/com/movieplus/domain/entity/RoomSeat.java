@@ -1,7 +1,12 @@
 package com.movieplus.domain.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,4 +35,18 @@ public class RoomSeat {
 	
 	@Column(nullable = false)
 	private String roomId;
+
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime registTime;
+	
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime updateTime;
+	
+	@Column(nullable = false)
+	private String updateUser;
+	
+	@Column(nullable = false, columnDefinition = "integer default 0")
+	private Integer delFlg;
 }

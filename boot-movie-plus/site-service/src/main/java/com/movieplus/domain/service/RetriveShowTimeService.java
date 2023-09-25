@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.movieplus.controller.external.RetriveShowTimeController.RetriveShowTimeRequest;
+import com.movieplus.controller.external.member.RetriveShowTimeController.RetriveShowTimeRequest;
 import com.movieplus.domain.common.CallInternalAPIService;
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.TypeReferenceConstance;

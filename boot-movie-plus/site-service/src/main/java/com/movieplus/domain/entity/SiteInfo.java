@@ -1,7 +1,12 @@
 package com.movieplus.domain.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,4 +33,39 @@ public class SiteInfo {
 
 	@Column(nullable = false)
 	private String localtion;
+	
+	@Column(nullable = false)
+	private String siteGradle;
+	
+	@Column(nullable = false)
+	private String siteZipNo;
+	
+	@Column(nullable = false)
+	private Double siteLonX;
+	
+	@Column(nullable = false)
+	private Double siteLatY;
+	
+	private String accessInfo;
+	
+	private String information;
+	
+	private String notice;
+	
+	@Column(nullable = false)
+	private String siteAreaGroupId;
+
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime registTime;
+	
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime updateTime;
+	
+	@Column(nullable = false)
+	private String updateUser;
+	
+	@Column(nullable = false, columnDefinition = "integer default 0")
+	private Integer delFlg;
 }

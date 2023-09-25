@@ -9,7 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.movieplus.controller.external.RetrieveMovieInfoController.RetrieveMovieInfoRequest;
+import com.movieplus.controller.external.member.RetrieveMovieInfoController.RetrieveMovieInfoRequest;
 import com.movieplus.domain.common.CallInternalAPIService;
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.MoviePlusConstance.KeyTypeReturn;

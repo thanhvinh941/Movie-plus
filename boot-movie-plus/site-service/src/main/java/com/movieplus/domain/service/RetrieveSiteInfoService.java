@@ -10,7 +10,7 @@ import java.util.Set;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.movieplus.controller.external.RetrieveSiteInfoController.RetrieveSiteInfoRequest;
+import com.movieplus.controller.external.member.RetrieveSiteInfoController.RetrieveSiteInfoRequest;
 import com.movieplus.domain.common.CallInternalAPIService;
 import com.movieplus.domain.common.MovieConstance.KeyTypeReturn;
 import com.movieplus.domain.common.TypeReferenceConstance;

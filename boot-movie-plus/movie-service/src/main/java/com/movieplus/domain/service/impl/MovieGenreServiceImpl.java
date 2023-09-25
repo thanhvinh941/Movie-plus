@@ -44,7 +44,7 @@ public class MovieGenreServiceImpl implements MovieGenreService {
 	public List<MovieGenre> getMovieGenre(GetInternalApiRequest request) {
 		try {
 			log.info("Do getMovieGenre with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
+			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), List.of());
 			return objectMapper.convertValue(results, new TypeReference<List<MovieGenre>>() {});
 		} catch (Exception e) {
 			log.error("ERROR save: {}", e);

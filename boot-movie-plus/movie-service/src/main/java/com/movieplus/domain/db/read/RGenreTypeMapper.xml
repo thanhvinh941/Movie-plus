@@ -6,13 +6,14 @@
 		<result column="genre_kbn" jdbcType="INTEGER" javaType="java.lang.Byte" property="genreKbn" />
 		<result column="display_name" jdbcType="VARCHAR" javaType="java.lang.String" property="displayName" />
 		<result column="order_score" jdbcType="INTEGER" javaType="java.lang.Integer" property="orderScore" />
+		<result column="movie_grade_id" jdbcType="VARCHAR" javaType="java.lang.String" property="movieGradeId" />
+		<result column="regist_time" jdbcType="VARCHAR" property="registTime" />
+		<result column="update_time" jdbcType="VARCHAR"  property="updateTime" />
+		<result column="update_user" jdbcType="VARCHAR" javaType="java.lang.String" property="updateUser" />
 	</resultMap>
 	<select id="selectWhere" parameterType="String" resultMap="ResultMap">
-		SELECT
-    	id,
-    	genre_kbn,
-    	display_name, 
-    	order_score
+	SELECT
+    	*
     FROM 
     	genre_type
 		<if test="where != null">

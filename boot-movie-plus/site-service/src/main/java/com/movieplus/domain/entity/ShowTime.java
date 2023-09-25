@@ -1,5 +1,6 @@
 package com.movieplus.domain.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UuidGenerator;
@@ -43,4 +44,18 @@ public class ShowTime {
 	@Column(nullable = false)
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime endTime;
+
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime registTime;
+	
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime updateTime;
+	
+	@Column(nullable = false)
+	private String updateUser;
+	
+	@Column(nullable = false, columnDefinition = "integer default 0")
+	private Integer delFlg;
 }

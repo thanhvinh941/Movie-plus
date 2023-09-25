@@ -44,7 +44,7 @@ public class MovieStarServiceImpl implements MovieStarService {
 	public List<MovieStar> getMovieStar(GetInternalApiRequest request) {
 		try {
 			log.info("Do save with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
+			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), List.of());
 			return objectMapper.convertValue(results, new TypeReference<List<MovieStar>>() {});
 		} catch (Exception e) {
 			log.error("ERROR save: {}", e);

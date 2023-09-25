@@ -44,7 +44,7 @@ public class MovieDirectorServiceImpl implements MovieDirectorService {
 	public List<MovieDirector> getMovieDirector(GetInternalApiRequest request) {
 		try {
 			log.info("Do getMovieDirector with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
+			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), List.of());
 			return objectMapper.convertValue(results, new TypeReference<List<MovieDirector>>() {});
 		} catch (Exception e) {
 			log.error("ERROR getMovieDirector: {}", e);

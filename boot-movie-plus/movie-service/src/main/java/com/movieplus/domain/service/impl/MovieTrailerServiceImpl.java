@@ -44,7 +44,7 @@ public class MovieTrailerServiceImpl implements MovieTrailerService{
 	public List<MovieTrailer> getMovieTrailer(GetInternalApiRequest request) {
 		try {
 			log.info("Do getMovieTrailer with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
+			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), List.of());
 			return objectMapper.convertValue(results, new TypeReference<List<MovieTrailer>>() {});
 		} catch (Exception e) {
 			log.error("ERROR getMovieTrailer: {}", e);

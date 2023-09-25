@@ -1,6 +1,7 @@
 package com.movieplus.domain.payload.request;
 
 import java.util.List;
+import java.util.Map;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,6 @@ public class GetInternalApiRequest {
 	private String conditionStr;
 	private int limit;
 	private int offset;
-	private List<String> orderBys;
+	private Map<String, String> orderBys;
 	private List<String> columeSelect;
 }

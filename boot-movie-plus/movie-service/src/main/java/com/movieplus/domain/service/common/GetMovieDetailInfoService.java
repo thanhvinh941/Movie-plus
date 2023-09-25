@@ -1,6 +1,7 @@
 package com.movieplus.domain.service.common;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -47,24 +48,6 @@ public class GetMovieDetailInfoService {
 
 		MovieInfo movieInfo = movieInfos.get(0);
 		String movieInfoId = movieInfo.getId();
-
-//		List<MovieDirector> movieDirectors = getMovieDirector(movieInfoId);
-//		List<String> directorIds = movieDirectors.stream().map(MovieDirector::getDirectorId).toList();
-//		List<DirectorInfoDTO> directorInfos = getDirectorInfo(directorIds);
-//		List<DirectorDto> responseDirectorInfo = directorInfos.stream().map(d -> {
-//			DirectorDto director = new DirectorDto();
-//			BeanUtils.copyProperties(d, director);
-//			return director;
-//		}).toList();
-
-//		List<MovieStar> movieStars = getMovieStar(movieInfoId);
-//		List<String> starIds = movieStars.stream().map(MovieStar::getStarId).toList();
-//		List<StarInfoDTO> starInfos = getStarInfo(starIds);
-//		List<StarInfoDto> responseStar = starInfos.stream().map(s -> {
-//			StarInfoDto starInfo = new StarInfoDto();
-//			BeanUtils.copyProperties(s, starInfo);
-//			return starInfo;
-//		}).toList();
 
 		List<MovieBanner> movieBanners = getMovieBanner(movieInfoId);
 		List<String> responseBanners = movieBanners.stream().map(MovieBanner::getBannerSrc).toList();
@@ -141,7 +124,7 @@ public class GetMovieDetailInfoService {
 			conditionStr = String.format(" id in (%s)", GeneratorCommonUtil.joiningListString(genresTypeIds));
 		}
 		apiRequest.setConditionStr(conditionStr);
-		apiRequest.setOrderBys(List.of("order_score ASC"));
+		apiRequest.setOrderBys(Map.of("order_score" ,"ASC"));
 		try {
 			return genreTypeService.getGenreType(apiRequest);
 		} catch (Exception e) {

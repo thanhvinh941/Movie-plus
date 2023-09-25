@@ -15,8 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class MultiSecurityConfig {
 
 	@Bean
-	public UserAuthTokenFilter authTokenFilter() {
-		return new UserAuthTokenFilter();
+	public MemberAuthTokenFilter authTokenFilter() {
+		return new MemberAuthTokenFilter();
 	}
 
 	@Bean
@@ -30,7 +30,7 @@ public class MultiSecurityConfig {
 		http.csrf(csrf -> csrf.disable())
 			.securityMatcher("/api/user/**")
 			.authorizeHttpRequests(authorize -> authorize
-					.anyRequest().authenticated()
+					.anyRequest().hasRole("USER")
 				);
 
 		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -50,4 +50,9 @@ public class MultiSecurityConfig {
 
 		return http.build();
 	}
+	
+	public enum Role {
+        ROLE_USER,
+        ROLE_ADMIN
+    }
 }

@@ -44,7 +44,7 @@ public class MovieBannerServiceImpl implements MovieBannerService {
 	public List<MovieBanner> getMovieBanner(GetInternalApiRequest request){
 		try {
 			log.info("Do getMovieBanner with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
+			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), List.of());
 			return objectMapper.convertValue(results, new TypeReference<List<MovieBanner>>() {});
 		} catch (Exception e) {
 			log.error("ERROR getMovieBanner: {}", e);
