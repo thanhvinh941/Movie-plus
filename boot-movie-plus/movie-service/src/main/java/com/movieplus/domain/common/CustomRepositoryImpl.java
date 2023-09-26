@@ -105,4 +105,16 @@ public class CustomRepositoryImpl<T, ID> implements CustomRepository<T, ID> {
 		return selectSql.getResultList();
 	}
 
+	@Override
+	public Long count(Class<T> tableName, String conditionStr) {
+		String sqlQuery = String.format("SELECT COUNT(id) FROM %s",
+				Util.convertSnake(tableName.getSimpleName()));
+		if (!StringUtils.isBlank(conditionStr)) {
+			sqlQuery += String.format(" WHERE %s", conditionStr);
+		}
+		
+		Query countSql = entityManager.createNativeQuery(sqlQuery);
+		return (Long) countSql.getSingleResult();
+	}
+
 }

@@ -13,7 +13,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.MessageManager;
+import com.movieplus.domain.common.dto.MovieDetailInfoDto;
 import com.movieplus.domain.payload.response.GetMovieInfoResponse;
+import com.movieplus.domain.payload.response.PaginationResponse;
 import com.movieplus.domain.service.GetMovieInfoService;
 
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GetMovieInfoController {
 
 	private final String[] logTitle = { "GetMovieInfo" };
+	private final ObjectMapper objectMapper;
 	private final MessageManager messageManager;
 	private final GetMovieInfoService service;
 
@@ -44,8 +47,7 @@ public class GetMovieInfoController {
 		GetMovieInfoRequest request = new GetMovieInfoRequest();
 		// DecodeRequest
 		try {
-			request = new ObjectMapper().readValue(requestStr, new TypeReference<GetMovieInfoRequest>() {
-			});
+			request = objectMapper.readValue(requestStr, new TypeReference<GetMovieInfoRequest>() {});
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
 			return GeneratorCommonUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));

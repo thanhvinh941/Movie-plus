@@ -11,4 +11,6 @@ public interface CustomRepository<T, ID> {
 
 	List<T> selectByCondition(Class<T> tableName, String conditionStr, List<String> listFields, /*field|sort_type*/Map<String, String> orderBy,
 			Integer limit, Integer offset, boolean isForUpdate);
+	
+	Long count(Class<T> tableName, String conditionStr);
 }

@@ -6,10 +6,9 @@ import com.movieplus.domain.common.dto.DirectorDto;
 import com.movieplus.domain.common.dto.GenreTypeDto;
 import com.movieplus.domain.common.dto.ProductionInfoDto;
 import com.movieplus.domain.common.dto.StarInfoDto;
+import com.movieplus.domain.common.dto.TrailerDto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class GetMovieInfoResponse {
@@ -26,11 +25,4 @@ public class GetMovieInfoResponse {
 	private List<DirectorDto> directors; // TODO add type of director
 	private List<StarInfoDto> starInfos; // TODO add caster
 	private ProductionInfoDto productionInfo;
-	
-	@Getter
-	@Setter
-	public static class TrailerDto extends com.movieplus.domain.common.dto.TrailerDto {
-		private String id;
-	}
-	
 }
