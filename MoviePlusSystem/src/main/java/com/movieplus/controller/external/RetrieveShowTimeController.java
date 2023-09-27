@@ -18,8 +18,8 @@ import lombok.Setter;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/show-time")
-public class RetriveShowTimeController {
+@RequestMapping("/api/site")
+public class RetrieveShowTimeController {
 	
 	@Getter
 	@Setter
@@ -29,7 +29,7 @@ public class RetriveShowTimeController {
 
 	private final RetriveShowTimeService service;
 	
-	@RequestMapping("/retriveShowTime")
+	@RequestMapping("/retrieveShowTime")
 	@ResponseBody
 	public String doRetriveShowTime(@RequestBody RetriveShowTimeRequest request) {
 		try {

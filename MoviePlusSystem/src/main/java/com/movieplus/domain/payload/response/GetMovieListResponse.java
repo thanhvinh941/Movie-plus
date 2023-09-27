@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GetMovieListResponse {
-	private List<GenreType> genreType;
+	private List<GenreType> genreTypes;
 
 	@Getter
 	@Setter

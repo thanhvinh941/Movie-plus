@@ -12,8 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RetriveShowTimeResponse extends ShowTimeDto{
-	private MovieDetailInfoDto movieDetailInfoDto;
-	private List<Map<String, List<Seat>>> seatMatrix; //Map<row, List<seat>>
+	private MovieDetailInfoDto movieInfo;
+	private List<Map<String, List<Seat>>> seatMatrixs; //Map<row, List<seat>>
 	
 	@Getter
 	@Setter

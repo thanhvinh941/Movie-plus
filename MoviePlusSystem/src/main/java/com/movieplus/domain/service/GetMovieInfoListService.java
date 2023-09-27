@@ -101,7 +101,7 @@ public class GetMovieInfoListService {
 			genreTypeResponses.add(genreTypeResponse);
 		}
 
-		response.setGenreType(genreTypeResponses);
+		response.setGenreTypes(genreTypeResponses);
 	}
 
 	private List<GenreType> getGenreType(List<String> genresTypeIds) {

@@ -33,9 +33,9 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Getter
 	@Setter
-	public static class LoginResponse{
+	public static class LoginResponse<T extends UserSession>{
 		
-		private UserSession user;
+		private T user;
 		private Token token;
 		
 		@Getter
@@ -83,7 +83,7 @@ public class LoginServiceImpl implements LoginService {
 			if(!Objects.isNull(userTokenService.save(userToken))){
 				
 			}
-			LoginResponse loginResponse = new LoginResponse();
+			LoginResponse<UserSession> loginResponse = new LoginResponse<UserSession>();
 
 			UserSession userSession = new UserSession();
 			BeanUtils.copyProperties(userInfo, userSession);

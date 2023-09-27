@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.movieplus.controller.external.RetriveShowTimeController.RetriveShowTimeRequest;
+import com.movieplus.controller.external.RetrieveShowTimeController.RetriveShowTimeRequest;
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.GetMovieDetailInfoService;
 import com.movieplus.domain.common.dto.MovieDetailInfoDto;
@@ -82,9 +82,9 @@ public class RetriveShowTimeService {
 		response.setEndTime(showTime.getEndTime());
 		response.setStartTime(showTime.getStartTime());
 		response.setId(request.getShowTimeId());
-		response.setMovieDetailInfoDto(movieDetailInfoDto);
+		response.setMovieInfo(movieDetailInfoDto);
 		response.setRoomInfo(roomInfoResponse);
-		response.setSeatMatrix(seatMatrix);
+		response.setSeatMatrixs(seatMatrix);
 	}
 
 	private List<SeatMaster> getSeatMaster(List<String> seatMasterIds) {

@@ -6,9 +6,9 @@ import { AppComponent } from './app.component';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
-import en  from '@angular/common/locales/en';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import en from '@angular/common/locales/en';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgZorroAntdModule } from './common/ng-zorro-antd.module';
 import { HomePageComponent } from './view/page/home-page/home-page.component';
@@ -16,6 +16,10 @@ import { TicketPageComponent } from './view/page/ticket-page/ticket-page.compone
 import { MoviePageComponent } from './view/page/movie-page/movie-page.component';
 import { MovieDetailPageComponent } from './view/page/movie-detail-page/movie-detail-page.component';
 import { BreadcrumbComponent } from './view/common/breadcrumb/breadcrumb.component';
+import { AuthInterceptor } from './shared/services/auth-service/AuthInterceptor';
+import { HomeComponent } from './modules/member/page/home/home.component';
+import { OperatorModule } from './modules/operator/operator.module';
+import { MemberModule } from './modules/member/member.module';
 
 registerLocaleData(en);
 
@@ -26,7 +30,8 @@ registerLocaleData(en);
     TicketPageComponent,
     MoviePageComponent,
     MovieDetailPageComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,11 +39,19 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NgZorroAntdModule
+    NgZorroAntdModule,
+    ReactiveFormsModule,
+    OperatorModule,
+    MemberModule,
   ],
   providers: [
-    { provide: NZ_I18N, useValue: en_US }
+    { provide: NZ_I18N, useValue: en_US },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

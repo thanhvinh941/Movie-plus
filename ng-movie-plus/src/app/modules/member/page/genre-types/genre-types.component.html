@@ -1,0 +1,31 @@
+<p>genre-types works!</p>
+<div *ngIf="genreTypes$ | async as genreTypes; else loading">
+  <ng-container *ngFor="let genreType of genreTypes">
+    <h3>{{ genreType.displayName }}</h3>
+    <ng-container *ngFor="let movie of genreType.movies">
+      <div nz-col style="width: 300px">
+        <a routerLink="/movie/{{ movie.id }}">
+          <div class="movie">
+            <div class="movie-conten">
+              <img
+                class="movie-img"
+                nzDisablePreview="true"
+                nz-image
+                width="200px"
+                height="200px"
+                nzSrc="{{ movie.thumnail }}"
+                alt=""
+              />
+            </div>
+            <div class="movie-des">
+              <!-- <h3>{{ movie.movieName }}</h3> -->
+              <h3>{{ movie.movieSubName }}</h3>
+              <h6>{{ movie.yearReleaseAt }}</h6>
+            </div>
+          </div>
+        </a>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+<ng-template #loading><nz-spin nzSimple></nz-spin></ng-template>
