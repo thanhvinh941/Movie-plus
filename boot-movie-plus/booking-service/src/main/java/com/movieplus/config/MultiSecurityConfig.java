@@ -15,8 +15,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class MultiSecurityConfig {
 
 	@Bean
-	public UserAuthTokenFilter authTokenFilter() {
+	public UserAuthTokenFilter userAuthTokenFilter() {
 		return new UserAuthTokenFilter();
+	}
+	
+	@Bean
+	public AdminAuthTokenFilter adminAuthTokenFilter() {
+		return new AdminAuthTokenFilter();
 	}
 
 	@Bean
@@ -33,7 +38,7 @@ public class MultiSecurityConfig {
 					.anyRequest().authenticated()
 				);
 
-		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(userAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
@@ -46,7 +51,7 @@ public class MultiSecurityConfig {
 					.anyRequest().hasRole("ADMIN")
 				);
 
-		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(adminAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

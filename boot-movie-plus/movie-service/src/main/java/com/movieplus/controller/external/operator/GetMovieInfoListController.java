@@ -1,6 +1,7 @@
 package com.movieplus.controller.external.operator;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.MessageManager;
 import com.movieplus.domain.common.dto.MovieDetailInfoDto;
+import com.movieplus.domain.entity.MovieInfo;
 import com.movieplus.domain.payload.response.PaginationResponse;
 import com.movieplus.domain.service.GetMovieInfoListService;
 
@@ -40,6 +42,7 @@ public class GetMovieInfoListController {
 		private int pageSize;
 		private boolean ignoreDelFlg = false;
 		private String searchTerm;
+		private Map<String, String> orderBys;
 	}
 
 	@PostMapping("/GetMovieInfoList")
@@ -55,7 +58,7 @@ public class GetMovieInfoListController {
 		}
 
 		try {
-			PaginationResponse<MovieDetailInfoDto> response = new PaginationResponse<>();
+			PaginationResponse<MovieInfo> response = new PaginationResponse<>();
 
 			service.execute(request, response);
 

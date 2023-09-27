@@ -2,8 +2,6 @@ package com.movieplus.domain.entity;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
 
@@ -20,8 +18,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@DynamicInsert
-@DynamicUpdate
 @Table(name="genre_type")
 public class GenreType {
 

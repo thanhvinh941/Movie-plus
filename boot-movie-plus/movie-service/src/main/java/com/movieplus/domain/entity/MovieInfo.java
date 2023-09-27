@@ -46,17 +46,17 @@ public class MovieInfo {
 	@Column(nullable = false)
 	private Long yearReleaseAt;
 
-	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@Column(nullable = false, columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime registTime;
+	private LocalDateTime registTime = LocalDateTime.now();
 	
-	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+	@Column(nullable = false, columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime updateTime;
+	private LocalDateTime updateTime = LocalDateTime.now();
 	
-	@Column(nullable = false)
-	private String updateUser;
+	@Column(nullable = false, columnDefinition = "VARCHAR(255) default 'postman_update'")
+	private String updateUser = "postman_update";
 	
 	@Column(nullable = false, columnDefinition = "integer default 0")
-	private Integer delFlg;
+	private Byte delFlg = 0;
 }

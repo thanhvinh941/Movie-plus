@@ -1,0 +1,76 @@
+<p>movie-info-create works!</p>
+<form nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="movieName">Movie Name</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input nz-input name="movieName" type="text" id="movieName" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="movieSubName"
+      >Movie Sub Name</nz-form-label
+    >
+    <nz-form-control [nzSpan]="14">
+      <input nz-input name="movieSubName" type="text" id="movieSubName" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="durationMin"
+          >durationMin</nz-form-label
+        >
+        <nz-form-control [nzSpan]="14">
+          <input nz-input name="durationMin" type="text" id="durationMin" />
+        </nz-form-control>
+        <nz-form-label [nzSpan]="6" nzFor="yearReleaseAt"
+          >yearReleaseAt</nz-form-label
+        >
+        <nz-form-control [nzSpan]="14">
+          <input nz-input name="yearReleaseAt" type="text" id="yearReleaseAt" />
+        </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="description">description</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <textarea
+        nz-input
+        name="description"
+        id="description"
+        placeholder="Controlled autosize"
+        [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+      ></textarea>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <div class="clearfix">
+      <nz-upload
+        nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        nzListType="picture"
+        [(nzFileList)]="fileList1"
+      > 
+        Thumnail:
+        <button nz-button>
+          <span nz-icon nzType="upload"></span>
+          Upload
+        </button>
+      </nz-upload>
+    </div>
+  </nz-form-item>
+  <nz-form-item>
+    <div class="clearfix">
+      <nz-upload
+        class="upload-list-inline"
+        nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        nzListType="picture"
+        [(nzFileList)]="fileList1"
+      >
+        Banners:
+        <button nz-button>
+          <span>
+            <span nz-icon nzType="upload"></span>
+            Upload
+          </span>
+        </button>
+      </nz-upload>
+    </div>
+  </nz-form-item>
+</form>

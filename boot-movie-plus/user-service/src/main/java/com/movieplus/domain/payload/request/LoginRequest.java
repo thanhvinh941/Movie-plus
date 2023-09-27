@@ -6,5 +6,5 @@ import lombok.Data;
 public class LoginRequest {
 	private String username;
 	private String password;
-	private boolean isAdmin = false;
+	private Boolean isAdmin = false;
 }

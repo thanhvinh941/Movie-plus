@@ -3,6 +3,7 @@ package com.movieplus.domain.service.impl;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,7 +72,7 @@ public class LoginServiceImpl implements LoginService {
 			throw new Exception("User not found");
 		}
 		
-		if((loginRequest.isAdmin() ? new Byte("1") : new Byte("0")).equals(userInfo.getIsAdmin())) {
+		if((loginRequest.getIsAdmin() ? new Byte("1") : new Byte("0")).equals(userInfo.getIsAdmin())) {
 			throw new Exception("User no permission");
 		}
 		
@@ -97,7 +98,7 @@ public class LoginServiceImpl implements LoginService {
 			new Thread(() -> {		
 				try {
 					String userSessionStr = objectMapper.writeValueAsString(userSession);
-					redisTemplate.opsForValue().set(accessToken, userSessionStr);
+					redisTemplate.opsForValue().set(accessToken, userSessionStr, expriration, TimeUnit.MILLISECONDS);
 				} catch (JsonProcessingException e) {
 					log.error("SET Redis ERROR by key: {}", accessToken, e);
 				}

@@ -15,44 +15,42 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class MultiSecurityConfig {
 
 	@Bean
-	public MemberAuthTokenFilter authTokenFilter() {
-		return new MemberAuthTokenFilter();
+	public UserAuthTokenFilter userAuthTokenFilter() {
+		return new UserAuthTokenFilter();
+	}
+
+	@Bean
+	public AdminAuthTokenFilter adminAuthTokenFilter() {
+		return new AdminAuthTokenFilter();
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Bean
 	@Order(1)
 	public SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable())
-			.securityMatcher("/api/user/**")
-			.authorizeHttpRequests(authorize -> authorize
-					.anyRequest().hasRole("USER")
-				);
+		http.csrf(csrf -> csrf.disable()).securityMatcher("/api/user/**")
+				.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
 
-		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(userAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
 
 	@Bean
 	public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable())
-			.securityMatcher("/api/admin/**")
-			.authorizeHttpRequests(authorize -> authorize
-					.anyRequest().hasRole("ADMIN")
-				);
+		http.csrf(csrf -> csrf.disable()).securityMatcher("/api/admin/**")
+				.authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("ADMIN"));
 
-		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(adminAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
-	
+
 	public enum Role {
-        ROLE_USER,
-        ROLE_ADMIN
-    }
+		ROLE_USER, ROLE_ADMIN
+	}
 }

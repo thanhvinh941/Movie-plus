@@ -2,7 +2,7 @@ package com.movieplus.domain.payload.response;
 
 import java.util.List;
 
-import com.movieplus.domain.common.dto.MovieInfoDto;
+import com.movieplus.domain.common.dto.MovieDetailInfoDto;
 import com.movieplus.domain.common.dto.ShowTimeDto;
 
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class RetrieveSiteInfoResponse {
 	
 	@Getter
 	@Setter
-	public static class MovieInfo extends MovieInfoDto{
+	public static class MovieInfo extends MovieDetailInfoDto{
 		private List<ShowTimeDto> showTimes;
 	}
 
