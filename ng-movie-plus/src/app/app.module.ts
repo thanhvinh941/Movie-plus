@@ -20,6 +20,7 @@ import { AuthInterceptor } from './shared/services/auth-service/AuthInterceptor'
 import { HomeComponent } from './modules/member/page/home/home.component';
 import { OperatorModule } from './modules/operator/operator.module';
 import { MemberModule } from './modules/member/member.module';
+import { MovieInfoListData } from './modules/operator/data/movie-info-list.data';
 
 registerLocaleData(en);
 
@@ -51,6 +52,7 @@ registerLocaleData(en);
       useClass: AuthInterceptor,
       multi: true,
     },
+    MovieInfoListData
   ],
   bootstrap: [AppComponent],
 })

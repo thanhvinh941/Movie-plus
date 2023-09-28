@@ -1,0 +1,12 @@
+<nz-pagination
+  *ngIf="pagination != null"
+  [nzPageIndex]="pagination.page"
+  [nzTotal]="pagination.totalRecords"
+  nzShowSizeChanger
+  [(nzPageSize)]="pagination.pageSize"
+  [nzShowTotal]="totalTemplate"
+></nz-pagination>
+<ng-template #totalTemplate let-total>Total {{ total }} items</ng-template>
+<ng-template #rangeTemplate let-range="range" let-total>
+  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+</ng-template>

@@ -27,8 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/admin")
-@PreAuthorize("hasAnyRole('ADMIN')")
+@RequestMapping("/api")
 public class GetMovieInfoListController {
 	private final String[] logTitle = { "GetMovieInfoList" };
 	private final ObjectMapper objectMapper;

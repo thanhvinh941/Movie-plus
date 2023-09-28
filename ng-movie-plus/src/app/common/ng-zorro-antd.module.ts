@@ -75,6 +75,8 @@ import { NzGraphModule } from 'ng-zorro-antd/graph';
 import { NzCronExpressionModule } from 'ng-zorro-antd/cron-expression';
 import { NzQRCodeModule } from 'ng-zorro-antd/qr-code';
 import { NzWaterMarkModule } from 'ng-zorro-antd/water-mark';
+import { PaginationComponent } from './layout/pagination/pagination.component';
+import { TableComponent } from './layout/table/table.component';
 
 @NgModule({
   exports: [
@@ -153,6 +155,8 @@ import { NzWaterMarkModule } from 'ng-zorro-antd/water-mark';
     NzGraphModule,
     NzQRCodeModule,
     NzWaterMarkModule
+  ],
+  declarations: [
   ]
 })
 export class NgZorroAntdModule { }
