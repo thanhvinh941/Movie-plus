@@ -28,12 +28,27 @@ export class MovieInfoListComponent implements OnInit {
 
   editCache: { [key: string]: { edit: boolean; data: MovieInfo } } = {};
   listOfData$!: Observable<MovieInfo[]>;
-
+  columnData$!: { lable: string; isImage: boolean; style: string }[];
   startEdit(id: string): void {
     this.editCache[id].edit = true;
   }
 
   ngOnInit(): void {
+    this.columnData$ = [
+      { lable: 'id', isImage: false, style: '' },
+      { lable: 'movieName', isImage: false, style: '' },
+      { lable: 'movieSubName', isImage: false, style: '' },
+      { lable: 'durationMin', isImage: false, style: '' },
+      { lable: 'description', isImage: false, style: '' },
+      { lable: 'thumnail', isImage: false, style: '' },
+      { lable: 'productionId', isImage: false, style: '' },
+      { lable: 'yearReleaseAt', isImage: false, style: '' },
+      { lable: 'registTime', isImage: false, style: '' },
+      { lable: 'updateTime', isImage: false, style: '' },
+      { lable: 'updateUser', isImage: false, style: '' },
+      { lable: 'delFlg', isImage: false, style: '' },
+    ];
+
     this.movieInfoData
       .getMovieInfoList({
         page: 0,
@@ -52,5 +67,6 @@ export class MovieInfoListComponent implements OnInit {
         });
         this.pagination = { ...success };
       });
+    console.log(this.movieInfoData);
   }
 }

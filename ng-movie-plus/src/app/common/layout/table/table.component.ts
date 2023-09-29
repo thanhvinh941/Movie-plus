@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -7,5 +8,7 @@ import { Component, Input } from '@angular/core';
 })
 export class TableComponent {
   @Input()
-  listOfData$!: Object[];
+  listOfData$!: any[];
+  @Input()
+  columnData$!: { lable: string; isImage: boolean; style: string }[]
 }

@@ -1,6 +1,7 @@
 <p>movie-info-list works!</p>
 <div *ngIf="listOfData$ | async; let listOfData;">
-    <nz-table
+  <app-table [listOfData$]="listOfData" [columnData$]="columnData$" />
+    <!-- <nz-table
       #editRowTable
       nzShowPagination="false"
       nzShowSizeChanger="false"
@@ -46,18 +47,10 @@
                 [(ngModel)]="editCache[data.id].data.durationMin"
               />
             </td>
-            <!-- <td>
-              <a (click)="saveEdit(data.id)" class="save">Save</a>
-              <a
-                nz-popconfirm
-                nzPopconfirmTitle="Sure to cancel?"
-                (nzOnConfirm)="cancelEdit(data.id)"
-                >Cancel</a
-              >
-            </td> -->
+            
           </ng-template>
         </tr>
       </tbody>
-    </nz-table>
+    </nz-table> -->
     <app-pagination [pagination] = "pagination" />
 </div>

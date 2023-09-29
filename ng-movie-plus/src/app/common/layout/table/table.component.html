@@ -1,25 +1,34 @@
 <nz-table #basicTable [nzData]="listOfData$">
-    <thead>
-        <tr *ngFor="let data of basicTable.data">
-
-        </tr>
-      <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Address</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of basicTable.data">
-        <td>{{ data.name }}</td>
-        <td>{{ data.age }}</td>
-        <td>{{ data.address }}</td>
+  <thead>
+    <tr>
+      <ng-container *ngFor="let column of columnData$">
+        <th [style]="column.style">{{ column.lable }}</th>
+      </ng-container>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <ng-container *ngFor="let column of columnData$">
         <td>
-          <a>Action 一 {{ data.name }}</a>
-          <nz-divider nzType="vertical"></nz-divider>
-          <a>Delete</a>
+          {{ data[column.lable] }}
         </td>
-      </tr>
-    </tbody>
-  </nz-table>
+        <!-- <td [ngSwitch]="column.isImage">
+          <ng-container
+            *ngSwitchCase="true"
+            [ngTemplateOutlet]="imageRow"
+            [ngTemplateOutletContext]="{ $implicit: data[column.lable] }"
+          />
+          <ng-container
+            *ngSwitchDefault
+            [ngTemplateOutlet]="defaultRow"
+            [ngTemplateOutletContext]="{ $implicit: data[column.lable] }"
+          />
+        </td> -->
+      </ng-container>
+    </tr>
+  </tbody>
+</nz-table>
+<ng-template #defaultRow let-dataitem="dataitem">
+  {{ dataitem }}
+</ng-template>
+<ng-template #imageRow let-dataitem="dataitem"></ng-template>
