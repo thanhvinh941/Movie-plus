@@ -1,7 +1,7 @@
 <p>movie-info-list works!</p>
-<div *ngIf="listOfData$ | async; let listOfData;">
+<div *ngIf="listOfData$ | async; let listOfData">
   <app-table [listOfData$]="listOfData" [columnData$]="columnData$" />
-    <!-- <nz-table
+  <!-- <nz-table
       #editRowTable
       nzShowPagination="false"
       nzShowSizeChanger="false"
@@ -52,5 +52,5 @@
         </tr>
       </tbody>
     </nz-table> -->
-    <app-pagination [pagination] = "pagination" />
+  <app-pagination [pagination]="pagination" />
 </div>

@@ -1,76 +1,176 @@
 <p>movie-info-create works!</p>
-<form nz-form>
-  <nz-form-item>
-    <nz-form-label [nzSpan]="6" nzFor="movieName">Movie Name</nz-form-label>
-    <nz-form-control [nzSpan]="14">
-      <input nz-input name="movieName" type="text" id="movieName" />
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSpan]="6" nzFor="movieSubName"
-      >Movie Sub Name</nz-form-label
+<div style="background: #ececec; padding: 30px">
+  <form nz-form [formGroup]="movieForm" (ngSubmit)="submitForm()">
+    <nz-card
+      nzTitle="Movie Info Create"
+      [nzActions]="[submitButton]"
+      [nzBodyStyle]="{ display: 'none' }"
     >
-    <nz-form-control [nzSpan]="14">
-      <input nz-input name="movieSubName" type="text" id="movieSubName" />
+      <nz-card-tab>
+        <nz-tabset nzSize="large" [(nzSelectedIndex)]="index2">
+          <nz-tab nzTitle="Information">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzFor="movieName"
+                >Movie Name</nz-form-label
+              >
+              <nz-form-control [nzSpan]="14">
+                <input
+                  nz-input
+                  formControlName="movieName"
+                  type="text"
+                  id="movieName"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzFor="movieSubName"
+                >Movie Sub Name</nz-form-label
+              >
+              <nz-form-control [nzSpan]="14">
+                <input
+                  nz-input
+                  formControlName="movieSubName"
+                  type="text"
+                  id="movieSubName"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzFor="durationMin"
+                >durationMin</nz-form-label
+              >
+              <nz-form-control [nzSpan]="14">
+                <input
+                  nz-input
+                  formControlName="durationMin"
+                  type="text"
+                  id="durationMin"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzFor="yearReleaseAt"
+                >yearReleaseAt</nz-form-label
+              >
+              <nz-form-control [nzSpan]="14">
+                <input
+                  nz-input
+                  formControlName="yearReleaseAt"
+                  type="text"
+                  id="yearReleaseAt"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzFor="description"
+                >description</nz-form-label
+              >
+              <nz-form-control [nzSpan]="14">
+                <textarea
+                  nz-input
+                  formControlName="description"
+                  id="description"
+                  placeholder="Controlled autosize"
+                  [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                ></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </nz-tab>
+          <nz-tab nzTitle="Image">
+            <nz-form-item>
+              <div class="clearfix">
+                <nz-upload
+                  nzListType="picture"
+                  [(nzFileList)]="thumnailFile"
+                  [nzBeforeUpload]="beforeUpload"
+                  (nzChange)="handleChange($event)"
+                >
+                  Thumnail:
+                  <button type="button" nz-button>
+                    <span nz-icon nzType="upload"></span>
+                    Upload
+                  </button>
+                </nz-upload>
+              </div>
+            </nz-form-item>
+            <nz-form-item>
+              <div class="clearfix">
+                <nz-upload
+                  [nzBeforeUpload]="beforeUpload"
+                  nzListType="picture"
+                  [(nzFileList)]="bannerFileList"
+                  (nzChange)="handleChange($event)"
+                >
+                  Banners:
+                  <button type="button" nz-button>
+                    <span>
+                      <span nz-icon nzType="upload"></span>
+                      Upload
+                    </span>
+                  </button>
+                </nz-upload>
+              </div>
+            </nz-form-item></nz-tab
+          >
+          <nz-tab nzTitle="Trailer">
+            <div nz-row>
+              <nz-form-item>
+                <nz-space nzDirection="vertical">
+                  <ng-container
+                    *ngFor="
+                      let trailer of movieForm.controls.trailers.controls;
+                      let i = index
+                    "
+                    [formGroup]="trailer"
+                  >
+                    <nz-card *nzSpaceItem [nzExtra]="input">
+                      <nz-form-item>
+                        <nz-form-label [nzSpan]="6" nzFor="trailerUrl_{{ i }}"
+                          >trailerUrl</nz-form-label
+                        >
+                        <nz-form-control [nzSpan]="14">
+                          <input
+                            type="text"
+                            nz-input
+                            formControlName="trailerUrl"
+                            id="trailerUrl_{{ i }}"
+                          />
+                        </nz-form-control>
+                      </nz-form-item>
+                      <ng-template #input>
+                        <nz-form-item>
+                          <nz-form-label
+                            [nzSpan]="6"
+                            nzFor="trailerTitle_{{ i }}"
+                            >trailerTitle :
+                          </nz-form-label>
+                          <nz-form-control [nzSpan]="14">
+                            <input
+                              type="text"
+                              nz-input
+                              formControlName="trailerTitle"
+                              id="trailerTitle_{{ i }}"
+                            />
+                          </nz-form-control>
+                        </nz-form-item>
+                      </ng-template>
+                    </nz-card>
+                  </ng-container>
+                </nz-space>
+              </nz-form-item></div
+          ></nz-tab>
+        </nz-tabset>
+      </nz-card-tab>
+    </nz-card>
+  </form>
+</div>
+<ng-template #submitButton
+  ><nz-form-item>
+    <nz-form-control
+      [nzXs]="{ span: 24, offset: 0 }"
+      [nzSm]="{ span: 20, offset: 4 }"
+    >
+      <button nz-button nzType="primary">Submit</button>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="durationMin"
-          >durationMin</nz-form-label
-        >
-        <nz-form-control [nzSpan]="14">
-          <input nz-input name="durationMin" type="text" id="durationMin" />
-        </nz-form-control>
-        <nz-form-label [nzSpan]="6" nzFor="yearReleaseAt"
-          >yearReleaseAt</nz-form-label
-        >
-        <nz-form-control [nzSpan]="14">
-          <input nz-input name="yearReleaseAt" type="text" id="yearReleaseAt" />
-        </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSpan]="6" nzFor="description">description</nz-form-label>
-    <nz-form-control [nzSpan]="14">
-      <textarea
-        nz-input
-        name="description"
-        id="description"
-        placeholder="Controlled autosize"
-        [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-      ></textarea>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <div class="clearfix">
-      <nz-upload
-        nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-        nzListType="picture"
-        [(nzFileList)]="fileList1"
-      > 
-        Thumnail:
-        <button nz-button>
-          <span nz-icon nzType="upload"></span>
-          Upload
-        </button>
-      </nz-upload>
-    </div>
-  </nz-form-item>
-  <nz-form-item>
-    <div class="clearfix">
-      <nz-upload
-        class="upload-list-inline"
-        nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-        nzListType="picture"
-        [(nzFileList)]="fileList1"
-      >
-        Banners:
-        <button nz-button>
-          <span>
-            <span nz-icon nzType="upload"></span>
-            Upload
-          </span>
-        </button>
-      </nz-upload>
-    </div>
-  </nz-form-item>
-</form>
+</ng-template>

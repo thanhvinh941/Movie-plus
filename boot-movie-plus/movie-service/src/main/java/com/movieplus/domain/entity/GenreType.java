@@ -36,8 +36,6 @@ public class GenreType {
 	@Column(columnDefinition = "integer default 100")
 	private Integer orderScore;
 	
-	private String movieGradeId;
-	
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime registTime;

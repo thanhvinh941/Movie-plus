@@ -43,6 +43,8 @@ public class MovieInfo {
 	@Column(nullable = false)
 	private String productionId;
 	
+	private String movieGradeId;
+	
 	@Column(nullable = false)
 	private Long yearReleaseAt;
 

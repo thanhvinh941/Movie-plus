@@ -18,8 +18,8 @@ public class EntryMovieInfoRequest{
 	private List<String> genreTypeIds;
 	private String productionId;
 	private List<Trailer> trailers;
-	private List<Caster> casters;
-	private List<DirectorClassify> directorClassifies;
+//	private List<Caster> casters;
+//	private List<DirectorClassify> directorClassifies;
 	
 	@Getter
 	@Setter
@@ -28,17 +28,17 @@ public class EntryMovieInfoRequest{
 		private String trailerTitle;
 	}
 	
-	@Getter
-	@Setter
-	public class Caster {
-		private String starId;
-		private String caster;
-	}
-	
-	@Getter
-	@Setter
-	public class DirectorClassify {
-		private String directorId;
-		private Byte directorKbn;
-	}
+//	@Getter
+//	@Setter
+//	public class Caster {
+//		private String starId;
+//		private String caster;
+//	}
+//	
+//	@Getter
+//	@Setter
+//	public class DirectorClassify {
+//		private String directorId;
+//		private Byte directorKbn;
+//	}
 }

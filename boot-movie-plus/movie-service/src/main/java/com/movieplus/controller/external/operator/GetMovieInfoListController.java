@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.controller.external.operator.dto.MovieInfoDto;
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.MessageManager;
 import com.movieplus.domain.common.dto.MovieDetailInfoDto;
@@ -57,7 +58,7 @@ public class GetMovieInfoListController {
 		}
 
 		try {
-			PaginationResponse<MovieInfo> response = new PaginationResponse<>();
+			PaginationResponse<MovieInfoDto> response = new PaginationResponse<>();
 
 			service.execute(request, response);
 

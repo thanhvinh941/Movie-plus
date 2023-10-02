@@ -1,7 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MovieInfoListData } from '../data/movie-info-list.data';
 import { MovieInfo } from '../models/movie-info';
-import { async } from '@angular/core/testing';
 import { Observable, from, map, of, tap } from 'rxjs';
 
 @Component({
