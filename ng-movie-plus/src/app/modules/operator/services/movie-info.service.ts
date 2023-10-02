@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AbstractPaginationResponse } from 'src/app/common/models/abstract-pagination-response';
 import { MovieInfo } from '../models/movie-info';
+import { AbstractRegistResponse } from 'src/app/common/models/abstract_regist_response';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,10 @@ export class MovieInfoService {
   public getMovieInfoList(request : any) : Observable<AbstractPaginationResponse<MovieInfo>> {
     let api = `${this.endpoint}/GetMovieInfoList`;
     return this.http.post<AbstractPaginationResponse<MovieInfo>>(api, request);
+  }
+
+  public entryMovieInfo(request : any)  : Observable<AbstractRegistResponse> {
+    let api = `${this.endpoint}/EntryMovieInfo`;
+    return this.http.post<AbstractRegistResponse>(api, request);
   }
 }

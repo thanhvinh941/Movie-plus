@@ -45,6 +45,8 @@ public class MovieInfo {
 	
 	private String movieGradeId;
 	
+	private String banners;
+	
 	@Column(nullable = false)
 	private Long yearReleaseAt;
 

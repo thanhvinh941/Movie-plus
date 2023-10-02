@@ -1,7 +1,8 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { MovieInfoListData } from '../data/movie-info-list.data';
+import { MovieInfoData } from '../data/movie-info.data';
 import { MovieInfo } from '../models/movie-info';
 import { Observable, from, map, of, tap } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-movie-info-list',
@@ -16,7 +17,10 @@ import { Observable, from, map, of, tap } from 'rxjs';
   styleUrls: ['./movie-info-list.component.css'],
 })
 export class MovieInfoListComponent implements OnInit {
-  constructor(private movieInfoData: MovieInfoListData) {}
+  constructor(
+    private movieInfoData: MovieInfoData,
+    private route: ActivatedRoute
+  ) {}
 
   pagination!: {
     page: number;
@@ -33,6 +37,7 @@ export class MovieInfoListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const targetId: string = this.route.snapshot.params['targetId'];
     this.columnData$ = [
       { lable: 'id', isImage: false, style: '' },
       { lable: 'movieName', isImage: false, style: '' },
@@ -48,13 +53,19 @@ export class MovieInfoListComponent implements OnInit {
       { lable: 'delFlg', isImage: false, style: '' },
     ];
 
+    let orderBys: { [key: string]: string } = {};
+    if (targetId != null) {
+      let keyOrder = "FIELD(ID,'" + targetId + "')";
+      orderBys = { [keyOrder]: 'DESC' };
+    }
+
     this.movieInfoData
       .getMovieInfoList({
         page: 0,
         pageSize: 50,
         ignoreDelFlg: false,
         searchTerm: '',
-        orderBys: {},
+        orderBys: orderBys,
       })
       .subscribe((success) => {
         this.listOfData$ = of(success.records);

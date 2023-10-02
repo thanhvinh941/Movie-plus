@@ -36,6 +36,29 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
+              <ng-container *ngFor="genreType$ | async; let genreTypeItems">
+                <nz-form-label [nzSpan]="6" nzFor="genreTypes"
+                  >Genre type</nz-form-label
+                >
+                <nz-form-control [nzSpan]="14">
+                  <nz-select
+                    id="genreTypes"
+                    [nzMode]="'multiple'"
+                    [nzPlaceHolder]="'Choose Genre Type'"
+                    formControlName="genreTypeIds"
+                    [nzNotFoundContent]="'Genre Type not found'"
+                  >
+                    <nz-option
+                      *ngFor="let item of genreTypeItems"
+                      [nzLabel]="item.displayName"
+                      [nzValue]="item.id"
+                    >
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </ng-container>
+            </nz-form-item>
+            <nz-form-item>
               <nz-form-label [nzSpan]="6" nzFor="durationMin"
                 >durationMin</nz-form-label
               >
@@ -78,28 +101,27 @@
           </nz-tab>
           <nz-tab nzTitle="Image">
             <nz-form-item>
-              <div class="clearfix">
+              Thumnail: <input type="file" formControlName="thumnail" (change)="handleFileInput($event)">
+              <!-- <div class="clearfix">
                 <nz-upload
+                  nzAction="localhost:8088/system/util/upload-file"
                   nzListType="picture"
                   [(nzFileList)]="thumnailFile"
                   [nzBeforeUpload]="beforeUpload"
-                  (nzChange)="handleChange($event)"
+                  (click)="handleUpload()"
                 >
-                  Thumnail:
+                 
                   <button type="button" nz-button>
                     <span nz-icon nzType="upload"></span>
                     Upload
                   </button>
                 </nz-upload>
-              </div>
+              </div> -->
             </nz-form-item>
             <nz-form-item>
               <div class="clearfix">
                 <nz-upload
-                  [nzBeforeUpload]="beforeUpload"
                   nzListType="picture"
-                  [(nzFileList)]="bannerFileList"
-                  (nzChange)="handleChange($event)"
                 >
                   Banners:
                   <button type="button" nz-button>
@@ -137,6 +159,15 @@
                           />
                         </nz-form-control>
                       </nz-form-item>
+                      <nz-form-item *ngIf="getTrailerUrl(i) != ''">
+                        <iframe
+                          [src]="safeURL(i)"
+                          width="560"
+                          height="315"
+                          frameborder="0"
+                          allowfullscreen
+                        ></iframe>
+                      </nz-form-item>
                       <ng-template #input>
                         <nz-form-item>
                           <nz-form-label
@@ -159,6 +190,7 @@
                 </nz-space>
               </nz-form-item></div
           ></nz-tab>
+          <nz-tab nzTitle="Caster & DirectorClassify"> </nz-tab>
         </nz-tabset>
       </nz-card-tab>
     </nz-card>

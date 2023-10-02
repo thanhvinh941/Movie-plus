@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.movieplus.controller.external.operator.RegistMovieInfoController.EntryMovieInfoResponse;
-import com.movieplus.domain.entity.MovieBanner;
 import com.movieplus.domain.entity.MovieGenre;
 import com.movieplus.domain.entity.MovieInfo;
 import com.movieplus.domain.entity.MovieTrailer;
@@ -22,7 +21,6 @@ public class EntryMovieInfoService {
 	
 	private final MovieInfoService movieInfoService;
 	private final MovieTrailerService movieTrailerService;
-	private final MovieBannerService movieBannerService;
 	private final MovieGenreService movieGenreService;
 	
 	private String movieId = null;
@@ -51,19 +49,6 @@ public class EntryMovieInfoService {
 				.toList();
 		try {
 			movieTrailerService.save(movieTrailers);
-		} catch (Exception e) {
-			throw new Exception(e);
-		}
-		
-		List<MovieBanner> movieBanners = request.getBanners().stream()
-				.map(banner -> {
-					MovieBanner movieBanner = new MovieBanner();
-					movieBanner.setBannerSrc(banner);
-					movieBanner.setMovieId(movieId);
-					return movieBanner;
-				}).toList();
-		try {
-			movieBannerService.save(movieBanners);
 		} catch (Exception e) {
 			throw new Exception(e);
 		}

@@ -28,17 +28,4 @@ public class EntryMovieInfoRequest{
 		private String trailerTitle;
 	}
 	
-//	@Getter
-//	@Setter
-//	public class Caster {
-//		private String starId;
-//		private String caster;
-//	}
-//	
-//	@Getter
-//	@Setter
-//	public class DirectorClassify {
-//		private String directorId;
-//		private Byte directorKbn;
-//	}
 }

@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, filter, of } from 'rxjs';
 import {
   HttpClient,
   HttpEvent,
@@ -18,6 +18,9 @@ import {
   HttpRequest,
   HttpResponse,
 } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
+import { GenreType } from '../models/genre-type';
+import { GenreTypeService } from '../services/genre-type.service';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
   new Promise((resolve, reject) => {
@@ -62,18 +65,17 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
     thumnail: ['', [Validators.required]],
     yearReleaseAt: ['', [Validators.required]],
     description: ['', [Validators.required]],
-    banners: this.fb.array(['']),
-    genreTypeIds: this.fb.array(['']),
-    trailers: this.fb.array([
-      this.fb.group({
-        trailerUrl: ['1', [Validators.required]],
-        trailerTitle: ['1', [Validators.required]],
-      }),
-      this.fb.group({
-        trailerUrl: ['2', [Validators.required]],
-        trailerTitle: ['2', [Validators.required]],
-      }),
-    ]),
+    banners: this.fb.array([''], [Validators.required]),
+    genreTypeIds: this.fb.array([''], [Validators.required]),
+    trailers: this.fb.array(
+      [
+        this.fb.group({
+          trailerUrl: ['', [Validators.required]],
+          trailerTitle: ['', [Validators.required]],
+        }),
+      ],
+      [Validators.required]
+    ),
   });
   // movieForm!: FormGroup<{
   //   movieName: FormControl<string>;
@@ -94,14 +96,19 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
   // }>;
 
   constructor(
+    private _genreTypeService: GenreTypeService,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private http: HttpClient
+    private http: HttpClient,
+    private _sanitizer: DomSanitizer
   ) {}
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.movieForm.value);
   }
   ngOnInit(): void {
+    // this._genreTypeService.getAllGenreType().subscribe(success=>{
+    //   this.genreType$ = of(success.data);
+    // })
     console.log(this.movieForm.value);
   }
 
@@ -121,22 +128,24 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
       ])
     );
   }
+
+  genreType$!: Observable<GenreType[]>;
   index2 = 0;
-  bannerFileList!: any;
+  bannerFileList!: any[];
   thumnailFile!: any;
   loading = false;
-  validateForm!: FormGroup<{
-    movieName: FormControl<string>;
-    movieSubName: FormControl<string>;
-    durationMin: FormControl<number>;
-    thumnail: FormControl<string>;
-    yearReleaseAt: FormControl<number>;
-    description: FormControl<string>;
-    banners: FormControl<string[]>;
-    genreTypeIds: FormControl<string[]>;
-    productionId: FormControl<string>;
-    trailers: FormControl<{ trailerUrl: string; trailerTitle: string }[]>;
-  }>;
+  // validateForm!: FormGroup<{
+  //   movieName: FormControl<string>;
+  //   movieSubName: FormControl<string>;
+  //   durationMin: FormControl<number>;
+  //   thumnail: FormControl<string>;
+  //   yearReleaseAt: FormControl<number>;
+  //   description: FormControl<string>;
+  //   banners: FormControl<string[]>;
+  //   genreTypeIds: FormControl<string[]>;
+  //   productionId: FormControl<string>;
+  //   trailers: FormControl<{ trailerUrl: string; trailerTitle: string }[]>;
+  // }>;
   // validateForm: FormRecord<FormControl<string>> = this.fb.record({});
 
   listOfControl: Array<{
@@ -149,98 +158,58 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
     console.log(this.movieForm.value);
   }
 
-  beforeUpload = (
-    file: NzUploadFile,
-    _fileList: NzUploadFile[]
-  ): Observable<boolean> =>
-    new Observable((observer: Observer<boolean>) => {
-      const isJpgOrPng =
-        file.type === 'image/jpeg' || file.type === 'image/png';
-      if (!isJpgOrPng) {
-        this.msg.error('You can only upload JPG file!');
-        observer.complete();
-        return;
-      }
-      const isLt2M = file.size! / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.msg.error('Image must smaller than 2MB!');
-        observer.complete();
-        return;
-      }
-      observer.next(isJpgOrPng && isLt2M);
-      observer.complete();
-    });
-
-  private getBase64(img: File, callback: (img: string) => void): void {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result!.toString()));
-    reader.readAsDataURL(img);
-  }
-
-  handleChange(info: { file: NzUploadFile }): void {
-    console.log(info);
-
-    switch (info.file.status) {
-      case 'uploading':
-        this.loading = true;
-        break;
-      case 'done':
-        // Get this url from response in real world.
-        this.getBase64(info.file!.originFileObj!, (img: string) => {
-          this.loading = false;
-          // this.bannerFileList = this.bannerFileList.concat(img);
-        });
-        break;
-
-      case 'removed':
-        break;
-      case 'error':
-        this.loading = false;
-        break;
-    }
-  }
-
-  getGroupAt(index: number) {
-    console.log(this.movieForm.get('trailers')?.value.at(index));
-    return this.movieForm
-      .get('trailers')
-      ?.value.at(index) as unknown as FormGroup;
-  }
-
-  setMediaUploadHeaders = (file: NzUploadFile) => {
-    return {
-      'Content-Type': 'multipart/form-data',
-      Accept: 'application/json',
+  handleFileInput($event: any) {
+    let me =  this.movieForm;
+    let file = $event.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      console.log(reader.result);
     };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+ }
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    this.bannerFileList = this.bannerFileList.concat(file);
+    return false;
   };
-  customUploadReq = (item: any) => {
+
+  handleUpload(): void {
     const formData = new FormData();
-    this.getBase64(item.file!.originFileObj!, (img: string) => {
-      formData.append('fileBase64', img); // tslint:disable-next-line:no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.bannerFileList.forEach((file: any) => {
+      formData.append('files[]', file);
     });
-    ///formData.append('id', '1000');
-    const req = new HttpRequest('POST', item.action, formData, {
-      reportProgress: true,
-      withCredentials: false,
+    this.loading = true;
+    // You can use any AJAX library you like
+    const req = new HttpRequest('POST', 'localhos:8088/system/util/upload-file', formData, {
+      // reportProgress: true
     });
-    // Always return a `Subscription` object, nz-upload will automatically unsubscribe at the appropriate time
-    return this.http.request(req).subscribe(
-      (event) => {
-        if (event.type === HttpEventType.UploadProgress) {
-          // if (event.total > 0) {
-          //   (event as any).percent = event.loaded / event.total * 100; // tslint:disable-next-line:no-any
-          // }
-          // To process the upload progress bar, you must specify the `percent` attribute to indicate progress.
-          item.onProgress(event, item.file);
-        } else if (event instanceof HttpResponse) {
-          /* success */
-          item.onSuccess(event.body, item.file, event);
+    this.http
+      .request(req)
+      .pipe(filter(e => e instanceof HttpResponse))
+      .subscribe(
+        () => {
+          this.loading = false;
+          this.bannerFileList = [];
+          this.msg.success('upload successfully.');
+        },
+        () => {
+          this.loading = false;
+          this.msg.error('upload failed.');
         }
-      },
-      (err) => {
-        /* error */
-        item.onError(err, item.file);
-      }
+      );
+  }
+
+  safeURL(index: number) {
+    return this._sanitizer.bypassSecurityTrustResourceUrl(
+      this.getTrailerUrl(index).replace('watch?v=', 'embed/') + '&output=embed'
     );
-  };
+  }
+
+  getTrailerUrl(index: number): string {
+    return this.movieForm.get('trailers')?.value.at(index)?.trailerUrl!;
+  }
 }

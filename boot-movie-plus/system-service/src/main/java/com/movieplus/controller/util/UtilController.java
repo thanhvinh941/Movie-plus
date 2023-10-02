@@ -18,7 +18,7 @@ import com.movieplus.domain.service.CommonService;
 import lombok.Data;
 
 @RestController
-@RequestMapping("/system/util")
+@RequestMapping("/util")
 public class UtilController {
 	
 	@Data

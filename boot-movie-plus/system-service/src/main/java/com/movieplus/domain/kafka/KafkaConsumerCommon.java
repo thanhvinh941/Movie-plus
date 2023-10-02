@@ -24,26 +24,26 @@ public class KafkaConsumerCommon {
 	private final WebsocketService websocketService;
 	private final ObjectMapper objectMapper;
 
-	@KafkaListener(topics = { MoviePlusConstance.KAFKA_WEBSOCKET })
-	public void websocketConsume(String message) throws JsonProcessingException {
-		log.info("Websocket Received message: " + message);
-		KafkaListenerRequest request = objectMapper.readValue(message, KafkaListenerRequest.class);
-		String topicTarget = request.getTopic();
-		switch (topicTarget) {
-			case MoviePlusConstance.KAFKA_ROOM: {
-				String roomId = request.getId();
-				List<TopicRoomRequest> topicRoomRequest = objectMapper.convertValue(request.getData(), new TypeReference<List<TopicRoomRequest>>() {});
-				websocketService.sendToTopic(MoviePlusConstance.SOCKET_ROOM, roomId, topicRoomRequest);
-				break;
-			}
-			case MoviePlusConstance.KAFKA_NOTIFY: {
-				//TODO convert and sent to client
-				break;
-			}
-		
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + topicTarget);
-		}
-	}
+//	@KafkaListener(topics = { MoviePlusConstance.KAFKA_WEBSOCKET })
+//	public void websocketConsume(String message) throws JsonProcessingException {
+//		log.info("Websocket Received message: " + message);
+//		KafkaListenerRequest request = objectMapper.readValue(message, KafkaListenerRequest.class);
+//		String topicTarget = request.getTopic();
+//		switch (topicTarget) {
+//			case MoviePlusConstance.KAFKA_ROOM: {
+//				String roomId = request.getId();
+//				List<TopicRoomRequest> topicRoomRequest = objectMapper.convertValue(request.getData(), new TypeReference<List<TopicRoomRequest>>() {});
+//				websocketService.sendToTopic(MoviePlusConstance.SOCKET_ROOM, roomId, topicRoomRequest);
+//				break;
+//			}
+//			case MoviePlusConstance.KAFKA_NOTIFY: {
+//				//TODO convert and sent to client
+//				break;
+//			}
+//		
+//			default:
+//				throw new IllegalArgumentException("Unexpected value: " + topicTarget);
+//		}
+//	}
 
 }

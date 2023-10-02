@@ -13,13 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class WebsocketService {
 
-	private final String[] logTitle = { "Websocket" };
-	private final SimpMessagingTemplate simpMessagingTemplate;
-
-	public void sendToTopic(String topicPath, String id, Object response) throws JsonProcessingException {
-		String responseStr = ObjectMapperUtil.writeValueAsString(response);
-		String webSocket = topicPath + "/" + id;
-		log.info("{} send to topic: {} with request: {}", logTitle, webSocket, responseStr);
-		simpMessagingTemplate.convertAndSend(webSocket, responseStr);
-	}
+//	private final String[] logTitle = { "Websocket" };
+//	private final SimpMessagingTemplate simpMessagingTemplate;
+//
+//	public void sendToTopic(String topicPath, String id, Object response) throws JsonProcessingException {
+//		String responseStr = ObjectMapperUtil.writeValueAsString(response);
+//		String webSocket = topicPath + "/" + id;
+//		log.info("{} send to topic: {} with request: {}", logTitle, webSocket, responseStr);
+//		simpMessagingTemplate.convertAndSend(webSocket, responseStr);
+//	}
 }

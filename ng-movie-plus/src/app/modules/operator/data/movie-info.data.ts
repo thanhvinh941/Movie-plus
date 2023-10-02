@@ -14,7 +14,7 @@ const initAbstractPaginationData: AbstractPaginationData<any> = {
 };
 
 @Injectable()
-export class MovieInfoListData {
+export class MovieInfoData {
   movieInfoListData: AbstractPaginationData<MovieInfo> = new AbstractPaginationData<MovieInfo>();
   constructor(private service: MovieInfoService) {}
 

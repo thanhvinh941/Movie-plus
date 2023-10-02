@@ -10,6 +10,8 @@ import { NgZorroAntdModule } from 'src/app/common/ng-zorro-antd.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaginationComponent } from 'src/app/common/layout/pagination/pagination.component';
 import { TableComponent } from 'src/app/common/layout/table/table.component';
+import { SiteInfoListComponent } from './site-info-list/site-info-list.component';
+import { SiteInfoDetailComponent } from './site-info-detail/site-info-detail.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { TableComponent } from 'src/app/common/layout/table/table.component';
     MovieInfoCreateComponent,
     PaginationComponent,
     TableComponent,
+    SiteInfoListComponent,
+    SiteInfoDetailComponent,
   ],
   imports: [
     CommonModule,

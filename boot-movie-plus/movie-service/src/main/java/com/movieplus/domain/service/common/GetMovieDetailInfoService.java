@@ -13,13 +13,11 @@ import com.movieplus.domain.common.dto.MovieDetailInfoDto;
 import com.movieplus.domain.common.dto.StarInfoDto;
 import com.movieplus.domain.common.dto.TrailerDto;
 import com.movieplus.domain.entity.GenreType;
-import com.movieplus.domain.entity.MovieBanner;
 import com.movieplus.domain.entity.MovieGenre;
 import com.movieplus.domain.entity.MovieInfo;
 import com.movieplus.domain.entity.MovieTrailer;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
 import com.movieplus.domain.service.GenreTypeService;
-import com.movieplus.domain.service.MovieBannerService;
 import com.movieplus.domain.service.MovieGenreService;
 import com.movieplus.domain.service.MovieInfoService;
 import com.movieplus.domain.service.MovieTrailerService;
@@ -36,7 +34,6 @@ public class GetMovieDetailInfoService {
 	private final GenreTypeService genreTypeService;
 	private final MovieInfoService movieInfoService;
 	private final MovieGenreService movieGenreService;
-	private final MovieBannerService movieBannerService;
 	private final MovieTrailerService movieTrailerService;
 
 	public MovieDetailInfoDto getMovieDetailInfo(String movieId) {
@@ -48,9 +45,6 @@ public class GetMovieDetailInfoService {
 
 		MovieInfo movieInfo = movieInfos.get(0);
 		String movieInfoId = movieInfo.getId();
-
-		List<MovieBanner> movieBanners = getMovieBanner(movieInfoId);
-		List<String> responseBanners = movieBanners.stream().map(MovieBanner::getBannerSrc).toList();
 
 		List<MovieTrailer> movieTrailers = getMovieTrailer(movieInfoId);
 		List<TrailerDto> responseTrailers = movieTrailers.stream().map(t -> {
@@ -68,15 +62,14 @@ public class GetMovieDetailInfoService {
 			return genreType;
 		}).toList();
 
-		return generatorResponse(movieDetailInfoDto, movieInfo, null, null, responseBanners,
+		return generatorResponse(movieDetailInfoDto, movieInfo, null, null, 
 				responseTrailers, responseGenreTypes);
 	}
 
 	private MovieDetailInfoDto generatorResponse(MovieDetailInfoDto movieDetailInfoDto, MovieInfo movieInfo,
-			List<DirectorDto> responseDirectorInfo, List<StarInfoDto> responseStar, List<String> responseBanners,
+			List<DirectorDto> responseDirectorInfo, List<StarInfoDto> responseStar,
 			List<TrailerDto> responseTrailers, List<GenreTypeDto> responseGenreTypes) {
 		BeanUtils.copyProperties(movieInfo, movieDetailInfoDto);
-		movieDetailInfoDto.setBanners(responseBanners);
 		movieDetailInfoDto.setTrailers(responseTrailers);
 		movieDetailInfoDto.setGenreType(responseGenreTypes);
 		movieDetailInfoDto.setDirectors(responseDirectorInfo);
@@ -174,21 +167,6 @@ public class GetMovieDetailInfoService {
 			return movieTrailerService.getMovieTrailer(apiRequest);
 		} catch (Exception e) {
 			log.error("{} ERROR call getMovieTrailer", CLASS_NAME, e);
-		}
-		return List.of();
-	}
-
-	private List<MovieBanner> getMovieBanner(String movieInfoId) {
-		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-
-		String conditionStr = null;
-		conditionStr = String.format(" movie_id = '%s'", movieInfoId);
-		apiRequest.setConditionStr(conditionStr);
-
-		try {
-			return movieBannerService.getMovieBanner(apiRequest);
-		} catch (Exception e) {
-			log.error("{} ERROR call getMovieBanner", CLASS_NAME, e);
 		}
 		return List.of();
 	}
