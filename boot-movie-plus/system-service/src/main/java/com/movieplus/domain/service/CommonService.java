@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 public class CommonService {
 	private final String UPLOAD_DIR = "../local-store/";
 
-	public boolean saveFile(String fileName, InputStream inputStream) throws IOException {
-		Path uploadPath = Paths.get(UPLOAD_DIR);
+	public boolean saveFile(String targetFolder, String fileName, InputStream inputStream) throws IOException {
+		Path uploadPath = Paths.get(UPLOAD_DIR + "/" + targetFolder);
 		long fileStore = 0;
 		if (!Files.exists(uploadPath)) {
 			Files.createDirectories(uploadPath);

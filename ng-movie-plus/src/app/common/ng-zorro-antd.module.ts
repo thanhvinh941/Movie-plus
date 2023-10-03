@@ -77,6 +77,7 @@ import { NzQRCodeModule } from 'ng-zorro-antd/qr-code';
 import { NzWaterMarkModule } from 'ng-zorro-antd/water-mark';
 import { PaginationComponent } from './layout/pagination/pagination.component';
 import { TableComponent } from './layout/table/table.component';
+import { DynamicFormComponent } from './layout/dynamic-form/dynamic-form.component';
 
 @NgModule({
   exports: [
@@ -157,6 +158,8 @@ import { TableComponent } from './layout/table/table.component';
     NzWaterMarkModule
   ],
   declarations: [
+  
+    DynamicFormComponent
   ]
 })
 export class NgZorroAntdModule { }

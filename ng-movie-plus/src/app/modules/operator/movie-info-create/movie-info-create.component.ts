@@ -8,19 +8,28 @@ import {
   NonNullableFormBuilder,
   Validators,
 } from '@angular/forms';
-import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
+import {
+  NzUploadChangeParam,
+  NzUploadFile,
+  NzUploadXHRArgs,
+  UploadFileStatus,
+} from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Observable, Observer, filter, of } from 'rxjs';
+import { Observable, Observer, filter, of, map } from 'rxjs';
 import {
   HttpClient,
   HttpEvent,
   HttpEventType,
+  HttpProgressEvent,
   HttpRequest,
   HttpResponse,
 } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GenreType } from '../models/genre-type';
 import { GenreTypeService } from '../services/genre-type.service';
+import { async } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { MovieInfoService } from '../services/movie-info.service';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
   new Promise((resolve, reject) => {
@@ -65,8 +74,8 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
     thumnail: ['', [Validators.required]],
     yearReleaseAt: ['', [Validators.required]],
     description: ['', [Validators.required]],
-    banners: this.fb.array([''], [Validators.required]),
-    genreTypeIds: this.fb.array([''], [Validators.required]),
+    banners: this.fb.array([], [Validators.required]),
+    genreTypeIds: this.fb.array([], [Validators.required]),
     trailers: this.fb.array(
       [
         this.fb.group({
@@ -96,111 +105,48 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
   // }>;
 
   constructor(
+    private _movieInfoService: MovieInfoService,
     private _genreTypeService: GenreTypeService,
     private fb: FormBuilder,
     private msg: NzMessageService,
     private http: HttpClient,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    private router: Router
   ) {}
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.movieForm.value);
   }
   ngOnInit(): void {
-    // this._genreTypeService.getAllGenreType().subscribe(success=>{
-    //   this.genreType$ = of(success.data);
-    // })
+    this._genreTypeService.getAllGenreType().subscribe({
+      next: (res) => {
+        this.genreType$ = of(res.data);
+      },
+    });
+
     console.log(this.movieForm.value);
   }
 
-  addBanners(file: string[]) {
-    this.movieForm.addControl('banners', this.fb.array(file));
-  }
-
-  addThumnail(file: string) {
-    this.movieForm.addControl('thumnail', this.fb.control(file));
-  }
-
-  addTrailer(e?: MouseEvent) {
-    this.movieForm.addControl(
-      'trailers',
-      this.fb.array([
-        this.fb.group({ trailerUrl: 'Great Book', trailerTitle: 'Great Book' }),
-      ])
-    );
-  }
-
+  tabSelectIndex = 0;
   genreType$!: Observable<GenreType[]>;
-  index2 = 0;
-  bannerFileList!: any[];
-  thumnailFile!: any;
+  bannerBase64List: NzUploadFile[] = [];
+  thumnail!: any;
+  thumnailBase64!: string;
   loading = false;
-  // validateForm!: FormGroup<{
-  //   movieName: FormControl<string>;
-  //   movieSubName: FormControl<string>;
-  //   durationMin: FormControl<number>;
-  //   thumnail: FormControl<string>;
-  //   yearReleaseAt: FormControl<number>;
-  //   description: FormControl<string>;
-  //   banners: FormControl<string[]>;
-  //   genreTypeIds: FormControl<string[]>;
-  //   productionId: FormControl<string>;
-  //   trailers: FormControl<{ trailerUrl: string; trailerTitle: string }[]>;
-  // }>;
-  // validateForm: FormRecord<FormControl<string>> = this.fb.record({});
-
-  listOfControl: Array<{
-    id: number;
-    trailerTitle: string;
-    trailerUrl: string;
-  }> = [];
 
   submitForm() {
-    console.log(this.movieForm.value);
-  }
-
-  handleFileInput($event: any) {
-    let me =  this.movieForm;
-    let file = $event.target.files[0];
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      console.log(reader.result);
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
- }
-
-  beforeUpload = (file: NzUploadFile): boolean => {
-    this.bannerFileList = this.bannerFileList.concat(file);
-    return false;
-  };
-
-  handleUpload(): void {
-    const formData = new FormData();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.bannerFileList.forEach((file: any) => {
-      formData.append('files[]', file);
+    let bannerBase64s: string[] = this.bannerBase64List.map((bannerBase64) => {
+      return bannerBase64.thumbUrl!;
     });
-    this.loading = true;
-    // You can use any AJAX library you like
-    const req = new HttpRequest('POST', 'localhos:8088/system/util/upload-file', formData, {
-      // reportProgress: true
+    this.pushBanners(bannerBase64s);
+    this._movieInfoService.entryMovieInfo(this.movieForm.value).subscribe({
+      next: (res) => {
+        let movieId = res.data[0];
+        this.router.navigate(['/movie-infos', { targetId: movieId }]);
+      },
+      error: (err) => {
+        this.msg.error(err);
+      },
     });
-    this.http
-      .request(req)
-      .pipe(filter(e => e instanceof HttpResponse))
-      .subscribe(
-        () => {
-          this.loading = false;
-          this.bannerFileList = [];
-          this.msg.success('upload successfully.');
-        },
-        () => {
-          this.loading = false;
-          this.msg.error('upload failed.');
-        }
-      );
   }
 
   safeURL(index: number) {
@@ -209,7 +155,61 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
     );
   }
 
+  addTrailer() {
+    this.movieForm.controls.trailers.push(
+      this.fb.group({ trailerUrl: '', trailerTitle: '' })
+    );
+  }
+
+  get trailers(): FormArray<any> {
+    return this.movieForm.controls.trailers;
+  }
+
   getTrailerUrl(index: number): string {
     return this.movieForm.get('trailers')?.value.at(index)?.trailerUrl!;
   }
+
+  setThumnail(thumnail: string): void {
+    this.movieForm.setControl('thumnail', this.fb.control(thumnail));
+  }
+
+  get banners(): FormArray<any> {
+    return this.movieForm.controls.banners;
+  }
+
+  pushBanners(banners: string[]): void {
+    banners.forEach((banner) => {
+      this.banners.push(this.fb.control(banner));
+    });
+  }
+
+  beforeUploadThumnail = (file: NzUploadFile): boolean => {
+    const myReader = new FileReader();
+    myReader.readAsDataURL(file as any);
+    myReader.onloadend = (e) => {
+      this.setThumnail(myReader.result as string);
+      this.thumnailBase64 = myReader.result as string;
+    };
+    return false;
+  };
+
+  beforeUploadBanner = (
+    file: NzUploadFile,
+    _fileList: NzUploadFile[]
+  ): boolean => {
+    const myReader = new FileReader();
+    myReader.readAsDataURL(file as any);
+    myReader.onloadend = (e) => {
+      let thumbUrl: string = myReader.result as string;
+      let bannerBase64: NzUploadFile = {
+        thumbUrl: thumbUrl,
+        status: 'success',
+        filename: file.name!,
+        uid: crypto.randomUUID(),
+        name: file.name!,
+      };
+      this.bannerBase64List = [...this.bannerBase64List, bannerBase64];
+    };
+    return false;
+  };
 }

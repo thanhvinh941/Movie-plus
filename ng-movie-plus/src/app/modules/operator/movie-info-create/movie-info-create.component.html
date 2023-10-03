@@ -7,7 +7,7 @@
       [nzBodyStyle]="{ display: 'none' }"
     >
       <nz-card-tab>
-        <nz-tabset nzSize="large" [(nzSelectedIndex)]="index2">
+        <nz-tabset nzSize="large" [(nzSelectedIndex)]="tabSelectIndex">
           <nz-tab nzTitle="Information">
             <nz-form-item>
               <nz-form-label [nzSpan]="6" nzFor="movieName"
@@ -101,43 +101,69 @@
           </nz-tab>
           <nz-tab nzTitle="Image">
             <nz-form-item>
-              Thumnail: <input type="file" formControlName="thumnail" (change)="handleFileInput($event)">
-              <!-- <div class="clearfix">
-                <nz-upload
-                  nzAction="localhost:8088/system/util/upload-file"
-                  nzListType="picture"
-                  [(nzFileList)]="thumnailFile"
-                  [nzBeforeUpload]="beforeUpload"
-                  (click)="handleUpload()"
-                >
-                 
-                  <button type="button" nz-button>
-                    <span nz-icon nzType="upload"></span>
-                    Upload
-                  </button>
-                </nz-upload>
-              </div> -->
+              Thumnail:
+              <nz-upload
+                class="avatar-uploader"
+                nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                nzName="avatar"
+                nzListType="picture-card"
+                [nzShowUploadList]="false"
+                [nzBeforeUpload]="beforeUploadThumnail"
+              >
+                <!-- (nzChange)="handleChange($event)" -->
+                <ng-container *ngIf="!thumnailBase64">
+                  <span
+                    class="upload-icon"
+                    nz-icon
+                    [nzType]="loading ? 'loading' : 'plus'"
+                  ></span>
+                  <div class="ant-upload-text">Upload</div>
+                </ng-container>
+                <img
+                  *ngIf="thumnailBase64"
+                  [src]="thumnailBase64"
+                  style="width: 100%"
+                />
+              </nz-upload>
             </nz-form-item>
             <nz-form-item>
-              <div class="clearfix">
-                <nz-upload
-                  nzListType="picture"
-                >
-                  Banners:
-                  <button type="button" nz-button>
-                    <span>
-                      <span nz-icon nzType="upload"></span>
-                      Upload
-                    </span>
-                  </button>
-                </nz-upload>
-              </div>
+              <nz-upload
+                nzMultiple
+                nzListType="picture"
+                [(nzFileList)]="bannerBase64List"
+                [nzBeforeUpload]="beforeUploadBanner"
+              >
+                Banners:
+                <button type="button" nz-button>
+                  <span>
+                    <span nz-icon nzType="upload"></span>
+                    Upload
+                  </span>
+                </button>
+              </nz-upload>
             </nz-form-item></nz-tab
           >
           <nz-tab nzTitle="Trailer">
             <div nz-row>
               <nz-form-item>
                 <nz-space nzDirection="vertical">
+                  <nz-form-item>
+                    <nz-form-control
+                      [nzXs]="{ span: 24, offset: 0 }"
+                      [nzSm]="{ span: 20, offset: 4 }"
+                    >
+                      <button
+                        type="button"
+                        nz-button
+                        nzType="dashed"
+                        class="add-button"
+                        (click)="addTrailer()"
+                      >
+                        <span nz-icon nzType="plus"></span>
+                        Add field
+                      </button>
+                    </nz-form-control>
+                  </nz-form-item>
                   <ng-container
                     *ngFor="
                       let trailer of movieForm.controls.trailers.controls;

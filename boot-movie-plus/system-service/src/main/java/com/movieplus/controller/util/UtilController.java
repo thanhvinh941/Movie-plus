@@ -25,6 +25,7 @@ public class UtilController {
 	public static class UploadFileRequest{
 		private String fileBase64;
 		private String fileName;
+		private String targetFolder = "";
 	}
 	
 	@Autowired
@@ -40,7 +41,7 @@ public class UtilController {
 		byte[] imageByte = Base64.getDecoder().decode(imageBase64[1].trim());
 		InputStream inputStream = new ByteArrayInputStream(imageByte);
 		
-		commonService.saveFile(imageName, inputStream);
+		commonService.saveFile(request.getTargetFolder(), imageName, inputStream);
 		return imageName;
     }
 	
