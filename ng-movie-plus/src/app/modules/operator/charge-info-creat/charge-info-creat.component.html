@@ -1,0 +1,36 @@
+<p>charge-info-creat works!</p>
+<form nz-form [formGroup]="chargeInfoForm" (ngSubmit)="submitForm()">
+  <nz-table #groupingTable nzBordered nzSize="middle">
+    <thead>
+      <tr>
+        <th colspan="2"></th>
+        <th *ngFor="let movie of movieGradleList">
+          {{ movie.movieGradeName }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let site of siteGradleList; let siteIndex = index">
+        <ng-container
+          *ngFor="let seat of seatGradleList; let seatIndex = index"
+        >
+          <tr>
+            <td *ngIf="seatIndex == 0" [attr.rowspan]="seatGradleList.length">
+              {{ site.siteGradeName }}
+            </td>
+            <td>
+              {{ seat.seatGradeName }}
+            </td>
+            <th *ngFor="let movie of movieGradleList; let movieIndex = index">
+              <input
+                type="text"
+                [formControlName]="movie.id + '/' + seat.id + '/' + site.id"
+              />
+            </th>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </nz-table>
+  <button type="submit">abc</button>
+</form>

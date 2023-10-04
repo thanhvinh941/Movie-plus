@@ -12,6 +12,8 @@ import { PaginationComponent } from 'src/app/common/layout/pagination/pagination
 import { TableComponent } from 'src/app/common/layout/table/table.component';
 import { SiteInfoListComponent } from './site-info-list/site-info-list.component';
 import { SiteInfoDetailComponent } from './site-info-detail/site-info-detail.component';
+import { ChargeInfoComponent } from './charge-info/charge-info.component';
+import { ChargeInfoCreatComponent } from './charge-info-creat/charge-info-creat.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { SiteInfoDetailComponent } from './site-info-detail/site-info-detail.com
     TableComponent,
     SiteInfoListComponent,
     SiteInfoDetailComponent,
+    ChargeInfoComponent,
+    ChargeInfoCreatComponent,
   ],
   imports: [
     CommonModule,

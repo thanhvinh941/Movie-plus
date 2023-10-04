@@ -3,18 +3,28 @@ import { RouterModule, Routes } from '@angular/router';
 import { OperatorComponent } from './operator.component';
 import { MovieInfoCreateComponent } from './movie-info-create/movie-info-create.component';
 import { MovieInfoListComponent } from './movie-info-list/movie-info-list.component';
+import { ChargeInfoCreatComponent } from './charge-info-creat/charge-info-creat.component';
 
-const routes: Routes = [{ path: 'operator', children:[
-  { path: '', redirectTo: '/operator/home', pathMatch: 'full' },
+const routes: Routes = [
   {
-    path: 'movie-infos/create',
-    component: MovieInfoCreateComponent,
-  },{
-    path: 'movie-infos',
-    component: MovieInfoListComponent,
-  }
-      
-] }];
+    path: 'operator',
+    children: [
+      { path: '', redirectTo: '/operator/home', pathMatch: 'full' },
+      {
+        path: 'movie-infos/create',
+        component: MovieInfoCreateComponent,
+      },
+      {
+        path: 'movie-infos',
+        component: MovieInfoListComponent,
+      },
+      {
+        path: 'charge-infos/create',
+        component: ChargeInfoCreatComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

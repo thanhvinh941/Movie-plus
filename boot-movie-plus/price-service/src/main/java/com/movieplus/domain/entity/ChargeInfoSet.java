@@ -38,7 +38,13 @@ public class ChargeInfoSet {
 	@Column(nullable = false)
 	private String movieGradeId;
 	
-	private Double price;
+	@Column(nullable = false)
+	private String seatGradeId;
+	
+	@Column(nullable = false)
+	private Integer holidayKbn;
+	
+	private Integer price;
 	
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -48,9 +54,8 @@ public class ChargeInfoSet {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateTime;
 	
-	@Column(nullable = false)
 	private String updateUser;
 	
-	@Column(nullable = false, columnDefinition = "integer default 0")
+	@Column(columnDefinition = "integer default 0")
 	private Integer delFlg;
 }
