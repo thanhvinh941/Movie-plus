@@ -23,19 +23,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class RegistMovieInfoController {
 	private final String[] logTitle = { "EntryMovieInfo" };
 	private final EntryMovieInfoService entryMovieInfoService;
 	private final MessageManager messageManager;
-	@Getter
-	@Setter
-	public static class EntryMovieInfoResponse{
-		@NotNull
-		private String movieId;
-	}	
-	
+
 	@PostMapping("/EntryMovieInfo")
 	public String doEntryMovieInfo(@RequestBody String requestStr) {
 		EntryMovieInfoRequest request = new EntryMovieInfoRequest();
@@ -47,12 +41,10 @@ public class RegistMovieInfoController {
 			return GeneratorCommonUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
-		
-		EntryMovieInfoResponse response = new EntryMovieInfoResponse();
 		try {
-			entryMovieInfoService.execute(request, response);
+			String result = entryMovieInfoService.execute(request);
 			
-			return GeneratorCommonUtil.getResponseBodySuccess(response);
+			return GeneratorCommonUtil.getResponseBodySuccess(result);
 		} catch (Exception e) {
 			log.error("{} execute fail: ", logTitle, e);
 			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));

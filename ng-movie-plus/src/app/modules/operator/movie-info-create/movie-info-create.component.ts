@@ -30,6 +30,7 @@ import { GenreTypeService } from '../services/genre-type.service';
 import { async } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { MovieInfoService } from '../services/movie-info.service';
+import { GenreTypeData } from '../data/genre-type.data';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
   new Promise((resolve, reject) => {
@@ -75,7 +76,7 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
     yearReleaseAt: ['', [Validators.required]],
     description: ['', [Validators.required]],
     banners: this.fb.array([], [Validators.required]),
-    genreTypeIds: this.fb.array([], [Validators.required]),
+    genreTypeIds: [[], [Validators.required]],
     trailers: this.fb.array(
       [
         this.fb.group({
@@ -107,6 +108,7 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
   constructor(
     private _movieInfoService: MovieInfoService,
     private _genreTypeService: GenreTypeService,
+    private _genreTypeData: GenreTypeData,
     private fb: FormBuilder,
     private msg: NzMessageService,
     private http: HttpClient,
@@ -117,17 +119,18 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
     console.log(this.movieForm.value);
   }
   ngOnInit(): void {
-    this._genreTypeService.getAllGenreType().subscribe({
+    this._genreTypeData.getAllGenreType().subscribe({
       next: (res) => {
-        this.genreType$ = of(res.data);
+        this.genreType$ = of(res);
+        console.log(typeof res);
       },
     });
-
+    console.log(this.genreType$);
     console.log(this.movieForm.value);
   }
 
   tabSelectIndex = 0;
-  genreType$!: Observable<GenreType[]>;
+  genreType$: Observable<GenreType[]> = of();
   bannerBase64List: NzUploadFile[] = [];
   thumnail!: any;
   thumnailBase64!: string;
@@ -138,10 +141,11 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
       return bannerBase64.thumbUrl!;
     });
     this.pushBanners(bannerBase64s);
+    console.log(this.movieForm.value);
     this._movieInfoService.entryMovieInfo(this.movieForm.value).subscribe({
       next: (res) => {
         let movieId = res.data[0];
-        this.router.navigate(['/movie-infos', { targetId: movieId }]);
+        this.router.navigate(['/operator/movie-infos', { targetId: movieId }]);
       },
       error: (err) => {
         this.msg.error(err);

@@ -18,16 +18,19 @@ const initAbstractPaginationData: AbstractPaginationData<any> = {
 
 @Injectable()
 export class GenreTypeData {
-  allGenreType: AbstractListResponse<GenreType> = new AbstractListResponse<GenreType>();
+  allGenreType: AbstractListResponse<GenreType> =
+    new AbstractListResponse<GenreType>();
   constructor(private service: GenreTypeService) {}
 
-  getGenreTypeList() : Observable<GenreType[]> {
-    return this.service.getAllGenreType().pipe(map(res=> {
-        if(res.status == 0){
-            throw throwError(res); 
-        }else {
-            return res.data
+  getAllGenreType(): Observable<GenreType[]> {
+    return this.service.getAllGenreType().pipe(
+      map((res) => {
+        if (res.status == 0) {
+          throw throwError(res);
+        } else {
+          return res.data;
         }
-    }));
+      })
+    );
   }
 }

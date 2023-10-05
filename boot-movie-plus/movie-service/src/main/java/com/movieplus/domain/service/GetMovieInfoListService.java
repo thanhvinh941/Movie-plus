@@ -37,17 +37,9 @@ public class GetMovieInfoListService {
 		List<String> movieInfoIds = movieInfos.stream().map(MovieInfo::getId).toList();
 		List<MovieGenre> movieGenres = getMovieGenreList(movieInfoIds);
 		Set<String> genreIds = new HashSet<>();
-		Map<String, List<MovieGenre>> movieGenreMap = new HashMap<>();
+		Map<String, List<MovieGenre>> movieGenreMap = movieGenres.stream().collect(Collectors.groupingBy(MovieGenre::getMovieId));
 		movieGenres.forEach(mvg -> {
 			genreIds.add(mvg.getGenreId());
-			String movieId = mvg.getMovieId();
-			if (movieGenreMap.containsKey(movieId)) {
-				List<MovieGenre> mgs = movieGenreMap.get(movieId);
-				mgs.add(mvg);
-				movieGenreMap.put(movieId, mgs);
-			} else {
-				movieGenreMap.put(movieId, List.of(mvg));
-			}
 		});
 		List<GenreType> genreTypes = getGenreTypeList(genreIds);
 		Map<String, GenreType> genreTypeMap = genreTypes.stream()
@@ -60,7 +52,7 @@ public class GetMovieInfoListService {
 		response.setRecords(movieInfos.stream().map(mvi -> {
 			MovieInfoDto movieInfoDto = new MovieInfoDto();
 			BeanUtils.copyProperties(mvi, movieInfoDto);
-			List<MovieGenre> mGOfMovie = movieGenreMap.get(mvi.getId());
+			List<MovieGenre> mGOfMovie = movieGenreMap.getOrDefault(mvi.getId(), List.of());
 			movieInfoDto.setGenreTypes(mGOfMovie.stream().map(mvgomv -> {
 				MovieInfoDto.MovieGenre mvmg = new MovieInfoDto.MovieGenre();
 				BeanUtils.copyProperties(movieGenreMap, genreTypes);

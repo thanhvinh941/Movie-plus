@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.domain.common.GeneratorCommonUtil;
@@ -20,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AddGenreTypeAJAXController {
 
@@ -34,7 +37,7 @@ public class AddGenreTypeAJAXController {
 		private String genreTypeId;
 	}
 	
-	@PostMapping("")
+	@PostMapping("/doAddGenreType")
 	@ResponseBody
 	public String doAddGenreType(@RequestBody String requestStr) {
 		AddGenreTypeAJAXRequest request = new AddGenreTypeAJAXRequest();
@@ -48,5 +51,16 @@ public class AddGenreTypeAJAXController {
 		}
 		String response = aJaxService.doAddGenreType(request);
 		return response;
+	}
+	
+	@PostMapping("/getAllGenreType")
+	@ResponseBody
+	public String getAllGenreType() throws JsonProcessingException {
+		try {
+			return GeneratorCommonUtil.getResponseBodySuccess(aJaxService.getAllGenreType());
+		} catch (Exception e) {
+			log.error("{} execute fail: ", logTitle, e);
+			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
+		}
 	}
 }

@@ -36,7 +36,7 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-              <ng-container *ngFor="genreType$ | async; let genreTypeItems">
+              <ng-container *ngIf="genreType$ | async; let genreTypeItems">
                 <nz-form-label [nzSpan]="6" nzFor="genreTypes"
                   >Genre type</nz-form-label
                 >

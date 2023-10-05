@@ -40,11 +40,11 @@ public class MovieInfo {
 	@Column(nullable = false)
 	private String thumnail;
 
-	@Column(nullable = false)
 	private String productionId;
 	
 	private String movieGradeId;
 	
+	@Column(length = 25500)
 	private String banners;
 	
 	@Column(nullable = false)

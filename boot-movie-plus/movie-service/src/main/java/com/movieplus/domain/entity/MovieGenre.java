@@ -41,9 +41,8 @@ public class MovieGenre {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateTime;
 	
-	@Column(nullable = false)
 	private String updateUser;
 	
-	@Column(nullable = false, columnDefinition = "integer default 0")
+	@Column(columnDefinition = "integer default 0")
 	private Integer delFlg;
 }

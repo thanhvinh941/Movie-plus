@@ -26,13 +26,6 @@ export class ChargeInfoCreatComponent implements OnInit {
       });
     });
     this.chargeInfoForm = this.fb.group(value);
-    console.log(this.chargeInfoForm);
-  }
-
-  toControl(absCtrl: AbstractControl): FormControl {
-    const ctrl = absCtrl as FormControl;
-    // if(!ctrl) throw;
-    return ctrl;
   }
 
   submitForm() {
@@ -121,38 +114,4 @@ export class ChargeInfoCreatComponent implements OnInit {
       movieGradeName: 'movieGrade6',
     },
   ];
-
-  // addInnitCharge(
-  //   siteGradeId: string,
-  //   seatGradleId: string,
-  //   movieGradleId: string
-  // ) {
-  //   let propertiesInit : Record<
-  //   string,
-  //   Record<string, Record<string, number>>
-  // > = {};
-  //   this.siteGradleList.forEach((site) => {
-  //     this.seatGradleList.forEach((seat) => {
-  //       this.movieGradleList.forEach((movie) => {
-  //         const recordSiteMap: Record<
-  //           string,
-  //           Record<string, Record<string, number>>
-  //         > = {};
-  //         const recordSeatMap: Record<string, Record<string, number>> = {};
-  //         const recordMovieMap: Record<string, number> = {};
-  //         recordMovieMap[movie.id] = 0;
-  //         recordSeatMap[seat.id] = recordMovieMap;
-  //         recordSiteMap[site.id] = recordSeatMap;
-  //         propertiesInit = recordSiteMap;
-  //       });
-  //     });
-  //   });
-  //   // this.chargeInfoForm.addControl(this.fb.control(siteGradeId))
-  //   // this.chargeInfoForm.controls[siteGradeId] = recordSeatMap;
-  //   // console.log(this.chargeInfoForm.controls[siteGradeId])
-  // }
-
-  // // get propertyControls(): FormArray {
-  // //   return this.chargeInfoForm.get('properties') as FormArray;
-  // // }
 }

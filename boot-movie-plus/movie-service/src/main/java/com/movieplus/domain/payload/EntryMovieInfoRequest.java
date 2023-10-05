@@ -23,7 +23,7 @@ public class EntryMovieInfoRequest{
 	
 	@Getter
 	@Setter
-	public class Trailer{
+	public static class Trailer{
 		private String trailerUrl;
 		private String trailerTitle;
 	}
