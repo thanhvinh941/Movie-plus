@@ -14,6 +14,8 @@ import { SiteInfoListComponent } from './site-info-list/site-info-list.component
 import { SiteInfoDetailComponent } from './site-info-detail/site-info-detail.component';
 import { ChargeInfoComponent } from './charge-info/charge-info.component';
 import { ChargeInfoCreatComponent } from './charge-info-creat/charge-info-creat.component';
+import { RoomDetailComponent } from './room-detail/room-detail.component';
+import { RoomCreateComponent } from './room-create/room-create.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { ChargeInfoCreatComponent } from './charge-info-creat/charge-info-creat.
     SiteInfoDetailComponent,
     ChargeInfoComponent,
     ChargeInfoCreatComponent,
+    RoomDetailComponent,
+    RoomCreateComponent,
   ],
   imports: [
     CommonModule,

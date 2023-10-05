@@ -1,0 +1,20 @@
+type SeatGradle {
+	id: ID!
+	seatGradeName: String!
+	sortNo: Int
+	memberVisibleFlg: Int
+	registTime: (dateFormat : String = "yyyy-MM-dd HH:mm:ss') : String!
+	updateTime: (dateFormat : String = "yyyy-MM-dd HH:mm:ss') : String!
+	updateUser: String!
+	delFlg: Int
+}
+
+# Root
+type Query {
+	findAllSeatGradle: [SeatGradle]!
+}
+
+# Root
+type Mutation {
+	createSeatGradle(seatGradeName: String!): SeatGradle!
+}

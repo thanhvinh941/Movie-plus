@@ -5,12 +5,12 @@ import java.util.Map;
 
 public interface CustomRepository<T, ID> {
 
-	List<String> updateAll(Map<ID, Map<String, Object>> params, T tableName);
-
-	String update(Map<String, Object> params, T tableName, ID key);
+	boolean update(Map<String, Object> params, Class<T> tableName, ID key);
 
 	void uDeleteAll(T tableName, List<ID> key);
 
-	List<?> selectByCondition(T tableName, String conditionStr, List<String> listFields, Map<String, Object> orderBy,
+	List<T> selectByCondition(Class<T> tableName, String conditionStr, List<String> listFields, /*field|sort_type*/Map<String, String> orderBy,
 			Integer limit, Integer offset, boolean isForUpdate);
+	
+	Long count(Class<T> tableName, String conditionStr);
 }

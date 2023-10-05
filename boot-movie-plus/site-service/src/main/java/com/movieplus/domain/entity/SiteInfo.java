@@ -1,6 +1,5 @@
 package com.movieplus.domain.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UuidGenerator;
@@ -35,7 +34,7 @@ public class SiteInfo {
 	private String localtion;
 	
 	@Column(nullable = false)
-	private String siteGradle;
+	private String siteGradleId;
 	
 	@Column(nullable = false)
 	private String siteZipNo;
@@ -51,9 +50,6 @@ public class SiteInfo {
 	private String information;
 	
 	private String notice;
-	
-	@Column(nullable = false)
-	private String siteAreaGroupId;
 
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -63,9 +59,8 @@ public class SiteInfo {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateTime;
 	
-	@Column(nullable = false)
 	private String updateUser;
 	
-	@Column(nullable = false, columnDefinition = "integer default 0")
+	@Column(columnDefinition = "integer default 0")
 	private Integer delFlg;
 }

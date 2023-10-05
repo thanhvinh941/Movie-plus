@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -17,6 +18,7 @@ export class ChargeInfoCreatComponent implements OnInit {
   chargeInfoForm = this.fb.group(this.properties);
   ngOnInit(): void {
     let value: { [key: string]: number } = {};
+
     this.siteGradleList.forEach((site) => {
       this.seatGradleList.forEach((seat) => {
         this.movieGradleList.forEach((movie) => {
@@ -25,6 +27,7 @@ export class ChargeInfoCreatComponent implements OnInit {
         });
       });
     });
+
     this.chargeInfoForm = this.fb.group(value);
   }
 
