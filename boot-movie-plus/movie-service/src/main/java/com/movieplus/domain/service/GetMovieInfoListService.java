@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.controller.external.operator.GetMovieInfoListController.GetMovieInfoListRequest;
 import com.movieplus.controller.external.operator.dto.MovieInfoDto;
 import com.movieplus.domain.common.CustomRepository;
@@ -30,7 +32,8 @@ public class GetMovieInfoListService {
 	private final CustomRepository<MovieInfo, String> movieInfoRepository;
 	private final CustomRepository<MovieGenre, String> movieGenreRepository;
 	private final CustomRepository<GenreType, String> genreTypeRepository;
-
+	private final ObjectMapper objectMapper;
+	
 	public void execute(GetMovieInfoListRequest request, PaginationResponse<MovieInfoDto> response) {
 		Long totalRecords = getRotalRecordsMovieInfo(request);
 		List<MovieInfo> movieInfos = getMovieInfoList(request);
@@ -66,12 +69,14 @@ public class GetMovieInfoListService {
 
 	private List<GenreType> getGenreTypeList(Set<String> genreIds) {
 		String conditionStr = String.format(" id in (%s)", Util.buildQueryIn(genreIds));
-		return genreTypeRepository.selectByCondition(GenreType.class, conditionStr, null, null, null, null, false);
+		Object result = genreTypeRepository.selectByCondition(GenreType.class, conditionStr, null, null, null, null, false);
+		return objectMapper.convertValue(result, new TypeReference<List<GenreType>>() {});
 	}
 
 	private List<MovieGenre> getMovieGenreList(List<String> movieInfoIds) {
 		String conditionStr = String.format(" movie_id in (%s)", Util.buildQueryIn(movieInfoIds));
-		return movieGenreRepository.selectByCondition(MovieGenre.class, conditionStr, null, null, null, null, false);
+		Object result = movieGenreRepository.selectByCondition(MovieGenre.class, conditionStr, null, null, null, null, false);
+		return objectMapper.convertValue(result, new TypeReference<List<MovieGenre>>() {});
 	}
 
 	private Long getRotalRecordsMovieInfo(GetMovieInfoListRequest request) {
@@ -81,8 +86,9 @@ public class GetMovieInfoListService {
 
 	private List<MovieInfo> getMovieInfoList(GetMovieInfoListRequest request) {
 		String conditionStr = buildQuery(request);
-		return movieInfoRepository.selectByCondition(MovieInfo.class, conditionStr, null, request.getOrderBys(),
+		Object result = movieInfoRepository.selectByCondition(MovieInfo.class, conditionStr, null, request.getOrderBys(),
 				request.getPageSize(), request.getPage() * request.getPageSize(), false);
+		return objectMapper.convertValue(result, new TypeReference<List<MovieInfo>>() {});
 	}
 
 	private String buildQuery(GetMovieInfoListRequest request) {

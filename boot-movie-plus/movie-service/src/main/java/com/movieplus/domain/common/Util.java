@@ -1,7 +1,12 @@
 package com.movieplus.domain.common;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Util {
 
@@ -28,5 +33,16 @@ public class Util {
 
 	public static String buildQueryIn(Collection<String> datas) {
 		return datas.stream().map(data -> "'" + data + "'").collect(Collectors.joining(","));
+	}
+	
+	public List<Map<String, Object>> transferObjectToMap(List<Object> results, List<String> fields){
+		return results.stream().map(r -> {
+			List<?> result = new ObjectMapper().convertValue(r, List.class);
+			Map<String, Object> map = new HashMap<>();
+			for (int i = 0; i < fields.size(); i++) {
+				map.put(fields.get(i), result.get(i));
+			}
+			return map;
+		}).toList();
 	}
 }

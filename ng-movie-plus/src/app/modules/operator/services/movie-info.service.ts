@@ -19,7 +19,17 @@ export class MovieInfoService {
   }
 
   public entryMovieInfo(request : any)  : Observable<AbstractRegistResponse> {
-    let api = `${this.endpoint}/EntryMovieInfo`;
+    let api = `${this.endpoint}/entryMovieInfo`;
+    return this.http.post<AbstractRegistResponse>(api, request);
+  }
+
+  public getGenreTypeList(request : any) : Observable<AbstractPaginationResponse<MovieInfo>> {
+    let api = `${this.endpoint}/getGenreTypeList`;
+    return this.http.post<AbstractPaginationResponse<MovieInfo>>(api, request);
+  }
+
+  public entryGenreType(request : any)  : Observable<AbstractRegistResponse> {
+    let api = `${this.endpoint}/entryGenreType`;
     return this.http.post<AbstractRegistResponse>(api, request);
   }
 }

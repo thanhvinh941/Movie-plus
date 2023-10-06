@@ -1,5 +1,6 @@
 package com.movieplus.domain.common;
 
+import java.lang.reflect.Constructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -7,10 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -21,6 +25,9 @@ public class CustomRepositoryImpl<T, ID> implements CustomRepository<T, ID> {
 
 	@PersistenceContext
 	private EntityManager entityManager;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -69,12 +76,11 @@ public class CustomRepositoryImpl<T, ID> implements CustomRepository<T, ID> {
 	}
 
 	@Override
-	public List<T> selectByCondition(Class<T> tableName, String conditionStr, List<String> listFields,
+	public List<Object> selectByCondition(Class<?> targetTable, String conditionStr, List<String> listFields,
 			Map<String, String> orderBys, Integer limit, Integer offset, boolean isForUpdate) {
-
 		String selectColumn = CollectionUtils.isEmpty(listFields) ? "*" : String.join(", ", listFields);
 		String sqlQuery = String.format("SELECT %s FROM %s", selectColumn,
-				Util.convertSnake(tableName.getSimpleName()));
+				Util.convertSnake(targetTable.getSimpleName()));
 
 		if (!StringUtils.isBlank(conditionStr)) {
 			sqlQuery += String.format(" WHERE %s", conditionStr);
@@ -100,21 +106,30 @@ public class CustomRepositoryImpl<T, ID> implements CustomRepository<T, ID> {
 			sqlQuery += " FOR UPDATE";
 		}
 
-		Query selectSql = entityManager.createNativeQuery(sqlQuery, tableName);
+		Query selectSql = entityManager.createNativeQuery(sqlQuery);
 
 		return selectSql.getResultList();
 	}
 
 	@Override
 	public Long count(Class<T> tableName, String conditionStr) {
-		String sqlQuery = String.format("SELECT COUNT(id) FROM %s",
-				Util.convertSnake(tableName.getSimpleName()));
+		String sqlQuery = String.format("SELECT COUNT(id) FROM %s", Util.convertSnake(tableName.getSimpleName()));
 		if (!StringUtils.isBlank(conditionStr)) {
 			sqlQuery += String.format(" WHERE %s", conditionStr);
 		}
-		
+
 		Query countSql = entityManager.createNativeQuery(sqlQuery);
 		return (Long) countSql.getSingleResult();
+	}
+
+	@Override
+	public List<Object> selectByCondition(Class<?> targetTable, String conditionStr, List<String> listFields) {
+		return selectByCondition(targetTable, conditionStr, listFields, null, null, null, false);
+	}
+
+	@Override
+	public List<Object> selectByCondition(Class<?> targetTable, String conditionStr) {
+		return selectByCondition(targetTable, conditionStr, null, null, null, null, false);
 	}
 
 }

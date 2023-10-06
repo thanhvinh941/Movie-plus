@@ -42,7 +42,7 @@ public class GenreTypeServiceImpl implements GenreTypeService {
 	public List<GenreType> getGenreType(GetInternalApiRequest request) {
 		try {
 			log.info("Do getGenreType with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			List<GenreType> results = customRepository.selectByCondition(GenreType.class, request.getConditionStr(),
+			Object results = customRepository.selectByCondition(GenreType.class, request.getConditionStr(),
 					request.getColumeSelect(), request.getOrderBys(), request.getLimit(), request.getOffset(), false);
 			return objectMapper.convertValue(results, new TypeReference<List<GenreType>>() {
 			});
