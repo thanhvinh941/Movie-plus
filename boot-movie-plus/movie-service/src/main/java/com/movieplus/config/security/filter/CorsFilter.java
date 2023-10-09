@@ -1,4 +1,4 @@
-package com.movieplus.config;
+package com.movieplus.config.security.filter;
 
 import java.io.IOException;
 

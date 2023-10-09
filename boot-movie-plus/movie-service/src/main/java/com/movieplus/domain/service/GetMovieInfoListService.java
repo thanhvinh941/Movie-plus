@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.config.common.repository.CustomRepository;
+import com.movieplus.config.common.util.XYZUtil;
 import com.movieplus.controller.external.operator.GetMovieInfoListController.GetMovieInfoListRequest;
 import com.movieplus.controller.external.operator.dto.MovieInfoDto;
-import com.movieplus.domain.common.CustomRepository;
-import com.movieplus.domain.common.Util;
 import com.movieplus.domain.entity.GenreType;
 import com.movieplus.domain.entity.MovieGenre;
 import com.movieplus.domain.entity.MovieInfo;
@@ -65,13 +65,13 @@ public class GetMovieInfoListService {
 	}
 
 	private List<GenreType> getGenreTypeList(Set<String> genreIds) throws Exception {
-		String conditionStr = String.format(" id in (%s)", Util.buildQueryIn(genreIds));
+		String conditionStr = String.format(" id in (%s)", XYZUtil.buildQueryIn(genreIds));
 		Object result = repository.selectByCondition(GenreType.class, conditionStr, null, null, null, false);
 		return objectMapper.convertValue(result, new TypeReference<List<GenreType>>() {});
 	}
 
 	private List<MovieGenre> getMovieGenreList(List<String> movieInfoIds) throws Exception {
-		String conditionStr = String.format(" movie_id in (%s)", Util.buildQueryIn(movieInfoIds));
+		String conditionStr = String.format(" movie_id in (%s)", XYZUtil.buildQueryIn(movieInfoIds));
 		Object result = repository.selectByCondition(MovieGenre.class, conditionStr, null, null, null, false);
 		return objectMapper.convertValue(result, new TypeReference<List<MovieGenre>>() {});
 	}

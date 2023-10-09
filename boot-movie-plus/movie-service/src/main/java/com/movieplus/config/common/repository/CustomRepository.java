@@ -1,4 +1,4 @@
-package com.movieplus.domain.common;
+package com.movieplus.config.common.repository;
 
 import java.util.List;
 import java.util.Map;
@@ -26,4 +26,8 @@ public interface CustomRepository{
 	Long count(String tableName, String conditionStr);
 
 	String insertRecords(String tableName, Map<String, Object> records) throws Exception;
+
+	String updateRecords(String tableName, Map<String, Object> records, String id) throws Exception;
+	
+	boolean deleteById(String tableName, String id) throws Exception;
 }

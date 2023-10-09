@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movieplus.domain.common.GeneratorCommonUtil;
+import com.movieplus.config.common.util.GeneratorUtil;
 import com.movieplus.domain.common.MessageManager;
 import com.movieplus.domain.entity.MovieInfo;
 import com.movieplus.domain.payload.request.InsertInternalApiRequest;
@@ -39,15 +39,15 @@ public class MovieInfoInternalController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<InsertInternalApiRequest<MovieInfo>>() {});
 		} catch (Exception e) {
 			log.error("{} insertMovie DecodeRequest fail: ", logTitle, e);
-			return GeneratorCommonUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 
 			List<String> results = movieService.save(request.getRecords());
-			return GeneratorCommonUtil.getResponseBodySuccess(results);
+			return GeneratorUtil.getResponseBodySuccess(results);
 		} catch (Exception e) {
-			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 	
@@ -60,14 +60,14 @@ public class MovieInfoInternalController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<GetInternalApiRequest>() {});
 		} catch (Exception e) {
 			log.error("{} getMovie DecodeRequest fail: ", logTitle, e);
-			return GeneratorCommonUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 			List<MovieInfo> results = movieService.getMovieInfo(request);
-			return GeneratorCommonUtil.getResponseBodySuccess(results);
+			return GeneratorUtil.getResponseBodySuccess(results);
 		} catch (Exception e) {
-			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 }

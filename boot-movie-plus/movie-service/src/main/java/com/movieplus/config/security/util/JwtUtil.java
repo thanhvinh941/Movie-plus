@@ -1,4 +1,4 @@
-package com.movieplus.config;
+package com.movieplus.config.security.util;
 
 import java.util.Date;
 

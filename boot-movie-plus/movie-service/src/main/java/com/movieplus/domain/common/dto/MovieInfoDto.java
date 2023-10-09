@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.movieplus.config.View;
+import com.movieplus.config.security.view.View;
 
 import lombok.Getter;
 import lombok.Setter;

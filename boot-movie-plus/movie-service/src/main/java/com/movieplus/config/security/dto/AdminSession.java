@@ -1,4 +1,4 @@
-package com.movieplus.config;
+package com.movieplus.config.security.dto;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class AdminSession extends UserSession {
 
-	private List<String> organizationIds;
+	private List<String> permission;
 }

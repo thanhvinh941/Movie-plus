@@ -1,4 +1,4 @@
-package com.movieplus.domain.common;
+package com.movieplus.config.common.util;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Util {
+public class XYZUtil {
 
-	private Util() {
+	private XYZUtil() {
 		throw new IllegalStateException("Utility class");
 	}
 

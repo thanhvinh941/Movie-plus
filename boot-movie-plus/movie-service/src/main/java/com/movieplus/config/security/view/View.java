@@ -1,9 +1,10 @@
-package com.movieplus.config;
+package com.movieplus.config.security.view;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.movieplus.config.MultiSecurityConfig.Role;
+import com.movieplus.config.security.MultiSecurityConfig;
+import com.movieplus.config.security.MultiSecurityConfig.Role;
 
 public class View {
 	public static final Map<Role, Class<?>> MAPPING = new HashMap<>();

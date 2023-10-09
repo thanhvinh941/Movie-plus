@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.movieplus.domain.common.GeneratorCommonUtil;
+import com.movieplus.config.common.util.GeneratorUtil;
 import com.movieplus.domain.common.dto.DirectorDto;
 import com.movieplus.domain.common.dto.GenreTypeDto;
 import com.movieplus.domain.common.dto.MovieDetailInfoDto;
@@ -114,7 +114,7 @@ public class GetMovieDetailInfoService {
 
 		String conditionStr = null;
 		if (!genresTypeIds.isEmpty()) {
-			conditionStr = String.format(" id in (%s)", GeneratorCommonUtil.joiningListString(genresTypeIds));
+			conditionStr = String.format(" id in (%s)", GeneratorUtil.joiningListString(genresTypeIds));
 		}
 		apiRequest.setConditionStr(conditionStr);
 		apiRequest.setOrderBys(Map.of("order_score" ,"ASC"));

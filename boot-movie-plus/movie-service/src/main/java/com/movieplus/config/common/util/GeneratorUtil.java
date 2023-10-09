@@ -1,20 +1,73 @@
-package com.movieplus.domain.common;
+package com.movieplus.config.common.util;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 
+import com.movieplus.domain.common.ObjectMapperUtil;
 import com.movieplus.domain.payload.response.ApiResponse;
 
-public class GeneratorCommonUtil {
+import lombok.Getter;
+import lombok.Setter;
 
-	private GeneratorCommonUtil() {
+public class GeneratorUtil {
+
+	private GeneratorUtil() {
 		throw new IllegalStateException("Utility class");
 	}
+	
+	public static class ExternalAPI<T>{
+		
+		@Getter
+		@Setter
+		public static class ExternalApiResponse<T>{
+			private T results;
+			private List<String> errors;
+		}
+		
+		public static <T> ResponseEntity<ExternalApiResponse<T>> createSuccessResponse(T data){
+			HttpStatus defaultStatus = HttpStatus.OK;
+			if(data instanceof Collection<?> && CollectionUtils.isEmpty((Collection<?>) data)) {
+				defaultStatus = HttpStatus.NO_CONTENT;
+			}
+			
+			if(data instanceof String || data instanceof Boolean) {
+				defaultStatus = HttpStatus.CREATED;
+			}
+			
+			ExternalApiResponse<T> response = new ExternalApiResponse<T>();
+			response.setResults(data);
+			
+			return ResponseEntity.status(defaultStatus).body(response);
+		}
+		
+		public static <T> ResponseEntity<ExternalApiResponse<T>> createErrorClientResponse(List<String> errors){
+			HttpStatus defaultStatus = HttpStatus.BAD_REQUEST;
+			
+			ExternalApiResponse<T> response = new ExternalApiResponse<>();
+			response.setErrors(errors);
+			
+			return ResponseEntity.status(defaultStatus).body(response);
+		}
+		
+		public static <T> ResponseEntity<ExternalApiResponse<T>> createErrorServerResponse(List<String> errors){
+			HttpStatus defaultStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			
+			ExternalApiResponse<T> response = new ExternalApiResponse<>();
+			response.setErrors(errors);
+			
+			return ResponseEntity.status(defaultStatus).body(response);
+		}
+	}
+	
 
 	public static String getResponseBodySuccess(Object data) {
 		ApiResponse response = new ApiResponse();
@@ -70,7 +123,7 @@ public class GeneratorCommonUtil {
 		if (value instanceof String) {
 			val = "'" + val + "'";
 		}
-		condCol = Util.convertSnake(key) + " = " + val;
+		condCol = XYZUtil.convertSnake(key) + " = " + val;
 		return condCol;
 	}
 }

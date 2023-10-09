@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movieplus.domain.common.CustomRepository;
+import com.movieplus.config.common.repository.CustomRepository;
 import com.movieplus.domain.common.ObjectMapperUtil;
 import com.movieplus.domain.entity.GenreType;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;

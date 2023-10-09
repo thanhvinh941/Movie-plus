@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movieplus.domain.common.GeneratorCommonUtil;
+import com.movieplus.config.common.util.GeneratorUtil;
 import com.movieplus.domain.common.MessageManager;
 import com.movieplus.domain.common.dto.MovieDetailInfoDto;
 import com.movieplus.domain.service.common.GetMovieDetailInfoService;
@@ -45,15 +45,15 @@ public class GetMovieDetailInfoController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<GetMovieDetailInfoRequest>() {});
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
-			return GeneratorCommonUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 			MovieDetailInfoDto result = getMovieDetailInfoService.getMovieDetailInfo(request.getMovieId());
-			return GeneratorCommonUtil.getResponseBodySuccess(result);
+			return GeneratorUtil.getResponseBodySuccess(result);
 		} catch (Exception e) {
 			log.error("{} execute fail: ", logTitle, e);
-			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 }

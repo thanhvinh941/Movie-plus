@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movieplus.domain.common.GeneratorCommonUtil;
+import com.movieplus.config.common.util.GeneratorUtil;
 import com.movieplus.domain.common.MessageManager;
 import com.movieplus.domain.service.AJaxService;
 
@@ -47,7 +47,7 @@ public class AddGenreTypeAJAXController {
 			});
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
-			return GeneratorCommonUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		String response = aJaxService.doAddGenreType(request);
 		return response;
@@ -57,10 +57,10 @@ public class AddGenreTypeAJAXController {
 	@ResponseBody
 	public String getAllGenreType() throws JsonProcessingException {
 		try {
-			return GeneratorCommonUtil.getResponseBodySuccess(aJaxService.getAllGenreType());
+			return GeneratorUtil.getResponseBodySuccess(aJaxService.getAllGenreType());
 		} catch (Exception e) {
 			log.error("{} execute fail: ", logTitle, e);
-			return GeneratorCommonUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 }

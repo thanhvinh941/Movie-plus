@@ -1,4 +1,4 @@
-package com.movieplus.config;
+package com.movieplus.config.security.filter;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +16,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.config.security.MultiSecurityConfig.Role;
+import com.movieplus.config.security.dto.AdminSession;
+import com.movieplus.config.security.util.JwtUtil;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,7 +27,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class OperatorAuthTokenFilter extends OncePerRequestFilter {
+public class AdminAuthTokenFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
@@ -54,11 +57,11 @@ public class OperatorAuthTokenFilter extends OncePerRequestFilter {
         }
         
         String userSessionStr = (String) redisTemplate.opsForValue().get(token);
-        OperatorSession userDetails = objectMapper.readValue(userSessionStr, OperatorSession.class);
+        AdminSession userDetails = objectMapper.readValue(userSessionStr, AdminSession.class);
         UsernamePasswordAuthenticationToken
 	        authentication = new UsernamePasswordAuthenticationToken(
 	            userDetails, null,
-	            List.of(new SimpleGrantedAuthority("ADMIN"))
+	            List.of(new SimpleGrantedAuthority(Role.ROLE_ADMIN.toString()))
 	        );
 	
 	    authentication.setDetails(

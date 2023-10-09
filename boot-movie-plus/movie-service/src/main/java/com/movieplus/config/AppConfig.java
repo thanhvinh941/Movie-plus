@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -30,7 +34,16 @@ public class AppConfig {
 
 	@Bean
 	public RestTemplate restTemplate() {
-		return new RestTemplate();
+		RestTemplate restTemplate = new RestTemplate();
+		
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+		MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
+		jsonMessageConverter.setObjectMapper(objectMapper());
+		messageConverters.add(jsonMessageConverter);
+		
+		restTemplate.setMessageConverters(messageConverters);
+		
+		return restTemplate;
 	}
 
 	@Bean
@@ -39,7 +52,7 @@ public class AppConfig {
 		template.setConnectionFactory(connectionFactory);
 
 		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
-		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper objectMapper = objectMapper();
 		objectMapper.setVisibility(PropertyAccessor.ALL, Visibility.ANY);
 		objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL,
 				As.WRAPPER_ARRAY);
@@ -58,12 +71,9 @@ public class AppConfig {
 	@Bean
 	public ObjectMapper objectMapper() {
 		JavaTimeModule javaTimeModule = new JavaTimeModule();
-		// override default
 		javaTimeModule.addDeserializer(LocalDateTime.class, new MillisOrLocalDateTimeDeserializer());
-
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(javaTimeModule);
-
 		return objectMapper;
 	}
 

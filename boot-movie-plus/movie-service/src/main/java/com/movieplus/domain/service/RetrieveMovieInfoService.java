@@ -9,9 +9,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.movieplus.config.common.util.GeneratorUtil;
 import com.movieplus.controller.external.member.RetrieveMovieInfoController.RetrieveMovieInfoRequest;
 import com.movieplus.domain.common.CallInternalAPIService;
-import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.MoviePlusConstance.KeyTypeReturn;
 import com.movieplus.domain.common.TypeReferenceConstance;
 import com.movieplus.domain.common.UrlConstance;
@@ -79,7 +79,7 @@ public class RetrieveMovieInfoService {
 			return List.of();
 		}
 		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-		String conditionStr = String.format(" id in (%s)", GeneratorCommonUtil.joiningListString(siteIds));
+		String conditionStr = String.format(" id in (%s)", GeneratorUtil.joiningListString(siteIds));
 		apiRequest.setConditionStr(conditionStr);
 
 		try {

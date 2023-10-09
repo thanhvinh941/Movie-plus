@@ -1,4 +1,4 @@
-package com.movieplus.config;
+package com.movieplus.config.security.view;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +13,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
+
+import com.movieplus.config.security.MultiSecurityConfig;
 
 @RestControllerAdvice
 public class SecurityJsonViewControllerAdvice extends AbstractMappingJacksonResponseBodyAdvice {
