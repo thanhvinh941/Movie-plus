@@ -30,7 +30,7 @@ public class RegistMovieInfoController {
 	private final EntryMovieInfoService entryMovieInfoService;
 	private final MessageManager messageManager;
 
-	@PostMapping("/EntryMovieInfo")
+	@PostMapping("/entryMovieInfo")
 	public String doEntryMovieInfo(@RequestBody String requestStr) {
 		EntryMovieInfoRequest request = new EntryMovieInfoRequest();
 		// DecodeRequest

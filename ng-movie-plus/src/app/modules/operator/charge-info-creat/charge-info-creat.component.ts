@@ -1,3 +1,4 @@
+import { Data } from '@angular/router';
 import { async } from '@angular/core/testing';
 import { Component, OnInit } from '@angular/core';
 import {
@@ -6,6 +7,11 @@ import {
   FormBuilder,
   FormControl,
 } from '@angular/forms';
+import { DirectionalData } from '../data/directional.data';
+import {
+  EndPoint,
+  MovieService,
+} from 'src/app/common/config/endpoint.constants';
 
 @Component({
   selector: 'app-charge-info-creat',
@@ -13,12 +19,30 @@ import {
   styleUrls: ['./charge-info-creat.component.css'],
 })
 export class ChargeInfoCreatComponent implements OnInit {
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private directionalData: DirectionalData
+  ) {}
   properties: { [key: string]: number } = {};
   chargeInfoForm = this.fb.group(this.properties);
   ngOnInit(): void {
     let value: { [key: string]: number } = {};
-
+    this.directionalData
+      .getDirectionalValue(
+        MovieService.END_POINT,
+        MovieService.TABLE.MOVIE_GRADLE,
+        0,
+        0,
+        '',
+        ['id', 'movieGradeName'],
+        false,
+        {}
+      )
+      .subscribe({
+        next: (res) => {
+          this.movieGradleList = res.data;
+        },
+      });
     this.siteGradleList.forEach((site) => {
       this.seatGradleList.forEach((seat) => {
         this.movieGradleList.forEach((movie) => {

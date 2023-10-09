@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.domain.common.ObjectMapperUtil;
-import com.movieplus.domain.db.read.RShowTimeMapper;
 import com.movieplus.domain.entity.ShowTime;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
 import com.movieplus.domain.repository.ShowTimeRepository;
@@ -23,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ShowTimeServiceImpl implements ShowTimeService{
 
 	private final ShowTimeRepository repository;
-	private final RShowTimeMapper mapper;
 	private final ObjectMapper objectMapper;
 	
 	@Override
@@ -42,13 +40,13 @@ public class ShowTimeServiceImpl implements ShowTimeService{
 
 	@Override
 	public List<ShowTime> getShowTime(GetInternalApiRequest request) {
-		try {
-			log.info("Do getShowTime with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
-			return objectMapper.convertValue(results, new TypeReference<List<ShowTime>>() {});
-		} catch (Exception e) {
-			log.error("ERROR getShowTime: {}", e);
+//		try {
+//			log.info("Do getShowTime with request: {}", ObjectMapperUtil.writeValueAsString(request));
+//			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
+//			return objectMapper.convertValue(results, new TypeReference<List<ShowTime>>() {});
+//		} catch (Exception e) {
+//			log.error("ERROR getShowTime: {}", e);
+//		}
 			return List.of();
-		}
 	}
 }

@@ -22,6 +22,23 @@ const routes: Routes = [
         path: 'charge-infos/create',
         component: ChargeInfoCreatComponent,
       },
+      {
+        path: 'charge-infos',
+        component: ChargeInfoCreatComponent,
+      },
+      {
+        path: 'site-infos/create',
+        component: ChargeInfoCreatComponent,
+      },{
+        path: 'site-infos',
+        component: ChargeInfoCreatComponent,
+      },{
+        path: 'seat-infos',
+        component: ChargeInfoCreatComponent,
+      },{
+        path: 'seat-infos/create',
+        component: ChargeInfoCreatComponent,
+      }
     ],
   },
 ];

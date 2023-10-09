@@ -2,6 +2,8 @@ package com.movieplus.domain.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
 
@@ -50,13 +52,13 @@ public class MovieInfo {
 	@Column(nullable = false)
 	private Long yearReleaseAt;
 
-	@Column(nullable = false, columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime registTime = LocalDateTime.now();
+	@CreationTimestamp
+//	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime registTime;
 	
-	@Column(nullable = false, columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime updateTime = LocalDateTime.now();
+	@UpdateTimestamp
+//	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime updateTime;
 	
 	@Column(nullable = false, columnDefinition = "VARCHAR(255) default 'postman_update'")
 	private String updateUser = "postman_update";

@@ -24,7 +24,7 @@ public class AJaxService {
 
 	private final ObjectMapper objectMapper;
 	private final MovieGenreRepository movieGenreRepository;
-	private final CustomRepository<GenreType, String> genreTypeRepository;
+	private final CustomRepository genreTypeRepository;
 
 	@Getter
 	@Setter
@@ -40,11 +40,9 @@ public class AJaxService {
 		return movieGenreRepository.save(movieGenre).getId();
 	}
 
-	public List<GetAllGenreTypeResponse> getAllGenreType() throws JsonProcessingException {
-		Object result = genreTypeRepository.selectByCondition(GenreType.class, null, null, null, null, null,
-				false);
-		List<GenreType> genreTypes = objectMapper.convertValue(result, new TypeReference<List<GenreType>>() {
-		});
+	public List<GetAllGenreTypeResponse> getAllGenreType() throws Exception {
+		Object result = genreTypeRepository.selectByCondition(GenreType.class, null);
+		List<GenreType> genreTypes = objectMapper.convertValue(result, new TypeReference<List<GenreType>>() {});
 		List<GetAllGenreTypeResponse> resullt = genreTypes.stream().map(genreType -> {
 			GetAllGenreTypeResponse response = new GetAllGenreTypeResponse();
 			response.setDisplayName(genreType.getDisplayName());

@@ -121,9 +121,9 @@ public class CustomRepositoryImpl implements CustomRepository {
 			List<Map<String, Object>> response = resultList.stream().map(r -> {
 				if (listFields.size() > 1) {
 					Map<String, Object> map = new HashMap<>();
-					Object[] result = (Object[]) r;
+					List<?> result = objectMapper.convertValue(r, List.class);
 					for (int i = 0; i < listFields.size(); i++) {
-						map.put(listFields.get(i), result[i]);
+						map.put(listFields.get(i), result.get(i));
 					}
 					return map;
 				}

@@ -24,7 +24,7 @@ public class GenreTypeServiceImpl implements GenreTypeService {
 
 	private final GenreTypeRepository repository;
 	private final ObjectMapper objectMapper;
-	private final CustomRepository<GenreType, String> customRepository;
+	private final CustomRepository customRepository;
 
 	@Override
 	public List<String> save(List<GenreType> records) throws Exception {
@@ -43,7 +43,7 @@ public class GenreTypeServiceImpl implements GenreTypeService {
 		try {
 			log.info("Do getGenreType with request: {}", ObjectMapperUtil.writeValueAsString(request));
 			Object results = customRepository.selectByCondition(GenreType.class, request.getConditionStr(),
-					request.getColumeSelect(), request.getOrderBys(), request.getLimit(), request.getOffset(), false);
+					request.getOrderBys(), request.getLimit(), request.getOffset(), false);
 			return objectMapper.convertValue(results, new TypeReference<List<GenreType>>() {
 			});
 		} catch (Exception e) {
@@ -54,13 +54,13 @@ public class GenreTypeServiceImpl implements GenreTypeService {
 
 	@Override
 	public boolean update(UpdateInternalApiRequest<String> request) {
-		try {
-			log.info("Do update with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			return customRepository.update(request.getParams(), GenreType.class, request.getId());
-		} catch (Exception e) {
-			log.error("ERROR update: {}", e);
+//		try {
+//			log.info("Do update with request: {}", ObjectMapperUtil.writeValueAsString(request));
+//			return customRepository.update(request.getParams(), GenreType.class, request.getId());
+//		} catch (Exception e) {
+//			log.error("ERROR update: {}", e);
 			return false;
-		}
+//		}
 	}
 
 }

@@ -36,8 +36,6 @@ public class EntryMovieInfoService {
 		movieInfo.setThumnail(StringUtils.isNoneEmpty(request.getThumnail()) ? getThumnail(request.getThumnail()) : "");
 		movieInfo.setBanners(getBanners(request.getBanners()));
 		movieInfo.setDelFlg(new Byte("0"));
-		movieInfo.setRegistTime(LocalDateTime.now());
-		movieInfo.setUpdateTime(LocalDateTime.now());
 		movieInfo.setUpdateUser("dummy user");
 		String movieId = movieInfoService.save(List.of(movieInfo)).get(0);
 		List<MovieTrailer> movieTrailers = request.getTrailers().stream()

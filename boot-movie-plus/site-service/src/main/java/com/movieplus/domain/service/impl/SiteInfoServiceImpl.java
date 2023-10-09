@@ -1,14 +1,11 @@
 package com.movieplus.domain.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.domain.common.ObjectMapperUtil;
-import com.movieplus.domain.db.read.RSiteInfoMapper;
 import com.movieplus.domain.entity.SiteInfo;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
 import com.movieplus.domain.repository.SiteInfoRepository;
@@ -23,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 public class SiteInfoServiceImpl implements SiteInfoService{
 
 	private final SiteInfoRepository repository;
-	private final RSiteInfoMapper mapper;
 	private final ObjectMapper objectMapper;
 	
 	@Override
@@ -42,13 +38,13 @@ public class SiteInfoServiceImpl implements SiteInfoService{
 
 	@Override
 	public List<SiteInfo> getSiteInfo(GetInternalApiRequest request) throws Exception {
-		try {
-			log.info("Do getSiteInfo with request: {}", ObjectMapperUtil.writeValueAsString(request));
-			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
-			return objectMapper.convertValue(results, new TypeReference<List<SiteInfo>>() {});
-		} catch (Exception e) {
-			log.error("ERROR getSiteInfo: {}", e);
+//		try {
+//			log.info("Do getSiteInfo with request: {}", ObjectMapperUtil.writeValueAsString(request));
+//			List<Map<String, Object>> results = mapper.selectWhere(request.getConditionStr(), request.getLimit(), request.getOffset(), request.getOrderBys());
+//			return objectMapper.convertValue(results, new TypeReference<List<SiteInfo>>() {});
+//		} catch (Exception e) {
+//			log.error("ERROR getSiteInfo: {}", e);
+//		}
 			return List.of();
-		}
 	}
 }

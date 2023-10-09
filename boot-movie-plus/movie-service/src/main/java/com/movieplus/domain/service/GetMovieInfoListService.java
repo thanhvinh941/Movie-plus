@@ -1,6 +1,5 @@
 package com.movieplus.domain.service;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +28,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GetMovieInfoListService {
 
-	private final CustomRepository<MovieInfo, String> movieInfoRepository;
-	private final CustomRepository<MovieGenre, String> movieGenreRepository;
-	private final CustomRepository<GenreType, String> genreTypeRepository;
+	private final CustomRepository repository;
 	private final ObjectMapper objectMapper;
 	
-	public void execute(GetMovieInfoListRequest request, PaginationResponse<MovieInfoDto> response) {
+	public void execute(GetMovieInfoListRequest request, PaginationResponse<MovieInfoDto> response) throws Exception {
 		Long totalRecords = getRotalRecordsMovieInfo(request);
 		List<MovieInfo> movieInfos = getMovieInfoList(request);
 		List<String> movieInfoIds = movieInfos.stream().map(MovieInfo::getId).toList();
@@ -67,27 +64,26 @@ public class GetMovieInfoListService {
 		}).toList());
 	}
 
-	private List<GenreType> getGenreTypeList(Set<String> genreIds) {
+	private List<GenreType> getGenreTypeList(Set<String> genreIds) throws Exception {
 		String conditionStr = String.format(" id in (%s)", Util.buildQueryIn(genreIds));
-		Object result = genreTypeRepository.selectByCondition(GenreType.class, conditionStr, null, null, null, null, false);
+		Object result = repository.selectByCondition(GenreType.class, conditionStr, null, null, null, false);
 		return objectMapper.convertValue(result, new TypeReference<List<GenreType>>() {});
 	}
 
-	private List<MovieGenre> getMovieGenreList(List<String> movieInfoIds) {
+	private List<MovieGenre> getMovieGenreList(List<String> movieInfoIds) throws Exception {
 		String conditionStr = String.format(" movie_id in (%s)", Util.buildQueryIn(movieInfoIds));
-		Object result = movieGenreRepository.selectByCondition(MovieGenre.class, conditionStr, null, null, null, null, false);
+		Object result = repository.selectByCondition(MovieGenre.class, conditionStr, null, null, null, false);
 		return objectMapper.convertValue(result, new TypeReference<List<MovieGenre>>() {});
 	}
 
 	private Long getRotalRecordsMovieInfo(GetMovieInfoListRequest request) {
 		String conditionStr = buildQuery(request);
-		return movieInfoRepository.count(MovieInfo.class, conditionStr);
+		return repository.count(MovieInfo.class, conditionStr);
 	}
 
-	private List<MovieInfo> getMovieInfoList(GetMovieInfoListRequest request) {
+	private List<MovieInfo> getMovieInfoList(GetMovieInfoListRequest request) throws Exception {
 		String conditionStr = buildQuery(request);
-		Object result = movieInfoRepository.selectByCondition(MovieInfo.class, conditionStr, null, request.getOrderBys(),
-				request.getPageSize(), request.getPage() * request.getPageSize(), false);
+		Object result = repository.selectByCondition(MovieInfo.class, conditionStr, null, request.getPageSize(), request.getPage() * request.getPageSize(), false);
 		return objectMapper.convertValue(result, new TypeReference<List<MovieInfo>>() {});
 	}
 
