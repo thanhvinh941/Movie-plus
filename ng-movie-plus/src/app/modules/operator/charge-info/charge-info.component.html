@@ -1,1 +1,56 @@
-<p>charge-info works!</p>
+<div nz-row>
+  <div nz-col [nzSpan]="18" [nzPush]="6">col-18 col-push-6</div>
+  <div nz-col [nzSpan]="6" [nzPull]="18">
+    <nz-card
+      nzTitle="Charge Info Create"
+      [nzActions]="[submitButton]"
+      [nzBodyStyle]="{ margin: 0, padding: 0 }"
+    >
+      <nz-table
+        #groupingTable
+        nzBordered
+        nzSize="middle"
+        [nzData]="['']"
+        nzShowPagination="false"
+      >
+        <thead>
+          <tr>
+            <th colspan="2"></th>
+            <th *ngFor="let movie of movieGradleList$">
+              {{ movie.movieGradeName }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container
+            *ngFor="let site of siteGradleList$; let siteIndex = index"
+          >
+            <ng-container
+              *ngFor="let seat of seatGradleList$; let seatIndex = index"
+            >
+              <tr>
+                <td
+                  *ngIf="seatIndex == 0"
+                  [attr.rowspan]="seatGradleList$.length"
+                >
+                  {{ site.siteGradeName }}
+                </td>
+                <td>
+                  {{ seat.seatGradeName }}
+                </td>
+                <td
+                  *ngFor="let movie of movieGradleList$; let movieIndex = index"
+                >
+                  {{ getChargByKey(movie.id + "/" + seat.id + "/" + site.id) }}
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </nz-card>
+    <ng-template #submitButton>
+      <button nz-button nzType="primary" type="submit">Submit</button>
+    </ng-template>
+  </div>
+</div>

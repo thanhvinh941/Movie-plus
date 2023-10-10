@@ -2,10 +2,10 @@ package com.movieplus.domain.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,16 +35,15 @@ public class MovieTrailer {
 	
 	private String trailerTitle;
 
-	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@CreationTimestamp
 	private LocalDateTime registTime;
 	
-	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@UpdateTimestamp
 	private LocalDateTime updateTime;
 	
+	@Column(columnDefinition = "VARCHAR(255) default 'postman_update'")
 	private String updateUser;
 	
 	@Column(columnDefinition = "integer default 0")
-	private Integer delFlg;
+	private Byte delFlg;
 }

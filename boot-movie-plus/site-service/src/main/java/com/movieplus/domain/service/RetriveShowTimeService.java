@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.movieplus.config.common.service.CallInternalAPIService;
 import com.movieplus.controller.external.member.RetriveShowTimeController.RetriveShowTimeRequest;
-import com.movieplus.domain.common.CallInternalAPIService;
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.TypeReferenceConstance;
 import com.movieplus.domain.common.UrlConstance;
@@ -153,7 +153,7 @@ public class RetriveShowTimeService {
 
 		try {
 			return callInternalAPIService.callPostMenthodForObject(apiRequest, CallInternalAPIService.MOVIE_SERVICE,
-					UrlConstance.GET_MOVIE_DETAIL_INFO, TypeReferenceConstance.movieDetail, true);
+					UrlConstance.GET_MOVIE_DETAIL_INFO, TypeReferenceConstance.movieDetail);
 		} catch (Exception e) {
 			log.error("{} ERROR CALL getMovieDetailInfo: ", logTitle, e);
 			throw new InternalAPIException(e);

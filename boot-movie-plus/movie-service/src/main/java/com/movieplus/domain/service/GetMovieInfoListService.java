@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.config.common.payload.response.PaginationResponse;
 import com.movieplus.config.common.repository.CustomRepository;
 import com.movieplus.config.common.util.XYZUtil;
 import com.movieplus.controller.external.operator.GetMovieInfoListController.GetMovieInfoListRequest;
@@ -20,7 +21,6 @@ import com.movieplus.controller.external.operator.dto.MovieInfoDto;
 import com.movieplus.domain.entity.GenreType;
 import com.movieplus.domain.entity.MovieGenre;
 import com.movieplus.domain.entity.MovieInfo;
-import com.movieplus.domain.payload.response.PaginationResponse;
 
 import lombok.RequiredArgsConstructor;
 

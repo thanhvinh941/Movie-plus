@@ -11,7 +11,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.movieplus.config.common.service.CallInternalAPIService;
 import com.movieplus.config.common.util.GeneratorUtil;
-import com.movieplus.controller.external.member.RetrieveMovieInfoController.RetrieveMovieInfoRequest;
+import com.movieplus.controller.external.member.M_RetrieveMovieInfoController.RetrieveMovieInfoRequest;
 import com.movieplus.domain.common.MoviePlusConstance.KeyTypeReturn;
 import com.movieplus.domain.common.TypeReferenceConstance;
 import com.movieplus.domain.common.UrlConstance;
@@ -22,7 +22,6 @@ import com.movieplus.domain.dto.SiteInfoDTO;
 import com.movieplus.domain.payload.request.GetInternalApiRequest;
 import com.movieplus.domain.payload.response.RetrieveMovieInfoResponse;
 import com.movieplus.domain.payload.response.RetrieveMovieInfoResponse.Site;
-import com.movieplus.domain.service.common.GetMovieDetailInfoService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

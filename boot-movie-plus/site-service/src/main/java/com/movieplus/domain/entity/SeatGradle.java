@@ -2,6 +2,8 @@ package com.movieplus.domain.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
 
@@ -36,16 +38,15 @@ public class SeatGradle {
 	@Column(nullable = false, columnDefinition = "integer default 1")
 	private Integer memberVisibleFlg;
 	
-	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@CreationTimestamp
 	private LocalDateTime registTime;
 	
-	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@UpdateTimestamp
 	private LocalDateTime updateTime;
 	
+	@Column(columnDefinition = "VARCHAR(255) default 'postman_update'")
 	private String updateUser;
 	
-	@Column(nullable = false, columnDefinition = "integer default 0")
-	private Integer delFlg;
+	@Column(columnDefinition = "integer default 0")
+	private Byte delFlg;
 }

@@ -10,8 +10,8 @@ import java.util.Set;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.movieplus.config.common.service.CallInternalAPIService;
 import com.movieplus.controller.external.member.RetrieveSiteInfoController.RetrieveSiteInfoRequest;
-import com.movieplus.domain.common.CallInternalAPIService;
 import com.movieplus.domain.common.MovieConstance.KeyTypeReturn;
 import com.movieplus.domain.common.TypeReferenceConstance;
 import com.movieplus.domain.common.UrlConstance;
@@ -72,7 +72,7 @@ public class RetrieveSiteInfoService {
 
 		try {
 			return callInternalAPIService.callPostMenthodForObject(apiRequest, CallInternalAPIService.MOVIE_SERVICE,
-					UrlConstance.GET_MOVIE_DETAIL_INFO, TypeReferenceConstance.movieDetail, true);
+					UrlConstance.GET_MOVIE_DETAIL_INFO, TypeReferenceConstance.movieDetail);
 		} catch (Exception e) {
 			log.error("{} ERROR CALL getMovieDetailInfo: ", logTitle, e);
 			throw new InternalAPIException(e);

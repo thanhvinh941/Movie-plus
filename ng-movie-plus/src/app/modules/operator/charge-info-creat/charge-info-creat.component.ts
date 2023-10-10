@@ -1,17 +1,15 @@
-import { Data } from '@angular/router';
-import { async } from '@angular/core/testing';
 import { Component, OnInit } from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
   FormBuilder,
   FormControl,
+  FormGroup,
+  Validators,
 } from '@angular/forms';
-import { DirectionalData } from '../data/directional.data';
 import {
-  EndPoint,
   MovieService,
+  SiteService,
 } from 'src/app/common/config/endpoint.constants';
+import { DynamicMasterEntityService } from '../services/dynamic-master-entity.service';
 
 @Component({
   selector: 'app-charge-info-creat',
@@ -20,39 +18,85 @@ import {
 })
 export class ChargeInfoCreatComponent implements OnInit {
   constructor(
-    private fb: FormBuilder,
-    private directionalData: DirectionalData
+    private _dynamicMasterEntity: DynamicMasterEntityService,
+    private fb: FormBuilder
   ) {}
-  properties: { [key: string]: number } = {};
-  chargeInfoForm = this.fb.group(this.properties);
-  ngOnInit(): void {
-    let value: { [key: string]: number } = {};
-    this.directionalData
-      .getDirectionalValue(
-        MovieService.END_POINT,
-        MovieService.TABLE.MOVIE_GRADLE,
-        0,
-        0,
-        '',
-        ['id', 'movieGradeName'],
-        false,
-        {}
-      )
-      .subscribe({
-        next: (res) => {
-          this.movieGradleList = res.data;
-        },
-      });
-    this.siteGradleList.forEach((site) => {
-      this.seatGradleList.forEach((seat) => {
-        this.movieGradleList.forEach((movie) => {
-          let key = movie.id + '/' + seat.id + '/' + site.id;
-          value[key] = 0;
-        });
-      });
-    });
+  movieGradleList$!: { id: string; movieGradeName: string }[];
+  siteGradleList$!: { id: string; siteGradeName: string }[];
+  seatGradleList$!: { id: string; seatGradeName: string }[];
+  chargeInfoForm!: FormGroup;
+  planKbnList: { id: number; displayName: string }[] = [];
+  dayKbnList: { id: number; displayName: string }[] = [];
 
-    this.chargeInfoForm = this.fb.group(value);
+  async ngOnInit(): Promise<void> {
+    await this._dynamicMasterEntity
+      .getDynamicMasterEntity(MovieService.END_POINT, {
+        tableName: MovieService.TABLE.MOVIE_GRADLE,
+        conditionStr: 'del_flg = 0 and member_visible_flg = 1',
+        listFields: ['id', 'movieGradeName'],
+        orderBys: { sort_no: 'asc' },
+      })
+      .then(
+        (res) =>
+          (this.movieGradleList$ = res?.data as {
+            id: string;
+            movieGradeName: string;
+          }[])
+      );
+
+    await this._dynamicMasterEntity
+      .getDynamicMasterEntity(SiteService.END_POINT, {
+        tableName: SiteService.TABLE.SITE_GRADLE,
+        conditionStr: 'del_flg = 0 and member_visible_flg = 1',
+        listFields: ['id', 'siteGradeName'],
+        orderBys: { sort_no: 'asc' },
+      })
+      .then(
+        (res) =>
+          (this.siteGradleList$ = res?.data as {
+            id: string;
+            siteGradeName: string;
+          }[])
+      );
+
+    await this._dynamicMasterEntity
+      .getDynamicMasterEntity(SiteService.END_POINT, {
+        tableName: SiteService.TABLE.SEAT_GRADLE,
+        conditionStr: 'del_flg = 0 and member_visible_flg = 1',
+        listFields: ['id', 'seatGradeName'],
+        orderBys: { sort_no: 'asc' },
+      })
+      .then(
+        (res) =>
+          (this.seatGradleList$ = res?.data as {
+            id: string;
+            seatGradeName: string;
+          }[])
+      );
+
+    this.setupFormGroup();
+  }
+
+  setupFormGroup() {
+    const formGroupFields: any = {};
+    for (const siteGradle of this.siteGradleList$) {
+      for (const seatGradle of this.seatGradleList$) {
+        for (const movieGradle of this.movieGradleList$) {
+          let key = movieGradle?.id + '/' + seatGradle.id + '/' + siteGradle.id;
+          formGroupFields[key] = new FormControl(49000);
+        }
+      }
+    }
+
+    this.chargeInfoForm = this.fb.group({
+      planName: ['', [Validators.required]],
+      planKbn: [0, [Validators.required]],
+      dayKbn: [0, [Validators.required]],
+      timeStart: ['', [Validators.required]],
+      timeEnd: ['', [Validators.required]],
+      chargeInfoSet: this.fb.group(formGroupFields),
+    });
+    console.log(this.chargeInfoForm.value);
   }
 
   submitForm() {
@@ -60,85 +104,6 @@ export class ChargeInfoCreatComponent implements OnInit {
   }
 
   getSiteGradleName(id: string): string {
-    return this.siteGradleList.find((s) => s.id === id)?.siteGradeName!;
+    return this.siteGradleList$.find((s) => s.id === id)?.siteGradeName!;
   }
-
-  siteGradleList: { id: string; siteGradeName: string }[] = [
-    {
-      id: 'a',
-      siteGradeName: 'siteGrade1',
-    },
-    {
-      id: 'b',
-      siteGradeName: 'siteGrade2',
-    },
-    {
-      id: 'b',
-      siteGradeName: 'siteGrade3',
-    },
-    {
-      id: 'd',
-      siteGradeName: 'siteGrade4',
-    },
-    {
-      id: 'e',
-      siteGradeName: 'siteGrade5',
-    },
-    {
-      id: 'f',
-      siteGradeName: 'siteGrade6',
-    },
-  ];
-  seatGradleList: { id: string; seatGradeName: string }[] = [
-    {
-      id: 'a',
-      seatGradeName: 'seatGrade1',
-    },
-    {
-      id: 'b',
-      seatGradeName: 'seatGrade2',
-    },
-    {
-      id: 'c',
-      seatGradeName: 'seatGrade3',
-    },
-    {
-      id: 'd',
-      seatGradeName: 'seatGrade4',
-    },
-    {
-      id: 'e',
-      seatGradeName: 'seatGrade5',
-    },
-    {
-      id: 'f',
-      seatGradeName: 'seatGrade6',
-    },
-  ];
-  movieGradleList: { id: string; movieGradeName: string }[] = [
-    {
-      id: 'a',
-      movieGradeName: 'movieGrade1',
-    },
-    {
-      id: 'b',
-      movieGradeName: 'movieGrade2',
-    },
-    {
-      id: 'c',
-      movieGradeName: 'movieGrade3',
-    },
-    {
-      id: 'd',
-      movieGradeName: 'movieGrade4',
-    },
-    {
-      id: 'e',
-      movieGradeName: 'movieGrade5',
-    },
-    {
-      id: 'f',
-      movieGradeName: 'movieGrade6',
-    },
-  ];
 }

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
 
@@ -41,17 +43,15 @@ public class MovieGradle {
 	@Column(nullable = false, columnDefinition = "integer default 1")
 	private Integer memberVisibleFlg;
 	
-	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@CreationTimestamp
 	private LocalDateTime registTime;
 	
-	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@UpdateTimestamp
 	private LocalDateTime updateTime;
 	
-	@Column(columnDefinition = "varchar(255) default 'dummy user'")
+	@Column(columnDefinition = "VARCHAR(255) default 'postman_update'")
 	private String updateUser;
 	
 	@Column(columnDefinition = "integer default 0")
-	private Integer delFlg;
+	private Byte delFlg;
 }
