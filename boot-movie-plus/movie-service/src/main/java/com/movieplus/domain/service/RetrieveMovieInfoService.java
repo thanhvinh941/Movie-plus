@@ -9,9 +9,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.movieplus.config.common.service.CallInternalAPIService;
 import com.movieplus.config.common.util.GeneratorUtil;
 import com.movieplus.controller.external.member.RetrieveMovieInfoController.RetrieveMovieInfoRequest;
-import com.movieplus.domain.common.CallInternalAPIService;
 import com.movieplus.domain.common.MoviePlusConstance.KeyTypeReturn;
 import com.movieplus.domain.common.TypeReferenceConstance;
 import com.movieplus.domain.common.UrlConstance;
@@ -61,7 +61,7 @@ public class RetrieveMovieInfoService {
 		apiRequest.put("keyTypeReturn", keyTypeReturn);
 		
 		try {
-			return callInternalAPIService.callPostMenthodForObject(apiRequest, CallInternalAPIService.SITE_SERVICE, UrlConstance.GET_SITE_INFO, TypeReferenceConstance.commonShowTime, true);
+			return callInternalAPIService.callPostMenthodForObject(apiRequest, CallInternalAPIService.SITE_SERVICE, UrlConstance.GET_SITE_INFO, TypeReferenceConstance.commonShowTime);
 		} catch (Exception e) {
 			log.error("{} ERROR CALL getShowTimeDetail: ", logTitle, e);
 			throw new InternalAPIException(e);
@@ -83,7 +83,7 @@ public class RetrieveMovieInfoService {
 		apiRequest.setConditionStr(conditionStr);
 
 		try {
-			return callInternalAPIService.callPostMenthodForObject(apiRequest, CallInternalAPIService.SITE_SERVICE, UrlConstance.GET_SITE_INFO, TypeReferenceConstance.siteListType, true);
+			return callInternalAPIService.callPostMenthodForObject(apiRequest, CallInternalAPIService.SITE_SERVICE, UrlConstance.GET_SITE_INFO, TypeReferenceConstance.siteListType);
 		} catch (Exception e) {
 			log.error("{} ERROR CALL getSiteInfo: ", logTitle, e);
 			throw new InternalAPIException(e);

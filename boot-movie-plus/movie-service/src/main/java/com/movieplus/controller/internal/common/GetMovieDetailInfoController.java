@@ -45,15 +45,15 @@ public class GetMovieDetailInfoController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<GetMovieDetailInfoRequest>() {});
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 			MovieDetailInfoDto result = getMovieDetailInfoService.getMovieDetailInfo(request.getMovieId());
-			return GeneratorUtil.getResponseBodySuccess(result);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(result);
 		} catch (Exception e) {
 			log.error("{} execute fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 }

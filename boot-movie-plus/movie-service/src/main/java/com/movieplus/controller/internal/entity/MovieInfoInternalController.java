@@ -39,15 +39,15 @@ public class MovieInfoInternalController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<InsertInternalApiRequest<MovieInfo>>() {});
 		} catch (Exception e) {
 			log.error("{} insertMovie DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 
 			List<String> results = movieService.save(request.getRecords());
-			return GeneratorUtil.getResponseBodySuccess(results);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(results);
 		} catch (Exception e) {
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 	
@@ -60,14 +60,14 @@ public class MovieInfoInternalController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<GetInternalApiRequest>() {});
 		} catch (Exception e) {
 			log.error("{} getMovie DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 			List<MovieInfo> results = movieService.getMovieInfo(request);
-			return GeneratorUtil.getResponseBodySuccess(results);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(results);
 		} catch (Exception e) {
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 }

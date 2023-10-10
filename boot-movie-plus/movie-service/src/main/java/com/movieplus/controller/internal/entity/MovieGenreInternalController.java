@@ -39,14 +39,14 @@ public class MovieGenreInternalController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<InsertInternalApiRequest<MovieGenre>>() {});
 		} catch (Exception e) {
 			log.error("{} insertMovieGenre DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 			List<String> results = movieGenreService.save(request.getRecords());
-			return GeneratorUtil.getResponseBodySuccess(results);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(results);
 		} catch (Exception e) {
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 	
@@ -59,14 +59,14 @@ public class MovieGenreInternalController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<GetInternalApiRequest>() {});
 		} catch (Exception e) {
 			log.error("{} getMovieGenre DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 			List<MovieGenre> results = movieGenreService.getMovieGenre(request);
-			return GeneratorUtil.getResponseBodySuccess(results);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(results);
 		} catch (Exception e) {
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 }

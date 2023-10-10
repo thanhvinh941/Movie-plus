@@ -1,19 +1,16 @@
 package com.movieplus.config.common.util;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 
 import com.movieplus.domain.common.ObjectMapperUtil;
-import com.movieplus.domain.payload.response.ApiResponse;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -68,24 +65,36 @@ public class GeneratorUtil {
 		}
 	}
 	
+	public static class InternalAPI{
+		
+		@Getter
+		@Setter
+		public static class ApiResponse {
 
-	public static String getResponseBodySuccess(Object data) {
-		ApiResponse response = new ApiResponse();
-		response.setData(data);
-		response.setStatus(1);
-		response.setErrors(List.of());
-
-		return ObjectMapperUtil.writeValueAsString(response);
+			private Object data;
+			private int status;
+			private List<String> errors;
+		}
+		
+		public static String getResponseBodySuccess(Object data) {
+			ApiResponse response = new ApiResponse();
+			response.setData(data);
+			response.setStatus(1);
+			response.setErrors(List.of());
+			
+			return ObjectMapperUtil.writeValueAsString(response);
+		}
+		
+		public static String getResponseBodyError(List<String> errors) {
+			ApiResponse response = new ApiResponse();
+			response.setData(null);
+			response.setStatus(0);
+			response.setErrors(errors);
+			
+			return ObjectMapperUtil.writeValueAsString(response);
+		}
 	}
 
-	public static String getResponseBodyError(List<String> errors) {
-		ApiResponse response = new ApiResponse();
-		response.setData(null);
-		response.setStatus(0);
-		response.setErrors(errors);
-
-		return ObjectMapperUtil.writeValueAsString(response);
-	}
 
 	public static String joiningListString(Collection<String> datas) {
 		return datas.stream().map(data -> "'" + data + "'").collect(Collectors.joining(", "));

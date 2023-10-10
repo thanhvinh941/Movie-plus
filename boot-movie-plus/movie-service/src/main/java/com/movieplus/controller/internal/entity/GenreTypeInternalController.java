@@ -41,15 +41,15 @@ public class GenreTypeInternalController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<InsertInternalApiRequest<GenreType>>() {});
 		} catch (Exception e) {
 			log.error("{} insertMovie DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 			List<String> results = genreTypeService.save(request.getRecords());
-			return GeneratorUtil.getResponseBodySuccess(results);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(results);
 		} catch (Exception e) {
 			log.error("{} insertMovie fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 	
@@ -62,15 +62,15 @@ public class GenreTypeInternalController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<GetInternalApiRequest>() {});
 		} catch (Exception e) {
 			log.error("{} getGenreType DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 			List<GenreType> results = genreTypeService.getGenreType(request);
-			return GeneratorUtil.getResponseBodySuccess(results);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(results);
 		} catch (Exception e) {
 			log.error("{} getGenreType fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 	
@@ -83,15 +83,15 @@ public class GenreTypeInternalController {
 			request = new ObjectMapper().readValue(requestStr, new TypeReference<UpdateInternalApiRequest<String>>() {});
 		} catch (Exception e) {
 			log.error("{} getGenreType DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		
 		try {
 			boolean results = genreTypeService.update(request);
-			return GeneratorUtil.getResponseBodySuccess(results);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(results);
 		} catch (Exception e) {
 			log.error("{} getGenreType fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 }

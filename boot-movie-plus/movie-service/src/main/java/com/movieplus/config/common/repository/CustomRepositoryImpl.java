@@ -37,34 +37,11 @@ public class CustomRepositoryImpl implements CustomRepository {
 	@PersistenceContext
 	private EntityManager entityManager;
 	private final MessageManager messageManager;
-	
-//	@Override
-
-//	public boolean update(Map<String, Object> params, Class<T> tableName, ID key) {
-//		String setQuery = getSetQuery(params) + getUpdateTime();
-//		String whereQuery = String.format("id = '%s'", key);
-//		String sqlQuery = String.format("UPDATE %s SET %s WHERE %s", Util.convertSnake(tableName.getSimpleName()),
-//				setQuery, whereQuery);
-//
-//		Query updateSql = entityManager.createNativeQuery(sqlQuery, tableName);
-//		return updateSql.executeUpdate() > 0;
-//	}
 
 	private String getUpdateTime() {
 		DateTimeFormatter formatters = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		return "update_time = '" + LocalDateTime.now().format(formatters) + "'";
 	}
-
-//	private String getSetQuery(Map<String, Object> params) {
-//		String setStr = "";
-//		for (Map.Entry<String, Object> entry : params.entrySet()) {
-//			setStr += String.format("%s = %s", Util.convertSnake(entry.getKey()),
-//					getStringValueOfObject(entry.getValue())) + ", ";
-//		}
-//		setStr = StringUtils.removeEnd(setStr, ", ");
-//
-//		return setStr;
-//	}
 
 	private String getStringValueOfObject(Object value) {
 		DateTimeFormatter formatters = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

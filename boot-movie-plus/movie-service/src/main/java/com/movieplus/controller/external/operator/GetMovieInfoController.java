@@ -50,7 +50,7 @@ public class GetMovieInfoController {
 			request = objectMapper.readValue(requestStr, new TypeReference<GetMovieInfoRequest>() {});
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 
 		try {
@@ -58,10 +58,10 @@ public class GetMovieInfoController {
 
 			service.execute(request, response);
 
-			return GeneratorUtil.getResponseBodySuccess(response);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(response);
 		} catch (Exception e) {
 			log.error("{} execute fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 }

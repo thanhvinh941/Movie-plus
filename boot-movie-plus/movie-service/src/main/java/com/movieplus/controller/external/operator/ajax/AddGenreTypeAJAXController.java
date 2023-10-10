@@ -47,7 +47,7 @@ public class AddGenreTypeAJAXController {
 			});
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(messageManager.getMessage("DECODE_FAIL", logTitle)));
 		}
 		String response = aJaxService.doAddGenreType(request);
 		return response;
@@ -57,10 +57,10 @@ public class AddGenreTypeAJAXController {
 	@ResponseBody
 	public String getAllGenreType() throws JsonProcessingException {
 		try {
-			return GeneratorUtil.getResponseBodySuccess(aJaxService.getAllGenreType());
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(aJaxService.getAllGenreType());
 		} catch (Exception e) {
 			log.error("{} execute fail: ", logTitle, e);
-			return GeneratorUtil.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 	}
 }
