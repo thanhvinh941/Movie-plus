@@ -1,0 +1,22 @@
+<nz-card>
+  <nz-table #basicTable [nzData]="chargeInfoPlanData">
+    <thead>
+      <tr>
+        <th *ngFor="let field of chargeInfoPlanData[0] | keyvalue">
+          {{ field.key }}
+        </th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of basicTable.data">
+        <ng-container *ngFor="let field of item | keyvalue; last as isLast">
+          <td>{{ field.value }}</td>
+          <td *ngIf="isLast">
+            {{ item[0].value }}
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>

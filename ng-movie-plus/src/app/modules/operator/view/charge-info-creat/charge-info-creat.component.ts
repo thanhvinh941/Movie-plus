@@ -9,7 +9,9 @@ import {
   MovieService,
   SiteService,
 } from 'src/app/common/config/endpoint.constants';
-import { DynamicMasterEntityService } from '../services/dynamic-master-entity.service';
+import { DynamicMasterEntityService } from '../../services/dynamic-master-entity.service';
+import { ChargeInfoService } from '../../services/charge-info.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-charge-info-creat',
@@ -19,7 +21,9 @@ import { DynamicMasterEntityService } from '../services/dynamic-master-entity.se
 export class ChargeInfoCreatComponent implements OnInit {
   constructor(
     private _dynamicMasterEntity: DynamicMasterEntityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _chargeInfoService: ChargeInfoService,
+    private router: Router
   ) {}
   movieGradleList$!: { id: string; movieGradeName: string }[];
   siteGradleList$!: { id: string; siteGradeName: string }[];
@@ -100,6 +104,16 @@ export class ChargeInfoCreatComponent implements OnInit {
   }
 
   submitForm() {
+    this._chargeInfoService
+      .settingChargeInfo(this.chargeInfoForm.value)
+      .subscribe((res) => {
+        if (res.status == 0) {
+        }
+        let chargeInfoPlanId = res.data[0];
+        this.router.navigateByUrl(
+          `/operator/charge-infos?targetId=${chargeInfoPlanId}`
+        );
+      });
     console.log(this.chargeInfoForm.value);
   }
 

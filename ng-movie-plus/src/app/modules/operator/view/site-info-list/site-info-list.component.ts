@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SiteInfo } from '../models/site-info';
+import { SiteInfo } from '../../models/site-info';
 
 @Component({
   selector: 'app-site-info-list',

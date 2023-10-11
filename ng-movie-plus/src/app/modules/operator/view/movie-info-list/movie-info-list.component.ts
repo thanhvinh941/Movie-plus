@@ -1,6 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { MovieInfoData } from '../data/movie-info.data';
-import { MovieInfo } from '../models/movie-info';
+import { MovieInfoData } from '../../data/movie-info.data';
+import { MovieInfo } from '../../models/movie-info';
 import { Observable, from, map, of, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 

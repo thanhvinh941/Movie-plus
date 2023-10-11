@@ -25,12 +25,12 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
-import { GenreType } from '../models/genre-type';
-import { GenreTypeService } from '../services/genre-type.service';
+import { GenreType } from '../../models/genre-type';
+import { GenreTypeService } from '../../services/genre-type.service';
 import { async } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { MovieInfoService } from '../services/movie-info.service';
-import { GenreTypeData } from '../data/genre-type.data';
+import { MovieInfoService } from '../../services/movie-info.service';
+import { GenreTypeData } from '../../data/genre-type.data';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
   new Promise((resolve, reject) => {

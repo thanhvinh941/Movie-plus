@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { OperatorComponent } from './operator.component';
-import { MovieInfoCreateComponent } from './movie-info-create/movie-info-create.component';
-import { MovieInfoListComponent } from './movie-info-list/movie-info-list.component';
-import { ChargeInfoCreatComponent } from './charge-info-creat/charge-info-creat.component';
+import { MovieInfoCreateComponent } from './view/movie-info-create/movie-info-create.component';
+import { MovieInfoListComponent } from './view/movie-info-list/movie-info-list.component';
+import { ChargeInfoCreatComponent } from './view/charge-info-creat/charge-info-creat.component';
 
 const routes: Routes = [
   {
@@ -29,16 +29,19 @@ const routes: Routes = [
       {
         path: 'site-infos/create',
         component: ChargeInfoCreatComponent,
-      },{
+      },
+      {
         path: 'site-infos',
         component: ChargeInfoCreatComponent,
-      },{
+      },
+      {
         path: 'seat-infos',
         component: ChargeInfoCreatComponent,
-      },{
+      },
+      {
         path: 'seat-infos/create',
         component: ChargeInfoCreatComponent,
-      }
+      },
     ],
   },
 ];

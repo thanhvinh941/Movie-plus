@@ -123,6 +123,27 @@ public class CustomRepositoryImpl implements CustomRepository {
 			throw new Exception(messageManager.getMessage("SQL_Unknow_Exception", null));
 		}
 	}
+	
+	List<?> mappingDataBaseListField(List<?> resultList, List<String> listFields){
+		return resultList.stream().map(r -> {
+			if (listFields.size() > 1) {
+				Map<String, Object> map = new HashMap<>();
+				Object[] result = (Object[]) r;
+				for (int i = 0; i < listFields.size(); i++) {
+					map.put(listFields.get(i), result[i]);
+				}
+				return map;
+			} else if(listFields.get(0).equals("*")) {
+				return resultList;
+			}
+
+			return new HashMap<String, Object>() {
+				{
+					put(listFields.get(0), r);
+				}
+			};
+		}).toList();
+	}
 
 	@Override
 	public List<?> selectByCondition(Class<?> targetTable, String conditionStr) throws Exception {
