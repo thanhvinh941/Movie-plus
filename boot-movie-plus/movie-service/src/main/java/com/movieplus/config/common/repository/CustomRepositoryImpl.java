@@ -98,6 +98,19 @@ public class CustomRepositoryImpl implements CustomRepository {
 
 		try {
 			List<?> resultList = selectSql.getResultList();
+			
+			Class<?> entityClass = null;
+			try {
+				entityClass = Class.forName(tableName);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+			if(listFields.get(0).equals("*")) {
+				listFields.remove(0);
+				listFields.addAll(XYZUtil.getFieldNames(entityClass));
+			}
+			
 			return resultList.stream().map(r -> {
 				if (listFields.size() > 1) {
 					Map<String, Object> map = new HashMap<>();
@@ -122,27 +135,6 @@ public class CustomRepositoryImpl implements CustomRepository {
 			}
 			throw new Exception(messageManager.getMessage("SQL_Unknow_Exception", null));
 		}
-	}
-	
-	List<?> mappingDataBaseListField(List<?> resultList, List<String> listFields){
-		return resultList.stream().map(r -> {
-			if (listFields.size() > 1) {
-				Map<String, Object> map = new HashMap<>();
-				Object[] result = (Object[]) r;
-				for (int i = 0; i < listFields.size(); i++) {
-					map.put(listFields.get(i), result[i]);
-				}
-				return map;
-			} else if(listFields.get(0).equals("*")) {
-				return resultList;
-			}
-
-			return new HashMap<String, Object>() {
-				{
-					put(listFields.get(0), r);
-				}
-			};
-		}).toList();
 	}
 
 	@Override
