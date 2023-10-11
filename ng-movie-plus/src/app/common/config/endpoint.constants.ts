@@ -26,7 +26,7 @@ export class SiteService {
 }
 
 export class ChargeService {
-  public static END_POINT = 'http://localhost:8084/price/api';
+  public static END_POINT = 'http://localhost:8085/price/api';
 
   public static TABLE = {
     CHARGE_INFO_SET: 'ChargeInfoSet',

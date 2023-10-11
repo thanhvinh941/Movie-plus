@@ -5,16 +5,12 @@
     [nzBodyStyle]="{ margin: 0, padding: 0 }"
   >
     <div nz-row>
-      <div nz-col nzSpan="12" nzOrder="1" >
+      <div nz-col nzSpan="12" nzOrder="1">
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="planName"
             >Plan Name</nz-form-label
           >
-          <nz-form-control
-            [nzSm]="14"
-            [nzXs]="24"
-            nzErrorTip="The input is not valid E-mail!"
-          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
             <input nz-input formControlName="planName" id="planName" />
           </nz-form-control>
         </nz-form-item>
@@ -72,24 +68,23 @@
           >
           <nz-form-control [nzSm]="14" [nzXs]="24">
             <nz-date-picker
-              nzShowTime
+              [nzFormat]="dateFormat"
+              id="timeStart"
               formControlName="timeStart"
+              [nzDateRender]="tplRender"
             ></nz-date-picker>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="timeEnd"
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="timeEnd"
             >Time End</nz-form-label
           >
-          <nz-form-control
-            [nzSm]="14"
-            [nzXs]="24"
-            nzErrorTip="The input is not valid E-mail!"
-          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
             <nz-date-picker
-              nzShowTime
+              [nzFormat]="dateFormat"
               formControlName="timeEnd"
               id="timeEnd"
+              [nzDateRender]="tplRender"
             ></nz-date-picker>
           </nz-form-control>
         </nz-form-item>
@@ -156,4 +151,9 @@
 </form>
 <ng-template #submitButton>
   <button nz-button nzType="primary" type="submit">Submit</button>
+</ng-template>
+<ng-template #tplRender let-current>
+  <div class="ant-picker-cell-inner" [class.border]="current.getDate() === 1">
+    {{ current.getDate() }}
+  </div>
 </ng-template>

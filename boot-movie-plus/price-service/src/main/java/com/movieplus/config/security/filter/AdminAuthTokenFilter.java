@@ -1,4 +1,4 @@
-package com.movieplus.config;
+package com.movieplus.config.security.filter;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +16,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.config.security.MultiSecurityConfig.Role;
+import com.movieplus.config.security.dto.AdminSession;
+import com.movieplus.config.security.util.JwtUtil;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -58,7 +61,7 @@ public class AdminAuthTokenFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken
 	        authentication = new UsernamePasswordAuthenticationToken(
 	            userDetails, null,
-	            List.of(new SimpleGrantedAuthority("ADMIN"))
+	            List.of(new SimpleGrantedAuthority(Role.ROLE_ADMIN.toString()))
 	        );
 	
 	    authentication.setDetails(

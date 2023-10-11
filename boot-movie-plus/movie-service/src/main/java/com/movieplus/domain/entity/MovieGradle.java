@@ -44,9 +44,11 @@ public class MovieGradle {
 	private Integer memberVisibleFlg;
 	
 	@CreationTimestamp
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime registTime;
 	
 	@UpdateTimestamp
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime updateTime;
 	
 	@Column(columnDefinition = "VARCHAR(255) default 'postman_update'")

@@ -2,21 +2,68 @@
   <nz-table #basicTable [nzData]="chargeInfoPlanData">
     <thead>
       <tr>
+        <th>
+          STT
+        </th>
+        <th>Plan Name</th>
+        <th>Day Kbn</th>
         <th *ngFor="let field of chargeInfoPlanData[0] | keyvalue">
           {{ field.key }}
         </th>
-        <th>Action</th>
+        <th colSpan="2">Action</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of basicTable.data">
-        <ng-container *ngFor="let field of item | keyvalue; last as isLast">
-          <td>{{ field.value }}</td>
-          <td *ngIf="isLast">
-            {{ item[0].value }}
-          </td>
-        </ng-container>
-      </tr>
+      <ng-container *ngFor="let item of basicTable.data">
+        <tr [ngStyle]="editCache[item.id].change ? {'background-color': '#cddc39'} : {}">
+          <ng-container *ngIf="!editCache[item.id].edit; else editTemplate">
+            <ng-container *ngFor="let field of item | keyvalue; last as isLast">
+              <td>{{ field.value }}</td>
+              <ng-container *ngIf="isLast">
+                <td>
+                  <button type="button">
+                    <a routerLink="{{ item.id }}">Detail</a>
+                  </button>
+                </td>
+                <td>
+                  <button type="button">
+                    <a (click)="startEdit(item.id)">Edit</a>
+                  </button>
+                </td>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <ng-template #editTemplate>
+            <ng-container *ngFor="let field of item | keyvalue; last as isLast">
+              <td>
+                <input
+                  type="text"
+                  nz-input
+                  [(ngModel)]="editCache[item.id].data[$any(field).key]"
+                />
+              </td>
+              <ng-container *ngIf="isLast">
+                <td>
+                  <button type="button">
+                    <a (click)="saveEdit(item.id)" class="save">Save</a>
+                  </button>
+                </td>
+                <td>
+                  <button type="button">
+                    <a
+                      nz-popconfirm
+                      nzPopconfirmTitle="Sure to cancel?"
+                      (nzOnConfirm)="cancelEdit(item.id)"
+                      >Cancel</a
+                    >
+                  </button>
+                </td>
+              </ng-container>
+            </ng-container>
+          </ng-template>
+        </tr>
+      </ng-container>
     </tbody>
   </nz-table>
+  <button (click)="onSaveAllChange()">Save Change</button>
 </nz-card>

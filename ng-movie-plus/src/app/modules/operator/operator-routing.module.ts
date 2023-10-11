@@ -4,6 +4,8 @@ import { OperatorComponent } from './operator.component';
 import { MovieInfoCreateComponent } from './view/movie-info-create/movie-info-create.component';
 import { MovieInfoListComponent } from './view/movie-info-list/movie-info-list.component';
 import { ChargeInfoCreatComponent } from './view/charge-info-creat/charge-info-creat.component';
+import { ChargeInfoListComponent } from './view/charge-info-list/charge-info-list.component';
+import { ChargeInfoDetailComponent } from './view/charge-info-detail/charge-info-detail.component';
 
 const routes: Routes = [
   {
@@ -24,7 +26,11 @@ const routes: Routes = [
       },
       {
         path: 'charge-infos',
-        component: ChargeInfoCreatComponent,
+        component: ChargeInfoListComponent,
+      },
+      {
+        path: 'charge-infos/:id',
+        component: ChargeInfoDetailComponent,
       },
       {
         path: 'site-infos/create',

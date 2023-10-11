@@ -1,4 +1,4 @@
-package com.movieplus.config;
+package com.movieplus.config.security.dto;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

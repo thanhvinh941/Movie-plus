@@ -12,7 +12,7 @@ import {
 import { DynamicMasterEntityService } from '../../services/dynamic-master-entity.service';
 import { ChargeInfoService } from '../../services/charge-info.service';
 import { Router } from '@angular/router';
-
+import { format } from "date-fns";
 @Component({
   selector: 'app-charge-info-creat',
   templateUrl: './charge-info-creat.component.html',
@@ -28,9 +28,24 @@ export class ChargeInfoCreatComponent implements OnInit {
   movieGradleList$!: { id: string; movieGradeName: string }[];
   siteGradleList$!: { id: string; siteGradeName: string }[];
   seatGradleList$!: { id: string; seatGradeName: string }[];
-  chargeInfoForm!: FormGroup;
-  planKbnList: { id: number; displayName: string }[] = [];
-  dayKbnList: { id: number; displayName: string }[] = [];
+  planKbnList: { id: number; displayName: string }[] = [
+    { id: 0, displayName: 'Basic Plan' },
+    { id: 1, displayName: 'Special Plan' },
+  ];
+  dayKbnList: { id: number; displayName: string }[] = [
+    { id: 0, displayName: 'WeekDay' },
+    { id: 1, displayName: 'WeekendDay' },
+    { id: 2, displayName: 'holiDay' },
+  ];
+  chargeInfoForm: FormGroup = this.fb.group({
+    planName: ['', [Validators.required]],
+    planKbn: [0, [Validators.required]],
+    dayKbn: [0, [Validators.required]],
+    timeStart: [new Date(), [Validators.required]],
+    timeEnd: [null, [Validators.required]],
+    chargeInfoSet: this.fb.group({}),
+  });;
+  dateFormat = 'yyyy/MM/dd';
 
   async ngOnInit(): Promise<void> {
     await this._dynamicMasterEntity
@@ -80,8 +95,8 @@ export class ChargeInfoCreatComponent implements OnInit {
 
     this.setupFormGroup();
   }
-
-  setupFormGroup() {
+  
+  async setupFormGroup() {
     const formGroupFields: any = {};
     for (const siteGradle of this.siteGradleList$) {
       for (const seatGradle of this.seatGradleList$) {
@@ -91,16 +106,7 @@ export class ChargeInfoCreatComponent implements OnInit {
         }
       }
     }
-
-    this.chargeInfoForm = this.fb.group({
-      planName: ['', [Validators.required]],
-      planKbn: [0, [Validators.required]],
-      dayKbn: [0, [Validators.required]],
-      timeStart: ['', [Validators.required]],
-      timeEnd: ['', [Validators.required]],
-      chargeInfoSet: this.fb.group(formGroupFields),
-    });
-    console.log(this.chargeInfoForm.value);
+    this.chargeInfoForm.setControl('chargeInfoSet', this.fb.group(formGroupFields));
   }
 
   submitForm() {

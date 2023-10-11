@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movieplus.controller.external.operator.EntryChargeInfoController.EntryCharPlanInfoRequest;
 import com.movieplus.domain.common.GeneratorCommonUtil;
 import com.movieplus.domain.common.MessageManager;
 import com.movieplus.domain.service.SelectBaseChargeInfoService;
@@ -28,16 +27,16 @@ public class SelectChargeInfoController {
 
 	private final SelectBaseChargeInfoService service;
 	private final MessageManager messageManager;
-	private final String[] logTitle = { "selectBaseChargeInfo" };
+	private final String[] logTitle = { "selectChargeInfo" };
 
 	@Getter
 	@Setter
 	public static class SelectBaseChargeInfoRequest {
-		private Integer holidayKbn;
+		private String chargeInfoPlanId;
 	}
 
 	@ResponseBody
-	@RequestMapping(path = "/selectBaseChargeInfo", method = RequestMethod.POST)
+	@RequestMapping(path = "/selectChargeInfo", method = RequestMethod.POST)
 	public String doSelectChargeInfo(@RequestBody String requestStr) {
 		SelectBaseChargeInfoRequest request = new SelectBaseChargeInfoRequest();
 		// DecodeRequest
