@@ -155,11 +155,8 @@ import { DynamicFormComponent } from './layout/dynamic-form/dynamic-form.compone
     NzCodeEditorModule,
     NzGraphModule,
     NzQRCodeModule,
-    NzWaterMarkModule
+    NzWaterMarkModule,
   ],
-  declarations: [
-  
-    DynamicFormComponent
-  ]
+  declarations: [DynamicFormComponent],
 })
-export class NgZorroAntdModule { }
+export class NgZorroAntdModule {}

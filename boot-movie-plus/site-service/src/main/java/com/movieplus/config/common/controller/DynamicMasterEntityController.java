@@ -98,7 +98,8 @@ public class DynamicMasterEntityController {
 	}
 
 	@RequestMapping(path = "/entryDynamicMasterEntity", method = RequestMethod.POST)
-	public ResponseEntity<ExternalApiResponse<String>> entryDynamicMasterEntity(@RequestBody String requestStr) {
+	@ResponseBody
+	public String entryDynamicMasterEntity(@RequestBody String requestStr) {
 		final String[] logTitle = { "entryDynamicMasterEntity" };
 		EntryDynamicMasterEntityRequest request = new EntryDynamicMasterEntityRequest();
 		// DecodeRequest
@@ -108,18 +109,18 @@ public class DynamicMasterEntityController {
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
 			String errorMessage = messageManager.getMessage("DECODE_FAIL", logTitle);
-			return GeneratorUtil.ExternalAPI.createErrorClientResponse(List.of(errorMessage));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(errorMessage));
 		}
 
 		try {
 			String result = customRepository.insertRecords(request.getTableName(), request.records);
-			return GeneratorUtil.ExternalAPI.createSuccessResponse(result);
+			return GeneratorUtil.InternalAPI.getResponseBodySuccess(result);
 		} catch (ClientException e) {
 			log.error("{} ClientException fail: ", logTitle, e);
-			return GeneratorUtil.ExternalAPI.createErrorClientResponse(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		} catch (Exception e) {
 			log.error("{} Exception fail: ", logTitle, e);
-			return GeneratorUtil.ExternalAPI.createErrorServerResponse(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
 		}
 
 	}

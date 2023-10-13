@@ -6,6 +6,10 @@ import { MovieInfoListComponent } from './view/movie-info-list/movie-info-list.c
 import { ChargeInfoCreatComponent } from './view/charge-info-creat/charge-info-creat.component';
 import { ChargeInfoListComponent } from './view/charge-info-list/charge-info-list.component';
 import { ChargeInfoDetailComponent } from './view/charge-info-detail/charge-info-detail.component';
+import { SiteInfoListComponent } from './view/site-info-list/site-info-list.component';
+import { SiteInfoCreateComponent } from './view/site-info-create/site-info-create.component';
+import { SiteInfoDetailComponent } from './view/site-info-detail/site-info-detail.component';
+import { RoomDetailComponent } from './view/room-detail/room-detail.component';
 
 const routes: Routes = [
   {
@@ -34,19 +38,23 @@ const routes: Routes = [
       },
       {
         path: 'site-infos/create',
-        component: ChargeInfoCreatComponent,
+        component: SiteInfoCreateComponent,
       },
       {
         path: 'site-infos',
+        component: SiteInfoListComponent,
+      },
+      {
+        path: 'site-infos/:id',
+        component: SiteInfoDetailComponent,
+      },
+      {
+        path: 'seat-infos/:id',
         component: ChargeInfoCreatComponent,
       },
       {
-        path: 'seat-infos',
-        component: ChargeInfoCreatComponent,
-      },
-      {
-        path: 'seat-infos/create',
-        component: ChargeInfoCreatComponent,
+        path: 'site-infos/:siteId/room-info/:roomId',
+        component: RoomDetailComponent,
       },
     ],
   },

@@ -44,7 +44,7 @@ export class ChargeInfoCreatComponent implements OnInit {
     timeStart: [new Date(), [Validators.required]],
     timeEnd: [null, [Validators.required]],
     chargeInfoSet: this.fb.group({}),
-  });;
+  });
   dateFormat = 'yyyy/MM/dd';
 
   async ngOnInit(): Promise<void> {

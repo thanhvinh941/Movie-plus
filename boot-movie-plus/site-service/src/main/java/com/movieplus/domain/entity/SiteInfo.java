@@ -39,10 +39,10 @@ public class SiteInfo {
 	@Column(nullable = false)
 	private String siteZipNo;
 	
-	@Column(nullable = false)
+	@Column(name = "site_lon_x" ,nullable = false)
 	private Double siteLonX;
 	
-	@Column(nullable = false)
+	@Column(name = "site_lat_y" ,nullable = false)
 	private Double siteLatY;
 	
 	private String accessInfo;

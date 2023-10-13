@@ -1,46 +1,68 @@
-<div *ngIf="siteInfoList$ | async; let listOfData">
-  <nz-table
-    #editRowTable
-    nzShowPagination="false"
-    nzShowSizeChanger="false"
-    nzBordered
-    [nzData]="listOfData"
-    nzTableLayout="fixed"
-  >
+<nz-card>
+  <nz-table #basicTable [nzData]="siteInfoDataList">
     <thead>
       <tr>
-        <th nzWidth="40%">id</th>
-        <th nzWidth="25%">siteName</th>
-        <th nzWidth="15%">localtion</th>
-        <th>Action</th>
+        <th>
+          STT
+        </th>
+        <th *ngFor="let field of siteInfoDataList[0] | keyvalue">
+          {{ field.key }}
+        </th>
+        <th colSpan="2">Action</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of editRowTable.data">
-        <ng-container *ngIf="!editCache[data.id].edit; ele: editTemplate">
-          <td>{{ data.id }}</td>
-          <td>{{ data.siteName }}</td>
-          <td>{{ data.localtion }}</td>
-          <td><a (click)="startEdit(data.id)">Edit</a></td>
-        </ng-container>
-        <ng-template #editTemplate>
-          <td>
-            <input
-              type="text"
-              nz-input
-              [(ngModel)]="editCache[data.id].data.siteName"
-            />
-          </td>
-          <td>
-            <input
-              type="text"
-              nz-input
-              [(ngModel)]="editCache[data.id].data.localtion"
-            />
-          </td>
-        </ng-template>
-      </tr>
+      <ng-container *ngFor="let item of basicTable.data; index as i">
+        <tr [ngStyle]="editCache[item.id].change ? {'background-color': '#cddc39'} : {}">
+          <ng-container *ngIf="!editCache[item.id].edit; else editTemplate">
+            <ng-container *ngFor="let field of item | keyvalue; last as isLast; first as isFirst; ">
+              <td *ngIf="isFirst">{{i + 1}}</td>
+              <td>{{ field.value }}</td>
+              <ng-container *ngIf="isLast">
+                <td>
+                  <button type="button">
+                    <a routerLink="{{ item.id }}">Detail</a>
+                  </button>
+                </td>
+                <td>
+                  <button type="button">
+                    <a (click)="startEdit(item.id)">Edit</a>
+                  </button>
+                </td>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <ng-template #editTemplate>
+            <ng-container *ngFor="let field of item | keyvalue; last as isLast">
+              <td>
+                <input
+                  type="text"
+                  nz-input
+                  [(ngModel)]="editCache[item.id].data[$any(field).key]"
+                />
+              </td>
+              <ng-container *ngIf="isLast">
+                <td>
+                  <button type="button">
+                    <a (click)="saveEdit(item.id)" class="save">Save</a>
+                  </button>
+                </td>
+                <td>
+                  <button type="button">
+                    <a
+                      nz-popconfirm
+                      nzPopconfirmTitle="Sure to cancel?"
+                      (nzOnConfirm)="cancelEdit(item.id)"
+                      >Cancel</a
+                    >
+                  </button>
+                </td>
+              </ng-container>
+            </ng-container>
+          </ng-template>
+        </tr>
+      </ng-container>
     </tbody>
   </nz-table>
-  <app-pagination [pagination]="pagination" />
-</div>
+  <button (click)="onSaveAllChange()">Save Change</button>
+</nz-card>

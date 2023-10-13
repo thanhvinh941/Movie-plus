@@ -18,6 +18,7 @@ import { RoomDetailComponent } from './view/room-detail/room-detail.component';
 import { RoomCreateComponent } from './view/room-create/room-create.component';
 import { ChargeInfoListComponent } from './view/charge-info-list/charge-info-list.component';
 import { ChargeInfoDetailComponent } from './view/charge-info-detail/charge-info-detail.component';
+import { SiteInfoCreateComponent } from './view/site-info-create/site-info-create.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ChargeInfoDetailComponent } from './view/charge-info-detail/charge-info
     RoomCreateComponent,
     ChargeInfoListComponent,
     ChargeInfoDetailComponent,
+    SiteInfoCreateComponent,
   ],
   imports: [
     CommonModule,

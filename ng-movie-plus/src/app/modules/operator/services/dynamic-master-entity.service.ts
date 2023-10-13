@@ -1,3 +1,4 @@
+import { AbstractRegistResponse } from 'src/app/common/models/abstract_regist_response';
 import {
   HttpClient,
   HttpErrorResponse,
@@ -18,6 +19,14 @@ export class DynamicMasterEntityService {
     let api = `${endpoint}/getDynamicMasterEntity`;
     return await this.http
       .post<AbstractListResponse<any>>(api, request)
+      .toPromise()
+      .then((res) => res);
+  }
+
+  async entryDynamicMasterEntity(endpoint: string, request: any): Promise<any> {
+    let api = `${endpoint}/entryDynamicMasterEntity`;
+    return await this.http
+      .post<AbstractRegistResponse>(api, request)
       .toPromise()
       .then((res) => res);
   }

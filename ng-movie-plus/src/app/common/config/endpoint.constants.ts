@@ -5,9 +5,6 @@ export class MovieService {
     GENRE_TYPE: 'GenreType',
     MOVIE_GRADLE: 'MovieGradle',
   };
-  public static API = {
-    getDirectionalValue: '/getDirectionalValue',
-  };
 }
 
 export class SiteService {
@@ -19,9 +16,6 @@ export class SiteService {
     SITE_GRADLE: 'SiteGradle',
     SITE_INFO: 'SiteInfo',
     SEAT_MASTER: 'SeatMaster',
-  };
-  public static API = {
-    getDirectionalValue: '/getDirectionalValue',
   };
 }
 

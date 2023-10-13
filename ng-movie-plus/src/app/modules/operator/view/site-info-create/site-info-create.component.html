@@ -1,0 +1,45 @@
+<p>site-info-create works!</p>
+<form nzForm [formGroup]="siteInfoForm" (ngSubmit)="submitForm()">
+  <ng-container *ngFor="let field of fieldDefind | keyvalue">
+    <ng-container *ngFor="let item of siteInfoForm.controls | keyvalue">
+      <ng-container *ngIf="field.key == item.key">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" [nzFor]="item.key">{{
+            $any(field.value)["label"]
+          }}</nz-form-label>
+          <nz-form-control [nzSpan]="14">
+            <ng-container
+              *ngIf="$any(field.value)['type'] == 'select'; else defaultInput"
+            >
+              <nz-select
+                nzShowSearch
+                nzAllowClear
+                [nzPlaceHolder]="$any(field.value)['placeholder']"
+                [formControlName]="item.key"
+              >
+                <ng-container
+                  *ngFor="let resource of $any(field.value)['resource']"
+                >
+                  <nz-option
+                    [nzLabel]="$any(resource)['displayName']"
+                    [nzValue]="$any(resource)['id']"
+                  ></nz-option>
+                </ng-container>
+              </nz-select>
+            </ng-container>
+            <ng-template #defaultInput>
+              <input
+                nz-input
+                [formControlName]="item.key"
+                [type]="$any(field.value)['type']"
+                [id]="item.key"
+                [placeholder]="$any(field.value)['placeholder']"
+              />
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  <button type="submit" nzType="primary">submit</button>
+</form>
