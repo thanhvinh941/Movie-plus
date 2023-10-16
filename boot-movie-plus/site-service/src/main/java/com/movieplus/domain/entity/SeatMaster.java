@@ -52,5 +52,5 @@ public class SeatMaster {
 	private String updateUser;
 
 	@Column(columnDefinition = "integer default 0")
-	private Byte delFlg;
+	private Integer delFlg;
 }

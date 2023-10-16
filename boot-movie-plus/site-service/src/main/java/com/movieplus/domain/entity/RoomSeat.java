@@ -3,6 +3,8 @@ package com.movieplus.domain.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
 
@@ -36,17 +38,17 @@ public class RoomSeat {
 	@Column(nullable = false)
 	private String roomId;
 
+	@CreationTimestamp
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime registTime;
 	
+	@UpdateTimestamp
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateTime;
 	
-	@Column(nullable = false)
+	@Column(columnDefinition = "VARCHAR(255) default 'postman_update'")
 	private String updateUser;
 	
-	@Column(nullable = false, columnDefinition = "integer default 0")
+	@Column(columnDefinition = "integer default 0")
 	private Integer delFlg;
 }

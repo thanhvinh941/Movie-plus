@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.common.exception.ClientException;
 import com.movieplus.config.common.util.XYZUtil;
 import com.movieplus.domain.common.MessageManager;
@@ -55,13 +56,6 @@ public class CustomRepositoryImpl implements CustomRepository {
 		} else {
 			return value.toString();
 		}
-	}
-
-	@Override
-	public List<?> selectByCondition(Class<?> targetTable, String conditionStr, Map<String, String> orderBys,
-			Integer limit, Integer offset, boolean isForUpdate) throws Exception {
-		return selectByCondition(targetTable.getSimpleName(), conditionStr, XYZUtil.getFieldNames(targetTable),
-				orderBys, limit, offset, isForUpdate);
 	}
 
 	@SuppressWarnings("serial")
@@ -123,20 +117,54 @@ public class CustomRepositoryImpl implements CustomRepository {
 			throw new Exception(messageManager.getMessage("SQL_Unknow_Exception", null));
 		}
 	}
+	
+	@SuppressWarnings("serial")
+	public <T> List<T> selectByCondition(Class<T> targetTable, String conditionStr,
+			Map<String, String> orderBys, Integer limit, Integer offset, boolean isForUpdate) throws Exception {
+		String tableName = targetTable.getSimpleName();
+		String sqlQuery = String.format("SELECT * FROM %s", XYZUtil.convertSnake(tableName));
 
-	@Override
-	public List<?> selectByCondition(Class<?> targetTable, String conditionStr) throws Exception {
-		return selectByCondition(targetTable, conditionStr, null, null, null, false);
+		if (!StringUtils.isBlank(conditionStr)) {
+			sqlQuery += String.format(" WHERE %s", conditionStr);
+		}
+
+		if (!CollectionUtils.isEmpty(orderBys)) {
+			String orderbyStr = "";
+			for (Map.Entry<String, String> entry : orderBys.entrySet()) {
+				orderbyStr += XYZUtil.convertSnake(entry.getKey()) + " " + entry.getValue() + ", ";
+			}
+			orderbyStr += StringUtils.removeEnd(orderbyStr, ", ");
+			sqlQuery += String.format(" ORDER BY %s", orderbyStr);
+		}
+
+		if (limit != null && limit > 0) {
+			sqlQuery += String.format(" LIMIT %s", limit);
+			if (offset != null && offset > 0) {
+				sqlQuery += String.format(" OFFSET %s", offset);
+			}
+		}
+
+		if (isForUpdate) {
+			sqlQuery += " FOR UPDATE";
+		}
+
+		Query selectSql = entityManager.createNativeQuery(sqlQuery, targetTable);
+
+		try {
+			return selectSql.getResultList();
+		} catch (Exception e) {
+			log.error("{} ERROR execute: {}", logTitle, e);
+			if (e instanceof SQLGrammarException) {
+				Object[] datas = { tableName };
+				throw new ClientException(messageManager.getMessage("SQL_Grammar_Exception", datas));
+			}
+			throw new Exception(messageManager.getMessage("SQL_Unknow_Exception", null));
+		}
 	}
 
 	@Override
 	public List<?> selectByCondition(String tableName, String conditionStr, List<String> listFields) throws Exception {
 		return selectByCondition(tableName, conditionStr, listFields, null, null, null, false);
-	}
-
-	@Override
-	public List<?> selectByCondition(Class<?> targetTable) throws Exception {
-		return selectByCondition(targetTable.getSimpleName(), null, null, null, null, null, false);
 	}
 
 	@Override
@@ -165,6 +193,9 @@ public class CustomRepositoryImpl implements CustomRepository {
 		String uuidStr = UUID.randomUUID().toString();
 		String id = nowStamp.getTime() + uuidStr.substring(12);
 		for (Map.Entry<String, Object> entry : records.entrySet()) {
+			if(Objects.isNull(entry.getValue())) {
+				continue;
+			}
 			columes = StringUtils.join(columes, XYZUtil.convertSnake(entry.getKey()) + ",");
 			values = StringUtils.join(values, "?,");
 		}
@@ -178,6 +209,9 @@ public class CustomRepositoryImpl implements CustomRepository {
 		int index = 1;
 		insertSql.setParameter(index, id);
 		for (Object value : records.values()) {
+			if(Objects.isNull(value)) {
+				continue;
+			}
 			index += 1;
 			insertSql.setParameter(index, value);
 		}
@@ -243,6 +277,25 @@ public class CustomRepositoryImpl implements CustomRepository {
 		}
 		
 		return true;
+	}
+
+	@Override
+	@Modifying
+	@Transactional
+	public String insertRecords(Object entity) throws Exception {
+		String tableName = entity.getClass().getSimpleName();
+		Map<String, Object> records = new ObjectMapper().convertValue(entity, Map.class);
+		return insertRecords(tableName, records);
+	}
+
+	@Override
+	public <T> List<T> selectByCondition(Class<T> targetTable, String conditionStr) throws Exception {
+		return selectByCondition(targetTable, conditionStr, null, null, null, false);
+	}
+
+	@Override
+	public <T> List<T> selectByCondition(Class<T> targetTable) throws Exception {
+		return selectByCondition(targetTable, null);
 	}
 
 }

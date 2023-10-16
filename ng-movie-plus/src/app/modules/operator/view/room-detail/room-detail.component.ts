@@ -10,6 +10,8 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { SiteService } from 'src/app/common/config/endpoint.constants';
 import { RoomInfoService } from '../../services/room-info.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-room-detail',
@@ -22,7 +24,8 @@ export class RoomDetailComponent implements OnInit {
     private _roomInfoService: RoomInfoService,
     private fb: FormBuilder,
     private router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private message: NzMessageService
   ) {}
 
   showTimeForm!: FormGroup;
@@ -43,19 +46,19 @@ export class RoomDetailComponent implements OnInit {
   siteId!: string;
   roomId!: string;
   rowSize = 7;
-  columnSize = 8;
+  columnSize = 12;
   isVisible = false;
   isSpinning = false;
 
   async ngOnInit(): Promise<void> {
-    await this._route.params.subscribe((parameter) => {
+    await this._route.params.subscribe(async (parameter) => {
       this.roomSeatForm.setControl(
         'roomId',
         this.fb.control(parameter['roomId']!)
       );
       this.roomId = parameter['roomId'];
       this.siteId = parameter['siteId'];
-      this._dynamicMasterEntity
+      await this._dynamicMasterEntity
         .getDynamicMasterEntity(SiteService.END_POINT, {
           tableName: SiteService.TABLE.SEAT_GRADLE,
           conditionStr: 'del_flg = 0 and member_visible_flg = 1',
@@ -68,36 +71,40 @@ export class RoomDetailComponent implements OnInit {
           });
         });
 
-      this._roomInfoService
+      await this._roomInfoService
         .getRoomInfoDetail({ id: parameter['roomId'] })
         .then((res) => {
           this.roomInfo$ = res?.data;
         });
-    });
 
-    let seatMaster = new FormArray<
-      FormGroup<{
-        seatRow: FormControl<number | null>;
-        seatColume: FormControl<number | null>;
-        seatSize: FormControl<number | null>;
-        seatGradle: FormControl<string | null>;
-        seatEnable: FormControl<boolean | null>;
-      }>
-    >([]);
-    for (let i = 1; i <= this.rowSize; i++) {
-      for (let j = 1; j <= this.columnSize; j++) {
-        let seatForm = this.fb.group({
-          seatRow: i!,
-          seatColume: j!,
-          seatSize: 1,
-          seatGradle: '',
-          seatEnable: true,
-        });
-        seatMaster.push(seatForm);
+      let seatMaster = new FormArray<
+        FormGroup<{
+          seatRow: FormControl<number | null>;
+          seatColume: FormControl<number | null>;
+          seatSize: FormControl<number | null>;
+          seatGradle: FormControl<string | null>;
+          seatEnable: FormControl<boolean | null>;
+        }>
+      >([]);
+      for (let i = 1; i <= this.rowSize; i++) {
+        for (let j = 1; j <= this.columnSize; j++) {
+          let seatForm = this.fb.group({
+            seatRow: i!,
+            seatColume: j!,
+            seatSize: 1,
+            seatGradle: this.seatGradleList$[0].id,
+            seatEnable: true,
+          });
+          seatMaster.push(seatForm);
+        }
       }
-    }
+      
+      console.log(
+        _.groupBy(this.roomInfo$['roomSeats'], "seatMaster.seatRow")
+      )
 
-    this.roomSeatForm.setControl('seatMaster', seatMaster);
+      this.roomSeatForm.setControl('seatMaster', seatMaster);
+    });
   }
 
   getSeatSize(index: number): number | null {
@@ -124,10 +131,19 @@ export class RoomDetailComponent implements OnInit {
     this.isVisible = true;
   }
 
-  handleOk(): void {
+  async handleOk(): Promise<void> {
     this.isSpinning = true;
-    console.log(this.roomSeatForm.value);
-    // this.isVisible = false;
+    await this._roomInfoService
+      .settingRoomSeat(this.roomSeatForm.value)
+      .then((res) => {
+        if (res?.data) {
+          this.message.success("Setting Room Seat success");
+        } else {
+          this.message.error(res.errors[0]);
+        }
+        this.isVisible = false;
+          this.isSpinning = false;
+      });
   }
 
   handleCancel(): void {

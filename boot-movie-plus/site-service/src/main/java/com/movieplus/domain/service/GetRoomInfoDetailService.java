@@ -1,17 +1,11 @@
 package com.movieplus.domain.service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -34,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GetRoomInfoDetailService {
 
-	private final ObjectMapper objectMapper;
 	private final CustomRepository customRepository;
 
 	public void execute(GetRoomInfoDetailRequest request, GetRoomInfoDetailResponse response) throws Exception {
@@ -53,7 +46,7 @@ public class GetRoomInfoDetailService {
 
 		List<GetRoomInfoDetailResponse.ShowTime> showTimesResponse = showTimes.stream().map(x -> {
 			GetRoomInfoDetailResponse.ShowTime showTime = new GetRoomInfoDetailResponse.ShowTime();
-			copyProperty(x, showTime);
+			BeanUtils.copyProperties(x, showTimes);
 			return showTime;
 		}).toList();
 		BeanUtils.copyProperties(roomInfos.get(0), response);
@@ -61,15 +54,15 @@ public class GetRoomInfoDetailService {
 
 		List<GetRoomInfoDetailResponse.RoomSeat> roomSeatsResponse = roomSeats.stream().map(x -> {
 			GetRoomInfoDetailResponse.RoomSeat roomSeat = new GetRoomInfoDetailResponse.RoomSeat();
-			copyProperty(x, roomSeat);
+			BeanUtils.copyProperties(x, roomSeat);
 
 			GetRoomInfoDetailResponse.SeatMaster seatMaster = new GetRoomInfoDetailResponse.SeatMaster();
 			SeatMaster seatMasterResource = seatMasterMap.get(x.getSeatId());
-			copyProperty(seatMasterResource, seatMaster);
+			BeanUtils.copyProperties(seatMasterResource, seatMaster);
 
-			SeatGradle seatGradleResource = seatGradleMap.get(seatMasterResource.getId());
+			SeatGradle seatGradleResource = seatGradleMap.get(seatMasterResource.getSeatGradleId());
 			GetRoomInfoDetailResponse.SeatGradle seatGradle = new GetRoomInfoDetailResponse.SeatGradle();
-			copyProperty(seatGradleResource, seatGradle);
+			BeanUtils.copyProperties(seatGradleResource, seatGradle);
 			seatMaster.setSeatGradle(seatGradle);
 			roomSeat.setSeatMaster(seatMaster);
 
@@ -80,90 +73,39 @@ public class GetRoomInfoDetailService {
 
 	private List<RoomInfo> getRoomInfo(String roomId) throws Exception {
 		String roomInfoCondition = String.format("id = '%s' and del_flg = %d", roomId, 0);
-		List<?> roomInfoResults = customRepository.selectByCondition(RoomInfo.class, roomInfoCondition);
-		List<RoomInfo> roomInfos = roomInfoResults.stream().map(x -> {
-			RoomInfo roomInfo = new RoomInfo();
-			copyProperty(x, roomInfo);
-			return roomInfo;
-		}).toList();
-
-		return roomInfos;
+		List<RoomInfo> roomInfoResults = customRepository.selectByCondition(RoomInfo.class, roomInfoCondition);
+		return roomInfoResults;
 	}
 
 	private List<ShowTime> getShowTime(String roomId) throws Exception {
 		String showTimeCondition = String.format("id = '%s' and del_flg = %d", roomId, 0);
-		List<?> showTimeResults = customRepository.selectByCondition(ShowTime.class, showTimeCondition);
-		List<ShowTime> showTimes = showTimeResults.stream().map(x -> {
-			ShowTime showTime = new ShowTime();
-			copyProperty(x, showTime);
-			return showTime;
-		}).toList();
-
-		return showTimes;
+		List<ShowTime> showTimeResults = customRepository.selectByCondition(ShowTime.class, showTimeCondition);
+		return showTimeResults;
 	}
 
 	private List<SeatGradle> getSeatGradle(List<String> seatGradleIds) throws Exception {
-		if(CollectionUtils.isEmpty(seatGradleIds)) {
+		if (CollectionUtils.isEmpty(seatGradleIds)) {
 			return List.of();
 		}
 		String seatGradleCondition = String.format("id in (%s) and del_flg = %d and member_visible_flg = %d",
 				XYZUtil.buildQueryIn(seatGradleIds), 0, 1);
-		List<?> seatGradleResults = customRepository.selectByCondition(SeatGradle.class, seatGradleCondition);
-		List<SeatGradle> seatGradles = seatGradleResults.stream().map(x -> {
-			SeatGradle seatGradle = new SeatGradle();
-			copyProperty(x, seatGradle);
-			return seatGradle;
-		}).toList();
-
-		return seatGradles;
+		List<SeatGradle> seatGradleResults = customRepository.selectByCondition(SeatGradle.class, seatGradleCondition);
+		return seatGradleResults;
 	}
 
 	private List<RoomSeat> getRoomSeat(String roomId) throws Exception {
 		String roomSeatCondition = String.format("room_id = '%s' and del_flg = %d", roomId, 0);
-		List<?> roomSeatResults = customRepository.selectByCondition(RoomSeat.class, roomSeatCondition);
-		List<RoomSeat> roomSeats = roomSeatResults.stream().map(x -> {
-			RoomSeat roomSeat = new RoomSeat();
-			copyProperty(x, roomSeat);
-			return roomSeat;
-		}).toList();
-		return roomSeats;
+		List<RoomSeat> roomSeatResults = customRepository.selectByCondition(RoomSeat.class, roomSeatCondition);
+		return roomSeatResults;
 	}
 
 	private List<SeatMaster> getSeatMaster(List<String> seatIds) throws Exception {
-		if(CollectionUtils.isEmpty(seatIds)) {
+		if (CollectionUtils.isEmpty(seatIds)) {
 			return List.of();
 		}
 		String seatMasterCondition = String.format("id in (%s) and del_flg = %d", XYZUtil.buildQueryIn(seatIds), 0);
-		List<?> seatMasterResults = customRepository.selectByCondition(SeatMaster.class, seatMasterCondition);
-		List<SeatMaster> seatMasters = seatMasterResults.stream().map(x -> {
-			SeatMaster seatMaster = new SeatMaster();
-			copyProperty(x, seatMaster);
-			return seatMaster;
-		}).toList();
-
-		return seatMasters;
-	}
-
-	public void copyProperty(Object resource, Object trg) {
-		Map<String, Object> resourceMap = objectMapper.convertValue(resource, Map.class);
-		for (Map.Entry<String, Object> entry : resourceMap.entrySet()) {
-			copyProperty(entry, trg);
-		}
-	}
-
-	public void copyProperty(Map.Entry<String, Object> entry, Object trg) {
-		try {
-			BeanWrapper trgWrap = PropertyAccessorFactory.forBeanPropertyAccess(trg);
-			Class<?> propertyType = trgWrap.getPropertyType(entry.getKey());
-			Object value = entry.getValue();
-			if (propertyType != null && propertyType.equals(LocalDateTime.class)
-					&& (entry.getValue() instanceof Timestamp)) {
-				value = LocalDateTime.ofInstant(((Timestamp) entry.getValue()).toInstant(), ZoneOffset.ofHours(0));
-			}
-			trgWrap.setPropertyValue(entry.getKey(), value);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		List<SeatMaster> seatMasterResults = customRepository.selectByCondition(SeatMaster.class, seatMasterCondition);
+		return seatMasterResults;
 	}
 
 }

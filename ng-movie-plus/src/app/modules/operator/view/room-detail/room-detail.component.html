@@ -28,7 +28,9 @@
       <form [formGroup]="roomSeatForm">
         <div nz-row [nzGutter]="[16, 24]">
           <ng-container *ngFor="let item of roomInfo$['roomSeats']">
-            <div nz-col class="gutter-row" [nzSpan]="8"></div>
+            <div nz-col class="gutter-row" [nzSpan]="8">
+              {{item | json}}
+            </div>
           </ng-container>
         </div>
       </form>
@@ -52,6 +54,7 @@
   nzCancelText="Cancel"
   (nzOnOk)="handleOk()"
   (nzOnCancel)="handleCancel()"
+  nzWidth ="1200"
 >
   <ng-container *nzModalContent>
     <nz-spin [nzSpinning]="isSpinning">
@@ -64,7 +67,7 @@
             "
             [formGroup]="seat"
           >
-            <div nz-col class="gutter-row" [nzFlex]="getSeatSize(i)!">
+            <div nz-col class="gutter-row" [nzSpan]="1 + getSeatSize(i)!">
               <div class="seat-box" [class.seat-checked]="getSeatEnable(i)">
                 <label nz-checkbox formControlName="seatEnable">
                   {{ getSeatColumn(i) }}{{ getSeatRow(i) | toAlphabet }}
@@ -78,9 +81,23 @@
                 [nzSize]="'small'"
                 [style]="{ width: '100%' }"
               />
+              <nz-select
+              [nzShowSearch]=" true"
+              [style.width]="'100%'"
+              id="seatGradle"
+              [nzPlaceHolder]="'Choose Seat Gradle'"
+              formControlName="seatGradle"
+              [nzNotFoundContent]="'Seat Gradle not found'"
+            >
+              <nz-option
+                *ngFor="let item of seatGradleList$"
+                [nzLabel]="item.displayName"
+                [nzValue]="item.id"
+              >
+              </nz-option>
+            </nz-select>
             </div>
           </ng-container>
-        </ng-container>
         </div>
       </form>
     </nz-spin>

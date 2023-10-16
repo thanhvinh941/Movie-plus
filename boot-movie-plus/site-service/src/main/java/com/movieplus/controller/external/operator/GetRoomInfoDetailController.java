@@ -75,12 +75,6 @@ public class GetRoomInfoDetailController {
 		public static class RoomSeat {
 			private String id;
 			private SeatMaster seatMaster;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime registTime;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime updateTime;
-			private String updateUser;
-			private Integer delFlg;
 		}
 		
 		@Getter
@@ -91,26 +85,13 @@ public class GetRoomInfoDetailController {
 			private Integer seatColume;
 			private Integer seatSize;
 			private SeatGradle seatGradle;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime registTime;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime updateTime;
-			private String updateUser;
-			private Integer delFlg;
 		}
 		
 		@Getter
 		@Setter
 		public static class SeatGradle {
 			private String id;
-			private Integer seatGradeName;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime registTime;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime updateTime;
-			private String updateUser;
-			private Integer delFlg;
-
+			private String seatGradeName;
 		}
 	}
 	
