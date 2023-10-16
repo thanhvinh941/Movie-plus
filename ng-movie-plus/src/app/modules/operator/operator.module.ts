@@ -19,6 +19,7 @@ import { RoomCreateComponent } from './view/room-create/room-create.component';
 import { ChargeInfoListComponent } from './view/charge-info-list/charge-info-list.component';
 import { ChargeInfoDetailComponent } from './view/charge-info-detail/charge-info-detail.component';
 import { SiteInfoCreateComponent } from './view/site-info-create/site-info-create.component';
+import { TransferAlphabet } from 'src/app/common/custom-pipe/TransferAlphabet';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { SiteInfoCreateComponent } from './view/site-info-create/site-info-creat
     ChargeInfoListComponent,
     ChargeInfoDetailComponent,
     SiteInfoCreateComponent,
+    TransferAlphabet,
   ],
   imports: [
     CommonModule,

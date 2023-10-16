@@ -22,6 +22,7 @@ import { OperatorModule } from './modules/operator/operator.module';
 import { MemberModule } from './modules/member/member.module';
 import { MovieInfoData } from './modules/operator/data/movie-info.data';
 import { GenreTypeData } from './modules/operator/data/genre-type.data';
+import { TransferAlphabet } from './common/custom-pipe/TransferAlphabet';
 
 registerLocaleData(en);
 

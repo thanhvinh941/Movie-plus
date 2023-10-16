@@ -1,0 +1,17 @@
+.seat-box{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: relative; 
+    display: flex;
+    justify-content: center;
+}
+
+.seat-box >>> .ant-checkbox{
+    position: absolute !important;
+    opacity: 0 !important;
+}
+
+.seat-checked {
+    background-color: aquamarine;
+}

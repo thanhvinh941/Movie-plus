@@ -40,19 +40,20 @@ public class A_RetrieveSiteInfoService {
 
 		List<RetrieveSiteInfoResponse.RoomInfo> roomInfoResponse = roomInfoResults.stream().map(ri -> {
 			RetrieveSiteInfoResponse.RoomInfo roomInfo = new RetrieveSiteInfoResponse.RoomInfo();
-			Map<String, Object> roomInfoMap = objectMapper.convertValue(ri, new TypeReference<Map<String, Object>>() {});
-			for (Map.Entry<String, Object> entry : roomInfoMap.entrySet()) {
-				copyProperty(entry, roomInfo);
-			}
+			copyProperty(ri, roomInfo);
 			return roomInfo;
 		}).toList();
-		Map<String, Object> siteInfoResultMap = objectMapper.convertValue(siteInfoResults.get(0), Map.class);
-		for (Map.Entry<String, Object> entry : siteInfoResultMap.entrySet()) {
-			copyProperty(entry, response);
-		}
+		copyProperty(siteInfoResults.get(0), response);
 		response.setRoomInfos(roomInfoResponse);
 	}
 
+	public void copyProperty(Object resource, Object trg) {
+		Map<String, Object> resourceMap = objectMapper.convertValue(resource, Map.class);
+		for (Map.Entry<String, Object> entry : resourceMap.entrySet()) {
+			copyProperty(entry, trg);
+		}
+	}
+	
 	public void copyProperty(Map.Entry<String, Object> entry, Object trg) {
 		try {			
 			BeanWrapper trgWrap = PropertyAccessorFactory.forBeanPropertyAccess(trg);
@@ -66,7 +67,7 @@ public class A_RetrieveSiteInfoService {
 			// TODO: handle exception
 		}
 	}
-
+	
 	public static void copyProperties(Object src, Object trg, Iterable<String> props) {
 
 		BeanWrapper srcWrap = PropertyAccessorFactory.forBeanPropertyAccess(src);

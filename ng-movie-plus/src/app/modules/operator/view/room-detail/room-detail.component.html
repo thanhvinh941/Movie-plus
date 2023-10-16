@@ -1,1 +1,88 @@
-<p>room-detail works!</p>
+<nz-card *ngIf="roomInfo$ != null">
+  <nz-descriptions
+    nzTitle="Room Info"
+    [nzExtra]="extraTpl"
+    nzBordered
+    [nzColumn]="24"
+  >
+    <nz-descriptions-item nzTitle="Room Name" [nzSpan]="6">
+      {{ roomInfo$["roomName"] }}
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="RegistTime" [nzSpan]="6">
+      {{ roomInfo$["registTime"] }}
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="UpdateTime" [nzSpan]="6">
+      {{ roomInfo$["updateTime"] }}
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="UpdateUser" [nzSpan]="6">
+      {{ roomInfo$["updateUser"] }}
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Show Time" [nzSpan]="6">
+      <div nz-row [nzGutter]="[16, 24]">
+        <ng-container *ngFor="let item of roomInfo$['showTimes']">
+          <div nz-col class="gutter-row" [nzSpan]="12"></div>
+        </ng-container>
+      </div>
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Room Seats" [nzSpan]="18">
+      <form [formGroup]="roomSeatForm">
+        <div nz-row [nzGutter]="[16, 24]">
+          <ng-container *ngFor="let item of roomInfo$['roomSeats']">
+            <div nz-col class="gutter-row" [nzSpan]="8"></div>
+          </ng-container>
+        </div>
+      </form>
+    </nz-descriptions-item>
+  </nz-descriptions>
+</nz-card>
+<ng-template #extraTpl>
+  <nz-space>
+    <button *nzSpaceItem nz-button nzType="primary" (click)="addShowTime()">
+      Add ShowTime
+    </button>
+    <button *nzSpaceItem nz-button nzType="primary" (click)="showModal()">
+      Setting seat
+    </button>
+  </nz-space>
+</ng-template>
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Modal"
+  nzOkText="Ok"
+  nzCancelText="Cancel"
+  (nzOnOk)="handleOk()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <nz-spin [nzSpinning]="isSpinning">
+      <form [formGroup]="roomSeatForm">
+        <div nz-row [nzGutter]="[16, 24]">
+          <ng-container
+            *ngFor="
+              let seat of roomSeatForm.controls.seatMaster.controls;
+              let i = index
+            "
+            [formGroup]="seat"
+          >
+            <div nz-col class="gutter-row" [nzFlex]="getSeatSize(i)!">
+              <div class="seat-box" [class.seat-checked]="getSeatEnable(i)">
+                <label nz-checkbox formControlName="seatEnable">
+                  {{ getSeatColumn(i) }}{{ getSeatRow(i) | toAlphabet }}
+                </label>
+              </div>
+              <nz-input-number
+                formControlName="seatSize"
+                [nzMin]="1"
+                [nzMax]="2"
+                [nzStep]="1"
+                [nzSize]="'small'"
+                [style]="{ width: '100%' }"
+              />
+            </div>
+          </ng-container>
+        </ng-container>
+        </div>
+      </form>
+    </nz-spin>
+  </ng-container>
+</nz-modal>

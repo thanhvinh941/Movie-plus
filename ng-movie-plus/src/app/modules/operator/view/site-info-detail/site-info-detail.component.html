@@ -27,7 +27,7 @@
     <nz-descriptions-item nzTitle="Room List" [nzSpan]="5">
       <div nz-row [nzGutter]="[16, 24]">
         <ng-container *ngFor="let item of siteInfo$['roomInfos']">
-          <div nz-col class="gutter-row" [nzSpan]="6">
+          <div nz-col class="gutter-row" [nzSpan]="8">
             <a routerLink="room-info/{{ item.id }}">
               <nz-descriptions
                 [nzTitle]="'Room Name: ' + item['roomName']"

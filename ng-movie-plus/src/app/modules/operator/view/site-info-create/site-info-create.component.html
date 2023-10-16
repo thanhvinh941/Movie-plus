@@ -1,4 +1,3 @@
-<p>site-info-create works!</p>
 <form nzForm [formGroup]="siteInfoForm" (ngSubmit)="submitForm()">
   <ng-container *ngFor="let field of fieldDefind | keyvalue">
     <ng-container *ngFor="let item of siteInfoForm.controls | keyvalue">
