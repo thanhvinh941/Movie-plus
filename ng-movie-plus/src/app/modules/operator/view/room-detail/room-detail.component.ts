@@ -12,6 +12,7 @@ import { SiteService } from 'src/app/common/config/endpoint.constants';
 import { RoomInfoService } from '../../services/room-info.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import * as _ from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-room-detail',
@@ -25,7 +26,8 @@ export class RoomDetailComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private _route: ActivatedRoute,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private modalService: NzModalService
   ) {}
 
   showTimeForm!: FormGroup;
@@ -41,6 +43,7 @@ export class RoomDetailComponent implements OnInit {
       }>
     >([]),
   });
+  roomSeatStatus!: FormGroup;
   roomInfo$!: any;
   seatGradleList$!: { id: string; displayName: string }[];
   siteId!: string;
@@ -75,6 +78,10 @@ export class RoomDetailComponent implements OnInit {
         .getRoomInfoDetail({ id: parameter['roomId'] })
         .then((res) => {
           this.roomInfo$ = res?.data;
+          this.roomInfo$['roomSeats'] = _.groupBy(
+            res?.data['roomSeats'],
+            'seatMaster.seatRow'
+          );
         });
 
       let seatMaster = new FormArray<
@@ -98,10 +105,6 @@ export class RoomDetailComponent implements OnInit {
           seatMaster.push(seatForm);
         }
       }
-      
-      console.log(
-        _.groupBy(this.roomInfo$['roomSeats'], "seatMaster.seatRow")
-      )
 
       this.roomSeatForm.setControl('seatMaster', seatMaster);
     });
@@ -131,18 +134,22 @@ export class RoomDetailComponent implements OnInit {
     this.isVisible = true;
   }
 
+  showModalShowTime(): void {
+    this.isVisible = true;
+  }
+
   async handleOk(): Promise<void> {
     this.isSpinning = true;
     await this._roomInfoService
       .settingRoomSeat(this.roomSeatForm.value)
       .then((res) => {
         if (res?.data) {
-          this.message.success("Setting Room Seat success");
+          this.message.success('Setting Room Seat success');
         } else {
           this.message.error(res.errors[0]);
         }
         this.isVisible = false;
-          this.isSpinning = false;
+        this.isSpinning = false;
       });
   }
 
