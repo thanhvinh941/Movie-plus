@@ -32,24 +32,24 @@
         [nzGutter]="[8, 8]"
       >
         <ng-container
-          *ngFor="let data of $any(roomSeat.value); first as isFirst"
+          *ngFor="
+            let data of $any(roomSeat.value);
+            first as isFirst;
+            index as i
+          "
         >
-          <ng-container *ngIf="isFirst">
-            <div nz-col nzSpan="4" [style]="{ width: '50px' }">
-              {{ data["seatMaster"]["seatRow"] | toAlphabet }}
-            </div></ng-container
-          >
-          <div
+          <room-seat-master [style] = "{'max-width' : 'none'}"
             nz-col
             [nzSpan]="data['seatMaster']['seatSize']"
-            [style]="{ 'min-width': '50px' }"
+            [form]="
+              getRoomSeatStatus(data['seatMaster']['seatRow']!, data['seatMaster']['seatColume']!)!
+            "
+            [seatColunm]="data['seatMaster']['seatColume']!"
+            [seatRow]="data['seatMaster']['seatRow']!"
+            [isDisplayOption]="false"
+            [stylesObj]="{ 'min-width': '80px' }"
           >
-            <div class="seat-box" [class.seat-checked]="true">
-              <label>
-                {{ data["seatMaster"]["seatColume"] }}
-              </label>
-            </div>
-          </div>
+          </room-seat-master>
         </ng-container>
       </div>
     </nz-descriptions-item>
@@ -86,7 +86,15 @@
             [formGroup]="seat"
           >
             <div nz-col class="gutter-row" [nzSpan]="1 + getSeatSize(i)!">
-              <div
+              <room-seat-master
+                [form]="seat"
+                [seatColunm]="getSeatColumn(i)!"
+                [seatRow]="getSeatRow(i)!"
+                [isDisplayOption]="true"
+                [stylesObj]="{ height: '100px' }"
+                [seatGradleList$]="seatGradleList$"
+              />
+              <!-- <div
                 class="seat-box"
                 [class.seat-checked]="getSeatEnable(i)"
                 [style]="{ height: '100px' }"
@@ -117,7 +125,7 @@
                   [nzValue]="item.id"
                 >
                 </nz-option>
-              </nz-select>
+              </nz-select> -->
             </div>
           </ng-container>
         </div>

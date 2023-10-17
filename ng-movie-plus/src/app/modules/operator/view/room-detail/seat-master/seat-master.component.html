@@ -1,0 +1,32 @@
+<div [formGroup]="form">
+  <div class="seat-box" [class.seat-checked]="seatEnable" [ngStyle]="stylesObj">
+    <label nz-checkbox formControlName="seatEnable">
+        {{ seatRow | toAlphabet }}{{ seatColunm }}
+    </label>
+  </div>
+  <ng-container *ngIf="isDisplayOption">
+    <nz-input-number
+      formControlName="seatSize"
+      [nzMin]="1"
+      [nzMax]="2"
+      [nzStep]="1"
+      [nzSize]="'small'"
+      [style]="{ width: '100%' }"
+    />
+    <nz-select
+      [nzShowSearch]="true"
+      [style.width]="'100%'"
+      id="seatGradle"
+      [nzPlaceHolder]="'Choose Seat Gradle'"
+      formControlName="seatGradle"
+      [nzNotFoundContent]="'Seat Gradle not found'"
+    >
+      <nz-option
+        *ngFor="let item of seatGradleList$"
+        [nzLabel]="item.displayName"
+        [nzValue]="item.id"
+      >
+      </nz-option>
+    </nz-select>
+  </ng-container>
+</div>

@@ -20,6 +20,7 @@ import { ChargeInfoListComponent } from './view/charge-info-list/charge-info-lis
 import { ChargeInfoDetailComponent } from './view/charge-info-detail/charge-info-detail.component';
 import { SiteInfoCreateComponent } from './view/site-info-create/site-info-create.component';
 import { TransferAlphabet } from 'src/app/common/custom-pipe/TransferAlphabet';
+import { SeatMasterComponent } from './view/room-detail/seat-master/seat-master.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { TransferAlphabet } from 'src/app/common/custom-pipe/TransferAlphabet';
     ChargeInfoDetailComponent,
     SiteInfoCreateComponent,
     TransferAlphabet,
+    SeatMasterComponent,
   ],
   imports: [
     CommonModule,

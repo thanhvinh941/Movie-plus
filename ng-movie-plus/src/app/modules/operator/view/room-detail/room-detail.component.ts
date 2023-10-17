@@ -1,6 +1,8 @@
+import { filter, first } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { DynamicMasterEntityService } from '../../services/dynamic-master-entity.service';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -43,7 +45,8 @@ export class RoomDetailComponent implements OnInit {
       }>
     >([]),
   });
-  roomSeatStatus!: FormGroup;
+  roomSeatStatus!: FormArray<FormGroup<any>>;
+  roomSeatStatusRender! : any;
   roomInfo$!: any;
   seatGradleList$!: { id: string; displayName: string }[];
   siteId!: string;
@@ -54,7 +57,7 @@ export class RoomDetailComponent implements OnInit {
   isSpinning = false;
 
   async ngOnInit(): Promise<void> {
-    await this._route.params.subscribe(async (parameter) => {
+    this._route.params.subscribe(async (parameter) => {
       this.roomSeatForm.setControl(
         'roomId',
         this.fb.control(parameter['roomId']!)
@@ -78,10 +81,18 @@ export class RoomDetailComponent implements OnInit {
         .getRoomInfoDetail({ id: parameter['roomId'] })
         .then((res) => {
           this.roomInfo$ = res?.data;
+          this.roomSeatStatus = this.fb.array(
+            _.map(this.roomInfo$['roomSeats'], (x) => {
+              return this.fb.group({ ...x['seatMaster'], seatEnable: true });
+            })
+          );
+
           this.roomInfo$['roomSeats'] = _.groupBy(
             res?.data['roomSeats'],
             'seatMaster.seatRow'
           );
+
+          console.log(this.roomSeatStatus.value);
         });
 
       let seatMaster = new FormArray<
@@ -108,6 +119,10 @@ export class RoomDetailComponent implements OnInit {
 
       this.roomSeatForm.setControl('seatMaster', seatMaster);
     });
+  }
+
+  getRoomSeatStatus(row: number, column : number){
+    return this.roomSeatStatus.controls.find((group: AbstractControl) => group.get('seatRow')?.value == row && group.get('seatColume')?.value == column)
   }
 
   getSeatSize(index: number): number | null {
@@ -139,6 +154,7 @@ export class RoomDetailComponent implements OnInit {
   }
 
   async handleOk(): Promise<void> {
+    console.log(this.roomSeatForm.value);
     this.isSpinning = true;
     await this._roomInfoService
       .settingRoomSeat(this.roomSeatForm.value)
@@ -172,3 +188,4 @@ export class RoomDetailComponent implements OnInit {
     console.log(this.showTimeForm.value);
   }
 }
+
