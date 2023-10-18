@@ -9,11 +9,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.config.common.exception.ClientException;
 import com.movieplus.config.common.repository.CustomRepository;
 import com.movieplus.config.common.util.XYZUtil;
 import com.movieplus.controller.external.operator.GetRoomInfoDetailController.GetRoomInfoDetailRequest;
 import com.movieplus.controller.external.operator.GetRoomInfoDetailController.GetRoomInfoDetailResponse;
+import com.movieplus.domain.common.MessageManager;
 import com.movieplus.domain.entity.RoomInfo;
 import com.movieplus.domain.entity.RoomSeat;
 import com.movieplus.domain.entity.SeatGradle;
@@ -29,9 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 public class GetRoomInfoDetailService {
 
 	private final CustomRepository customRepository;
-
+	private final MessageManager messageManager;
+	
 	public void execute(GetRoomInfoDetailRequest request, GetRoomInfoDetailResponse response) throws Exception {
 		List<RoomInfo> roomInfos = getRoomInfo(request.getId());
+		if(CollectionUtils.isEmpty(roomInfos)) {
+			throw new ClientException(messageManager.getMessage("PARAM_INVALID", null));
+		}
 		List<RoomSeat> roomSeats = getRoomSeat(request.getId());
 		List<String> seatIds = roomSeats.stream().map(RoomSeat::getSeatId).toList();
 		List<SeatMaster> seatMasters = getSeatMaster(seatIds);
@@ -63,9 +68,9 @@ public class GetRoomInfoDetailService {
 			SeatGradle seatGradleResource = seatGradleMap.get(seatMasterResource.getSeatGradleId());
 			GetRoomInfoDetailResponse.SeatGradle seatGradle = new GetRoomInfoDetailResponse.SeatGradle();
 			BeanUtils.copyProperties(seatGradleResource, seatGradle);
+			
 			seatMaster.setSeatGradle(seatGradle);
 			roomSeat.setSeatMaster(seatMaster);
-
 			return roomSeat;
 		}).toList();
 		response.setRoomSeats(roomSeatsResponse);
@@ -73,14 +78,12 @@ public class GetRoomInfoDetailService {
 
 	private List<RoomInfo> getRoomInfo(String roomId) throws Exception {
 		String roomInfoCondition = String.format("id = '%s' and del_flg = %d", roomId, 0);
-		List<RoomInfo> roomInfoResults = customRepository.selectByCondition(RoomInfo.class, roomInfoCondition);
-		return roomInfoResults;
+		return customRepository.selectByCondition(RoomInfo.class, roomInfoCondition);
 	}
 
 	private List<ShowTime> getShowTime(String roomId) throws Exception {
 		String showTimeCondition = String.format("id = '%s' and del_flg = %d", roomId, 0);
-		List<ShowTime> showTimeResults = customRepository.selectByCondition(ShowTime.class, showTimeCondition);
-		return showTimeResults;
+		return customRepository.selectByCondition(ShowTime.class, showTimeCondition);
 	}
 
 	private List<SeatGradle> getSeatGradle(List<String> seatGradleIds) throws Exception {
@@ -89,14 +92,12 @@ public class GetRoomInfoDetailService {
 		}
 		String seatGradleCondition = String.format("id in (%s) and del_flg = %d and member_visible_flg = %d",
 				XYZUtil.buildQueryIn(seatGradleIds), 0, 1);
-		List<SeatGradle> seatGradleResults = customRepository.selectByCondition(SeatGradle.class, seatGradleCondition);
-		return seatGradleResults;
+		return customRepository.selectByCondition(SeatGradle.class, seatGradleCondition);
 	}
 
 	private List<RoomSeat> getRoomSeat(String roomId) throws Exception {
 		String roomSeatCondition = String.format("room_id = '%s' and del_flg = %d", roomId, 0);
-		List<RoomSeat> roomSeatResults = customRepository.selectByCondition(RoomSeat.class, roomSeatCondition);
-		return roomSeatResults;
+		return customRepository.selectByCondition(RoomSeat.class, roomSeatCondition);
 	}
 
 	private List<SeatMaster> getSeatMaster(List<String> seatIds) throws Exception {
@@ -104,8 +105,7 @@ public class GetRoomInfoDetailService {
 			return List.of();
 		}
 		String seatMasterCondition = String.format("id in (%s) and del_flg = %d", XYZUtil.buildQueryIn(seatIds), 0);
-		List<SeatMaster> seatMasterResults = customRepository.selectByCondition(SeatMaster.class, seatMasterCondition);
-		return seatMasterResults;
+		return customRepository.selectByCondition(SeatMaster.class, seatMasterCondition);
 	}
 
 }

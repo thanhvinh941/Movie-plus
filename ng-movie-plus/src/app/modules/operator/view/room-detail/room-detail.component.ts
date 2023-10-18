@@ -53,8 +53,10 @@ export class RoomDetailComponent implements OnInit {
   roomId!: string;
   rowSize = 7;
   columnSize = 12;
-  isVisible = false;
-  isSpinning = false;
+  isVisibleRoomSeat = false;
+  isSpinningRoomSeat = false;
+  isVisibleShowTime = false;
+  isSpinningShowTime = false;
 
   async ngOnInit(): Promise<void> {
     this._route.params.subscribe(async (parameter) => {
@@ -145,17 +147,24 @@ export class RoomDetailComponent implements OnInit {
       .value;
   }
 
-  showModal(): void {
-    this.isVisible = true;
+  showModalRoomSeat(): void {
+    this.isVisibleRoomSeat = true;
   }
 
   showModalShowTime(): void {
-    this.isVisible = true;
+    this.showTimeForm = this.fb.group({
+      roomId: [this.roomId],
+      siteId: [this.siteId],
+      movieId: [, Validators.required],
+      startTime: [new Date(), Validators.required],
+      endTime: [new Date(), Validators.required],
+    });
+    this.isVisibleShowTime = true;
   }
 
-  async handleOk(): Promise<void> {
+  async handleOkRoomSeat(): Promise<void> {
     console.log(this.roomSeatForm.value);
-    this.isSpinning = true;
+    this.isSpinningRoomSeat = true;
     await this._roomInfoService
       .settingRoomSeat(this.roomSeatForm.value)
       .then((res) => {
@@ -164,27 +173,20 @@ export class RoomDetailComponent implements OnInit {
         } else {
           this.message.error(res.errors[0]);
         }
-        this.isVisible = false;
-        this.isSpinning = false;
+        this.isVisibleRoomSeat = false;
+        this.isSpinningRoomSeat = false;
       });
   }
 
-  handleCancel(): void {
-    this.isVisible = false;
+  handleCancelRoomSeat(): void {
+    this.isVisibleRoomSeat = false;
   }
 
-  addShowTime(): void {
-    this.showTimeForm = this.fb.group({
-      roomId: [this.roomId],
-      siteId: [this.siteId],
-      movieId: [, Validators.required],
-      startTime: [new Date(), Validators.required],
-      endTime: [new Date(), Validators.required],
-    });
-    console.log(this.showTimeForm.value);
+  handleCancelShowTime(): void {
+    this.isVisibleRoomSeat = false;
   }
 
-  submitShowTime() {
+  handleOkShowTime() {
     console.log(this.showTimeForm.value);
   }
 }

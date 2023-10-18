@@ -3,6 +3,7 @@ package com.movieplus.controller.external.operator;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.common.exception.ClientException;
@@ -76,8 +78,7 @@ public class RetrieveSiteInfoDetailController {
 	}
 
 	@PostMapping("/retrieveSiteInfo")
-	@ResponseBody
-	public String doGetMovieInfo(@RequestBody String requestStr) {
+	public ResponseEntity<?> doGetMovieInfo(@RequestBody String requestStr) throws JsonProcessingException {
 		RetrieveSiteInfoRequest request = new RetrieveSiteInfoRequest();
 		// DecodeRequest
 		try {
@@ -86,7 +87,7 @@ public class RetrieveSiteInfoDetailController {
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
 			String errorMessage = messageManager.getMessage("DECODE_FAIL", logTitle);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(errorMessage));
+			return GeneratorUtil.ExternalAPI.createErrorClientResponse(List.of(errorMessage));
 		}
 
 		try {
@@ -94,13 +95,13 @@ public class RetrieveSiteInfoDetailController {
 
 			service.execute(request, response);
 
-			return GeneratorUtil.InternalAPI.getResponseBodySuccess(response);
+			return GeneratorUtil.ExternalAPI.createSuccessResponse(response);
 		} catch (ClientException e) {
 			log.error("{} ClientException fail: ", logTitle, e);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.ExternalAPI.createErrorClientResponse(List.of(e.getMessage()));
 		} catch (Exception e) {
 			log.error("{} Exception fail: ", logTitle, e);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.ExternalAPI.createErrorServerResponse(List.of(e.getMessage()));
 		}
 	}
 }

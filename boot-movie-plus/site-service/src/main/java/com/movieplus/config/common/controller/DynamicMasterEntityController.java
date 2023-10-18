@@ -7,16 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.common.controller.DynamicEntityController.GetDynamicEntityRequest;
 import com.movieplus.config.common.exception.ClientException;
 import com.movieplus.config.common.repository.CustomRepository;
 import com.movieplus.config.common.util.GeneratorUtil;
-import com.movieplus.config.common.util.GeneratorUtil.ExternalAPI.ExternalApiResponse;
 import com.movieplus.domain.common.MessageManager;
 
 import lombok.Getter;
@@ -69,8 +68,7 @@ public class DynamicMasterEntityController {
 	}
 
 	@RequestMapping(path = "/getDynamicMasterEntity", method = RequestMethod.POST)
-	@ResponseBody
-	public String getDynamicEntity(@RequestBody String requestStr) {
+	public ResponseEntity<?> getDynamicEntity(@RequestBody String requestStr) throws JsonProcessingException {
 		final String[] logTitle = { "getDynamicEntity" };
 		GetDynamicEntityRequest request = new GetDynamicEntityRequest();
 		// DecodeRequest
@@ -80,26 +78,25 @@ public class DynamicMasterEntityController {
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
 			String errorMessage = messageManager.getMessage("DECODE_FAIL", logTitle);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(errorMessage));
+			return GeneratorUtil.ExternalAPI.createErrorClientResponse(List.of(errorMessage));
 		}
 
 		try {
 			List<?> resultList = customRepository.selectByCondition(request.getTableName(), request.getConditionStr(),
 					request.getListFields(), request.getOrderBys(), request.getLimit(), request.getOffset(),
 					request.isForUpdate());
-			return GeneratorUtil.InternalAPI.getResponseBodySuccess(resultList);
+			return GeneratorUtil.ExternalAPI.createSuccessResponse(resultList);
 		} catch (ClientException e) {
 			log.error("{} ClientException fail: ", logTitle, e);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.ExternalAPI.createErrorClientResponse(List.of(e.getMessage()));
 		} catch (Exception e) {
 			log.error("{} Exception fail: ", logTitle, e);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.ExternalAPI.createErrorServerResponse(List.of(e.getMessage()));
 		}
 	}
 
 	@RequestMapping(path = "/entryDynamicMasterEntity", method = RequestMethod.POST)
-	@ResponseBody
-	public String entryDynamicMasterEntity(@RequestBody String requestStr) {
+	public ResponseEntity<?> entryDynamicMasterEntity(@RequestBody String requestStr) throws JsonProcessingException {
 		final String[] logTitle = { "entryDynamicMasterEntity" };
 		EntryDynamicMasterEntityRequest request = new EntryDynamicMasterEntityRequest();
 		// DecodeRequest
@@ -109,24 +106,24 @@ public class DynamicMasterEntityController {
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
 			String errorMessage = messageManager.getMessage("DECODE_FAIL", logTitle);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(errorMessage));
+			return GeneratorUtil.ExternalAPI.createErrorClientResponse(List.of(errorMessage));
 		}
 
 		try {
 			String result = customRepository.insertRecords(request.getTableName(), request.records);
-			return GeneratorUtil.InternalAPI.getResponseBodySuccess(result);
+			return GeneratorUtil.ExternalAPI.createSuccessResponse(result);
 		} catch (ClientException e) {
 			log.error("{} ClientException fail: ", logTitle, e);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.ExternalAPI.createErrorClientResponse(List.of(e.getMessage()));
 		} catch (Exception e) {
 			log.error("{} Exception fail: ", logTitle, e);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.ExternalAPI.createErrorServerResponse(List.of(e.getMessage()));
 		}
 
 	}
 
 	@RequestMapping(path = "/changeDynamicMasterEntity", method = RequestMethod.POST)
-	public ResponseEntity<ExternalApiResponse<String>> changeDynamicMasterEntity(@RequestBody String requestStr) {
+	public ResponseEntity<?> changeDynamicMasterEntity(@RequestBody String requestStr) throws JsonProcessingException {
 		final String[] logTitle = { "changeDynamicMasterEntity" };
 		ChangeDynamicMasterEntityRequest request = new ChangeDynamicMasterEntityRequest();
 		// DecodeRequest
@@ -152,7 +149,7 @@ public class DynamicMasterEntityController {
 	}
 
 	@RequestMapping(path = "/deleteDynamicMasterEntity", method = RequestMethod.POST)
-	public ResponseEntity<ExternalApiResponse<Boolean>> deleteDynamicMasterEntity(@RequestBody String requestStr) {
+	public ResponseEntity<?> deleteDynamicMasterEntity(@RequestBody String requestStr) throws JsonProcessingException {
 		final String[] logTitle = { "deleteDynamicMasterEntity" };
 		UDeleteDynamicMasterEntityRequest request = new UDeleteDynamicMasterEntityRequest();
 		// DecodeRequest
