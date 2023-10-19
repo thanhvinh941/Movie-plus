@@ -1,11 +1,10 @@
 package com.movieplus.config.common.service;
 
-import java.util.List;
-
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 
 import com.movieplus.config.common.exception.ClientException;
-import com.movieplus.config.common.util.GeneratorUtil;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -32,22 +31,23 @@ public abstract class TransactionService {
 	}
 	
 	public Object execute(Object params) throws Exception {
-		EntityTransaction entityTransaction = entityManager.getTransaction();
+		Session session =  (Session ) entityManager.getDelegate();
+		Transaction transaction = session.getTransaction();
 
 		Object res = null;
 
 		try {
-			entityTransaction.begin();
+			transaction.begin();
 
 			res = doProc(params);
 		} catch (ClientException e) {
 			log.error("{} - ClientException: ", getServiceId(), e);
-			entityTransaction.rollback();
+			transaction.rollback();
 		} catch (Exception e) {
 			log.error("{} - Exception: ", getServiceId(), e);
-			entityTransaction.rollback();
+			transaction.rollback();
 		} finally {
-			entityTransaction.commit();
+			transaction.commit();
 		}
 
 		return res;

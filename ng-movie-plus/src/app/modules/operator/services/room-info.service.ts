@@ -26,4 +26,12 @@ export class RoomInfoService {
       .toPromise()
       .then((res) => res as AbstractRegistResponse);
   }
+
+  public settingShowTime(request: any): Promise<AbstractRegistResponse> {
+    let api = `${this.endpoint}/settingShowTime`;
+    return this.http
+      .post<AbstractRegistResponse>(api, request)
+      .toPromise()
+      .then((res) => res as AbstractRegistResponse);
+  }
 }

@@ -17,19 +17,23 @@
     <nz-descriptions-item nzTitle="UpdateUser" [nzSpan]="6">
       {{ roomInfo$["updateUser"] }}
     </nz-descriptions-item>
-    <nz-descriptions-item nzTitle="Show Time" [nzSpan]="6">
+  </nz-descriptions>
+  <nz-descriptions nzBordered nzLayout="vertical">
+    <nz-descriptions-item nzTitle="Show Time">
       <div nz-row [nzGutter]="[16, 24]">
         <ng-container *ngFor="let item of roomInfo$['showTimes']">
-          <div nz-col class="gutter-row" [nzSpan]="12"></div>
+          <div nz-col class="gutter-row" [nzSpan]="12">
+            {{item | json}}
+          </div>
         </ng-container>
       </div>
     </nz-descriptions-item>
-    <nz-descriptions-item nzTitle="Room Seats" [nzSpan]="24">
+    <nz-descriptions-item nzTitle="Room Seats">
       <div
         nz-row
         *ngFor="let roomSeat of roomInfo$['roomSeats'] | keyvalue"
         nzJustify="center"
-        [nzGutter]="[8, 8]"
+        [nzGutter]="[2, 2]"
       >
         <ng-container
           *ngFor="
@@ -38,11 +42,15 @@
             index as i
           "
         >
-          <room-seat-master [style] = "{'max-width' : 'none'}"
+          <room-seat-master
+            [style]="{ 'max-width': 'none' }"
             nz-col
             [nzSpan]="data['seatMaster']['seatSize']"
             [form]="
-              getRoomSeatStatus(data['seatMaster']['seatRow']!, data['seatMaster']['seatColume']!)!
+              getRoomSeatStatus(
+                data['seatMaster']['seatRow']!,
+                data['seatMaster']['seatColume']!
+              )!
             "
             [seatColunm]="data['seatMaster']['seatColume']!"
             [seatRow]="data['seatMaster']['seatRow']!"
@@ -53,14 +61,25 @@
         </ng-container>
       </div>
     </nz-descriptions-item>
+
   </nz-descriptions>
 </nz-card>
 <ng-template #extraTpl>
   <nz-space>
-    <button *nzSpaceItem nz-button nzType="primary" (click)="showModalShowTime()">
+    <button
+      *nzSpaceItem
+      nz-button
+      nzType="primary"
+      (click)="showModalShowTime()"
+    >
       Add ShowTime
     </button>
-    <button *nzSpaceItem nz-button nzType="primary" (click)="showModalRoomSeat()">
+    <button
+      *nzSpaceItem
+      nz-button
+      nzType="primary"
+      (click)="showModalRoomSeat()"
+    >
       Setting seat
     </button>
   </nz-space>
@@ -77,7 +96,47 @@
   <ng-container *nzModalContent>
     <nz-spin [nzSpinning]="isSpinningShowTime">
       <form [formGroup]="showTimeForm">
-        
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzFor="movieId"
+            >Movie Name</nz-form-label
+          >
+          <nz-form-control [nzSpan]="14">
+            <input
+              nz-input
+              formControlName="movieId"
+              type="text"
+              id="movieId"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="startTime"
+            >Start Time</nz-form-label
+          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-date-picker
+              [nzFormat]="dateFormat"
+              formControlName="startTime"
+              id="startTime"
+              nzShowTime = "true"
+              [nzDateRender]="tplRender"
+            ></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endTime"
+            >End Time</nz-form-label
+          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-date-picker
+              [nzFormat]="dateFormat"
+              formControlName="endTime"
+              id="endTime"
+              nzShowTime = "true"
+              [nzDateRender]="tplRender"
+            ></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
       </form>
     </nz-spin>
   </ng-container>
@@ -118,3 +177,8 @@
     </nz-spin>
   </ng-container>
 </nz-modal>
+<ng-template #tplRender let-current>
+  <div class="ant-picker-cell-inner" [class.border]="current.getDate() === 1">
+    {{ current.getDate() }}
+  </div>
+</ng-template>

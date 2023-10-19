@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.annotations.UuidGenerator.Style;
+import org.hibernate.tuple.GenerationTiming;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -39,9 +41,11 @@ public class ShowTime {
 	@Column(nullable = false)
 	private String roomId;
 	
+	@CurrentTimestamp(timing = GenerationTiming.INSERT)
 	@Column(nullable = false)
 	private LocalDateTime startTime;
 	
+	@CurrentTimestamp(timing = GenerationTiming.INSERT)
 	@Column(nullable = false)
 	private LocalDateTime endTime;
 

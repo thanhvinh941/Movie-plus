@@ -51,7 +51,7 @@ public class GetRoomInfoDetailService {
 
 		List<GetRoomInfoDetailResponse.ShowTime> showTimesResponse = showTimes.stream().map(x -> {
 			GetRoomInfoDetailResponse.ShowTime showTime = new GetRoomInfoDetailResponse.ShowTime();
-			BeanUtils.copyProperties(x, showTimes);
+			BeanUtils.copyProperties(x, showTime);
 			return showTime;
 		}).toList();
 		BeanUtils.copyProperties(roomInfos.get(0), response);
@@ -82,7 +82,7 @@ public class GetRoomInfoDetailService {
 	}
 
 	private List<ShowTime> getShowTime(String roomId) throws Exception {
-		String showTimeCondition = String.format("id = '%s' and del_flg = %d", roomId, 0);
+		String showTimeCondition = String.format("room_id = '%s' and del_flg = %d", roomId, 0);
 		return customRepository.selectByCondition(ShowTime.class, showTimeCondition);
 	}
 

@@ -69,7 +69,7 @@ public class GetRoomInfoDetailController {
 			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 			private LocalDateTime updateTime;
 			private String updateUser;
-			private Integer delFlg;
+			private Byte delFlg;
 		}
 		
 		@Getter

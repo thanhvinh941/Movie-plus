@@ -1,9 +1,13 @@
 package com.movieplus.config.common.repository;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +20,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.movieplus.config.common.exception.ClientException;
 import com.movieplus.config.common.util.XYZUtil;
 import com.movieplus.domain.common.MessageManager;
@@ -36,7 +43,8 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomRepositoryImpl implements CustomRepository {
 
 	private final String[] logTitle = { "CustomRepository" };
-
+	private static String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	
 	@PersistenceContext
 	private EntityManager entityManager;
 	private final MessageManager messageManager;
@@ -185,7 +193,6 @@ public class CustomRepositoryImpl implements CustomRepository {
 
 	@Override
 	@Modifying
-	@Transactional
 	public String insertRecords(String tableName, Map<String, Object> records) throws Exception {
 		Date nowStamp = new Date();
 		String columes = "id, ";
@@ -232,7 +239,6 @@ public class CustomRepositoryImpl implements CustomRepository {
 
 	@Override
 	@Modifying
-	@Transactional
 	public String updateRecords(String tableName, Map<String, Object> records, String id) throws Exception {
 		String setValue = "";
 		if(Objects.isNull(id)) {
@@ -281,10 +287,9 @@ public class CustomRepositoryImpl implements CustomRepository {
 
 	@Override
 	@Modifying
-	@Transactional
 	public String insertRecords(Object entity) throws Exception {
 		String tableName = entity.getClass().getSimpleName();
-		Map<String, Object> records = new ObjectMapper().convertValue(entity, Map.class);
+		Map<String, Object> records = initObjectMapper().convertValue(entity, Map.class);
 		return insertRecords(tableName, records);
 	}
 
@@ -296,6 +301,29 @@ public class CustomRepositoryImpl implements CustomRepository {
 	@Override
 	public <T> List<T> selectByCondition(Class<T> targetTable) throws Exception {
 		return selectByCondition(targetTable, null);
+	}
+	
+	private static ObjectMapper initObjectMapper() {
+		JavaTimeModule javaTimeModule = new JavaTimeModule();
+		javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeCustomSerializer());
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(javaTimeModule);
+		return objectMapper;
+	}
+	
+	public static class LocalDateTimeCustomSerializer extends JsonSerializer<LocalDateTime> {
+
+		@Override
+		public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+			try {
+				DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+				gen.writeString(value.format(dateFormatter));
+			} catch (DateTimeParseException e) {
+				System.err.println(e);
+				gen.writeString("");
+			}
+		}
+		
 	}
 
 }

@@ -57,6 +57,7 @@ export class RoomDetailComponent implements OnInit {
   isSpinningRoomSeat = false;
   isVisibleShowTime = false;
   isSpinningShowTime = false;
+  dateFormat = 'yyyy/MM/dd HH:mm:ss';
 
   async ngOnInit(): Promise<void> {
     this._route.params.subscribe(async (parameter) => {
@@ -152,12 +153,18 @@ export class RoomDetailComponent implements OnInit {
   }
 
   showModalShowTime(): void {
+    let date = new Date();
+    let minN = date.getMinutes();
+    let dateN = date.getDate();
+    date.setMinutes(Math.floor(minN / 10) * 10);
+    date.setDate(dateN + 1);
+    date.setSeconds(0);
     this.showTimeForm = this.fb.group({
       roomId: [this.roomId],
       siteId: [this.siteId],
       movieId: [, Validators.required],
-      startTime: [new Date(), Validators.required],
-      endTime: [new Date(), Validators.required],
+      startTime: [date, Validators.required],
+      endTime: [date, Validators.required],
     });
     this.isVisibleShowTime = true;
   }
@@ -186,8 +193,20 @@ export class RoomDetailComponent implements OnInit {
     this.isVisibleRoomSeat = false;
   }
 
-  handleOkShowTime() {
+  async handleOkShowTime() {
     console.log(this.showTimeForm.value);
+    this.isSpinningShowTime = true;
+    await this._roomInfoService
+      .settingShowTime(this.showTimeForm.value)
+      .then((res) => {
+        if (res?.data) {
+          this.message.success('Setting Room Seat success');
+        } else {
+          this.message.error(res.errors[0]);
+        }
+        this.isVisibleShowTime = false;
+        this.isSpinningShowTime = false;
+      });
   }
 }
 
