@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.common.repository.CustomRepository;
+import com.movieplus.config.common.service.TransactionService;
 import com.movieplus.controller.external.operator.SettingRoomSeatController.SettingRoomSeatRequest;
 import com.movieplus.domain.entity.RoomSeat;
 import com.movieplus.domain.entity.SeatMaster;
@@ -25,25 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SettingRoomSeatService {
+public class SettingRoomSeatService extends TransactionService{
 
-	private final ObjectMapper objectMapper;
 	private final CustomRepository customRepository;
-
-	public boolean execute(SettingRoomSeatRequest request) throws Exception {
-		String roomId = request.getRoomId();
-		String updateUser = "dummy admin";
-		List<SeatMaster> seatMasters = getSeatMaster();
-		Map<List<Object>, String> seatMasterMap = seatMasters.stream()
-				.collect(
-						Collectors.toMap(x -> List.of(x.getSeatRow(), x.getSeatColume(), x.getSeatSize(), x.getSeatGradleId()), 
-								SeatMaster::getId)
-						);
-
-		List<RoomSeat> roomSeatFromRequest = getRoomSeatFromRequest(request, seatMasterMap, roomId, updateUser);
-
-		return insertAllRoomSeat(roomSeatFromRequest);
-	}
 
 	boolean insertAllRoomSeat(List<RoomSeat> roomSeats) {
 		try {
@@ -97,35 +82,35 @@ public class SettingRoomSeatService {
 	}
 
 	private List<SeatMaster> getSeatMaster() throws Exception {
-		List<?> seatMasterResults = customRepository.selectByCondition(SeatMaster.class);
-		List<SeatMaster> seatMasters = seatMasterResults.stream().map(x -> {
-			SeatMaster seatMaster = new SeatMaster();
-			copyProperty(x, seatMaster);
-			return seatMaster;
-		}).toList();
-		return seatMasters;
+		List<SeatMaster> seatMasterResults = customRepository.selectByCondition(SeatMaster.class);
+		return seatMasterResults;
 	}
 
-	public void copyProperty(Object resource, Object trg) {
-		Map<String, Object> resourceMap = objectMapper.convertValue(resource, new TypeReference<Map<String, Object>>() {});
-		for (Map.Entry<String, Object> entry : resourceMap.entrySet()) {
-			copyProperty(entry, trg);
-		}
+	@Override
+	public String getApiId() {
+		return "SettingRoomSeat";
 	}
 
-	public void copyProperty(Map.Entry<String, Object> entry, Object trg) {
-		try {
-			BeanWrapper trgWrap = PropertyAccessorFactory.forBeanPropertyAccess(trg);
-			Class<?> propertyType = trgWrap.getPropertyType(entry.getKey());
-			Object value = entry.getValue();
-			if (propertyType != null && propertyType.equals(LocalDateTime.class)
-					&& (entry.getValue() instanceof Timestamp)) {
-				value = LocalDateTime.ofInstant(((Timestamp) entry.getValue()).toInstant(), ZoneOffset.ofHours(0));
-			}
-			trgWrap.setPropertyValue(entry.getKey(), value);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+	@Override
+	public String getMicroServiceId() {
+		return "site-service";
+	}
+
+	@Override
+	public Object doProc(Object params) throws Exception {
+		SettingRoomSeatRequest request = (SettingRoomSeatRequest) params;
+		String roomId = request.getRoomId();
+		String updateUser = "dummy admin";
+		List<SeatMaster> seatMasters = getSeatMaster();
+		Map<List<Object>, String> seatMasterMap = seatMasters.stream()
+				.collect(
+						Collectors.toMap(x -> List.of(x.getSeatRow(), x.getSeatColume(), x.getSeatSize(), x.getSeatGradleId()), 
+								SeatMaster::getId)
+						);
+
+		List<RoomSeat> roomSeatFromRequest = getRoomSeatFromRequest(request, seatMasterMap, roomId, updateUser);
+
+		return insertAllRoomSeat(roomSeatFromRequest);
 	}
 
 }
