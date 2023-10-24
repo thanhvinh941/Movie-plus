@@ -29,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 public class SettingRoomSeatController {
 	
 	private final String[] logTitle = { "SettingRoomSeat" };
-	private final ObjectMapper objectMapper;
 	private final MessageManager messageManager;
 	private final SettingRoomSeatService service;
 	
@@ -65,8 +64,7 @@ public class SettingRoomSeatController {
 		}
 
 		try {
-
-			boolean result = service.execute(request);
+			Boolean result = (Boolean) service.execute(request);
 
 			return GeneratorUtil.InternalAPI.getResponseBodySuccess(result);
 		} catch (ClientException e) {

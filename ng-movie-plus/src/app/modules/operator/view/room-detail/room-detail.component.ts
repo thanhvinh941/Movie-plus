@@ -46,7 +46,7 @@ export class RoomDetailComponent implements OnInit {
     >([]),
   });
   roomSeatStatus!: FormArray<FormGroup<any>>;
-  roomSeatStatusRender! : any;
+  roomSeatStatusRender!: any;
   roomInfo$!: any;
   seatGradleList$!: { id: string; displayName: string }[];
   siteId!: string;
@@ -124,8 +124,12 @@ export class RoomDetailComponent implements OnInit {
     });
   }
 
-  getRoomSeatStatus(row: number, column : number){
-    return this.roomSeatStatus.controls.find((group: AbstractControl) => group.get('seatRow')?.value == row && group.get('seatColume')?.value == column)
+  getRoomSeatStatus(row: number, column: number) {
+    return this.roomSeatStatus.controls.find(
+      (group: AbstractControl) =>
+        group.get('seatRow')?.value == row &&
+        group.get('seatColume')?.value == column
+    );
   }
 
   getSeatSize(index: number): number | null {
@@ -209,4 +213,3 @@ export class RoomDetailComponent implements OnInit {
       });
   }
 }
-

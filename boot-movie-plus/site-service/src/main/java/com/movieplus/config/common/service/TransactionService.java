@@ -1,13 +1,11 @@
 package com.movieplus.config.common.service;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.springframework.stereotype.Service;
 
 import com.movieplus.config.common.exception.ClientException;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +29,8 @@ public abstract class TransactionService {
 	}
 	
 	public Object execute(Object params) throws Exception {
-		Session session =  (Session ) entityManager.getDelegate();
-		Transaction transaction = session.getTransaction();
+		SessionImplementor sessionImp = (SessionImplementor) entityManager.getDelegate();
+	    var transaction = sessionImp.getTransaction();
 
 		Object res = null;
 
@@ -52,4 +50,5 @@ public abstract class TransactionService {
 
 		return res;
 	}
+	
 }
