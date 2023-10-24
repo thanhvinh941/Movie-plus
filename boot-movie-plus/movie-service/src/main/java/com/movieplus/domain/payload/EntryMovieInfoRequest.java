@@ -16,7 +16,7 @@ public class EntryMovieInfoRequest{
 	private String description;
 	private List<String> banners;
 	private List<String> genreTypeIds;
-	private String productionId;
+	private String productionId = "";
 	private List<Trailer> trailers;
 //	private List<Caster> casters;
 //	private List<DirectorClassify> directorClassifies;

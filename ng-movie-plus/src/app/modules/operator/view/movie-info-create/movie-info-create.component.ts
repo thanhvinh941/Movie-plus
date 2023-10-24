@@ -31,6 +31,8 @@ import { async } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { MovieInfoService } from '../../services/movie-info.service';
 import { GenreTypeData } from '../../data/genre-type.data';
+import { DynamicMasterEntityService } from '../../services/dynamic-master-entity.service';
+import { MovieService } from 'src/app/common/config/endpoint.constants';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
   new Promise((resolve, reject) => {
@@ -113,24 +115,28 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
     private msg: NzMessageService,
     private http: HttpClient,
     private _sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+    private _dynamicMasterEntity: DynamicMasterEntityService,
   ) {}
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.movieForm.value);
   }
-  ngOnInit(): void {
-    this._genreTypeData.getAllGenreType().subscribe({
-      next: (res) => {
-        this.genreType$ = of(res);
-        console.log(typeof res);
-      },
-    });
+  async ngOnInit(): Promise<void> {
+    await this._dynamicMasterEntity
+      .getDynamicMasterEntity(MovieService.END_POINT, {
+        tableName: MovieService.TABLE.GENRE_TYPE,
+        conditionStr: 'del_flg = 0',
+        listFields: ['id', 'displayName'],
+      })
+      .then((res) => {
+        this.genreType$ = res?.data;
+      });
     console.log(this.genreType$);
     console.log(this.movieForm.value);
   }
 
   tabSelectIndex = 0;
-  genreType$: Observable<GenreType[]> = of();
+  genreType$!: { id: string; displayName: string }[];
   bannerBase64List: NzUploadFile[] = [];
   thumnail!: any;
   thumnailBase64!: string;
