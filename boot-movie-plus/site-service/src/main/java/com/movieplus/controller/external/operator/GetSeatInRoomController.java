@@ -1,7 +1,9 @@
 package com.movieplus.controller.external.operator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,11 +81,8 @@ public class GetSeatInRoomController {
 		}
 
 		try {
-			List<RoomSeat> response = new ArrayList<>();
 
-			service.execute(request, response);
-
-			return GeneratorUtil.ExternalAPI.createSuccessResponse(response);
+			return GeneratorUtil.ExternalAPI.createSuccessResponse(service.execute(request));
 		} catch (ClientException e) {
 			log.error("{} ClientException fail: ", logTitle, e);
 			return GeneratorUtil.ExternalAPI.createErrorClientResponse(List.of(e.getMessage()));

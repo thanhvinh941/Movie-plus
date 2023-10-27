@@ -24,7 +24,7 @@ public class GetSeatInRoomService {
 	private final CustomRepository customRepository;
 	private final MessageManager messageManager;
 	
-	public void execute(GetSeatInRoomRequest request, List<com.movieplus.controller.external.operator.GetSeatInRoomController.RoomSeat> response) throws Exception {
+	public Object execute(GetSeatInRoomRequest request) throws Exception {
 		List<RoomSeat> roomSeats = getRoomSeat(request);
 		
 		List<String> seatIds = roomSeats.stream().map(RoomSeat::getSeatId).toList();
@@ -53,7 +53,8 @@ public class GetSeatInRoomService {
 			roomSeat.setSeatMaster(seatMaster);
 			return roomSeat;
 		}).toList();
-		response.addAll(roomSeatsResponse);
+		
+		return roomSeatsResponse; //.stream().collect(Collectors.groupingBy(x->x.getSeatMaster().getSeatRow()));
 	}
 	
 	private List<SeatGradle> getSeatGradle(List<String> seatGradleIds) throws Exception {

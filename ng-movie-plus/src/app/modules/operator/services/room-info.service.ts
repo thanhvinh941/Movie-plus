@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { AbstractListResponse } from 'src/app/common/models/abstact_list_reponse';
 import { AbstractPaginationResponse } from 'src/app/common/models/abstract-pagination-response';
+import { AbstractObjectResponse } from 'src/app/common/models/abstract_object_response';
 import { AbstractRegistResponse } from 'src/app/common/models/abstract_regist_response';
 
 @Injectable({
@@ -18,9 +19,9 @@ export class RoomInfoService {
     return this.http.post<AbstractPaginationResponse<any>>(api, request)
   }
 
-  public getSeatInRoom(request : any): Observable<AbstractListResponse<any>>{
+  public getSeatInRoom(request : any): Observable<AbstractObjectResponse>{
     let api = `${this.endpoint}/getSeatInRoom`;
-    return this.http.post<AbstractListResponse<any>>(api, request)
+    return this.http.post<AbstractObjectResponse>(api, request)
   }
 
   public getRoomInfoDetail(request: any): Promise<any> {
