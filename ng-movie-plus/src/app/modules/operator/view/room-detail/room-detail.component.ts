@@ -1,5 +1,5 @@
-import { filter, first } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { debounceTime, filter, first, startWith, tap } from 'rxjs';
+import { Component, OnInit, Pipe, ViewChild } from '@angular/core';
 import { DynamicMasterEntityService } from '../../services/dynamic-master-entity.service';
 import {
   AbstractControl,
@@ -15,6 +15,9 @@ import { RoomInfoService } from '../../services/room-info.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import * as _ from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { MovieInfoService } from 'src/app/modules/operator/services/movie-info.service';
+import { ShowtimeOfRoomComponent } from './showtime-of-room/showtime-of-room.component';
+import { SeatInRoomComponent } from './seat-in-room/seat-in-room.component';
 
 @Component({
   selector: 'app-room-detail',
@@ -29,9 +32,11 @@ export class RoomDetailComponent implements OnInit {
     private router: Router,
     private _route: ActivatedRoute,
     private message: NzMessageService,
-    private modalService: NzModalService
+    private modalService: NzModalService,
+    private movieInfoService: MovieInfoService,
   ) {}
-
+  @ViewChild('showtimeOfRoomComp') showtimeOfRoomComp! : ShowtimeOfRoomComponent
+  @ViewChild('seatInRoomComp') seatInRoomComp! : SeatInRoomComponent
   showTimeForm!: FormGroup;
   roomSeatForm = this.fb.group({
     roomId: '',
@@ -58,6 +63,17 @@ export class RoomDetailComponent implements OnInit {
   isVisibleShowTime = false;
   isSpinningShowTime = false;
   dateFormat = 'yyyy/MM/dd HH:mm:ss';
+  optionLoading = false;
+  optionList: any;
+
+  handleSearch($event: string) {
+    console.log($event);
+    this.optionLoading = true;
+    this.movieInfoService
+      .fullTextSearchMovie({ term: $event })
+      .pipe(tap(() => (this.optionLoading = false)))
+      .subscribe((res) => (this.optionList = res.data));
+  }
 
   async ngOnInit(): Promise<void> {
     this._route.params.subscribe(async (parameter) => {
@@ -122,6 +138,13 @@ export class RoomDetailComponent implements OnInit {
 
       this.roomSeatForm.setControl('seatMaster', seatMaster);
     });
+  }
+  
+  ngAfterViewInit() {
+    console.log(this.showtimeOfRoomComp);
+    console.log(this.seatInRoomComp);
+    this.showtimeOfRoomComp.getShowTimeOfRoom(this.roomId);
+    this.seatInRoomComp.getSeatInRoom(this.roomId);
   }
 
   getRoomSeatStatus(row: number, column: number) {
@@ -194,7 +217,7 @@ export class RoomDetailComponent implements OnInit {
   }
 
   handleCancelShowTime(): void {
-    this.isVisibleRoomSeat = false;
+    this.isVisibleShowTime = false;
   }
 
   async handleOkShowTime() {

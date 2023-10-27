@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.common.exception.ClientException;
 import com.movieplus.config.common.util.GeneratorUtil;
-import com.movieplus.config.common.util.GeneratorUtil.ExternalAPI.ExternalApiResponse;
 import com.movieplus.domain.common.MessageManager;
 import com.movieplus.domain.common.dto.DirectorDto;
 import com.movieplus.domain.common.dto.GenreTypeDto;
@@ -68,7 +68,7 @@ public class A_RetrieveMovieInfoController {
 
 	@PostMapping("/GetMovieInfo")
 	@ResponseBody
-	public ResponseEntity<ExternalApiResponse<RetrieveMovieInfoResponse>> doGetMovieInfo(@RequestBody String requestStr) {
+	public ResponseEntity<?> doGetMovieInfo(@RequestBody String requestStr) throws JsonProcessingException {
 		RetrieveMovieInfoRequest request = new RetrieveMovieInfoRequest();
 		// DecodeRequest
 		try {

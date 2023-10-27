@@ -38,10 +38,10 @@ public class AppConfig {
 		
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
 		MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
-		jsonMessageConverter.setObjectMapper(objectMapper());
+		jsonMessageConverter.setObjectMapper(new ObjectMapper());
 		messageConverters.add(jsonMessageConverter);
 		
-		restTemplate.setMessageConverters(messageConverters);
+//		restTemplate.setMessageConverters(messageConverters);
 		
 		return restTemplate;
 	}
@@ -70,10 +70,11 @@ public class AppConfig {
 
 	@Bean
 	public ObjectMapper objectMapper() {
-		JavaTimeModule javaTimeModule = new JavaTimeModule();
-		javaTimeModule.addDeserializer(LocalDateTime.class, new MillisOrLocalDateTimeDeserializer());
 		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(javaTimeModule);
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.setVisibility(PropertyAccessor.ALL, Visibility.ANY);
+		objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL,
+				As.WRAPPER_ARRAY);
 		return objectMapper;
 	}
 

@@ -11,6 +11,14 @@ public interface CustomRepository {
 //
 //	void uDeleteAll(T tableName, List<ID> key);
 
+	/*
+	 * @param Class<T> targetTable
+	 * @param String conditionStr
+	 * @param Map<String, String> orderBys
+	 * @param Integer limit
+	 * @param Integer offset
+	 * @param boolean isForUpdate
+	 * */
 	public <T> List<T> selectByCondition(Class<T> targetTable, String conditionStr, Map<String, String> orderBys,
 			Integer limit, Integer offset, boolean isForUpdate) throws Exception;
 

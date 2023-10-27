@@ -116,7 +116,7 @@ export class MovieInfoCreateComponent implements OnInit, OnChanges {
     private http: HttpClient,
     private _sanitizer: DomSanitizer,
     private router: Router,
-    private _dynamicMasterEntity: DynamicMasterEntityService,
+    private _dynamicMasterEntity: DynamicMasterEntityService
   ) {}
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.movieForm.value);

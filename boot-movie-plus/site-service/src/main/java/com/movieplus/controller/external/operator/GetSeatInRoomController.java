@@ -1,29 +1,25 @@
 package com.movieplus.controller.external.operator;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.common.constant.EndPointConstant;
 import com.movieplus.config.common.exception.ClientException;
+import com.movieplus.config.common.payload.request.PaginationRequest;
 import com.movieplus.config.common.util.GeneratorUtil;
 import com.movieplus.domain.common.MessageManager;
-import com.movieplus.domain.common.dto.MovieDetailInfoDto;
-import com.movieplus.domain.service.GetRoomInfoDetailService;
+import com.movieplus.domain.service.GetSeatInRoomService;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -33,36 +29,48 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(EndPointConstant.EXTERNAL_PATH_URI + EndPointConstant.PREFIX_ADMIN )
-public class GetRoomInfoDetailController {
-	private final String[] logTitle = { "GetRoomInfoDetail" };
+public class GetSeatInRoomController {
+	private final String[] logTitle = { "GetSeatInRoom" };
 	private final MessageManager messageManager;
-	private final GetRoomInfoDetailService service;
+	private final GetSeatInRoomService service;
 	
-	@Data
-	public static class GetRoomInfoDetailRequest {
+	@Getter
+	@Setter
+	public static class GetSeatInRoomRequest extends PaginationRequest{
 		@NotNull
 		private String id;
 	}
 
 	@Getter
 	@Setter
-	public static class GetRoomInfoDetailResponse {
+	public static class RoomSeat {
 		private String id;
-		private String roomName;
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-		private LocalDateTime registTime;
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-		private LocalDateTime updateTime;
-		private String updateUser;
-		private Integer delFlg;
+		private SeatMaster seatMaster;
 	}
 	
-	@PostMapping("/getRoomInfoDetail")
-	public ResponseEntity<?> getRoomInfoDetail(@RequestBody String requestStr) throws JsonProcessingException {
-		GetRoomInfoDetailRequest request = new GetRoomInfoDetailRequest();
+	@Getter
+	@Setter
+	public static class SeatMaster {
+		private String id;
+		private Integer seatRow;
+		private Integer seatColume;
+		private Integer seatSize;
+		private SeatGradle seatGradle;
+	}
+	
+	@Getter
+	@Setter
+	public static class SeatGradle {
+		private String id;
+		private String seatGradeName;
+	}
+	
+	@PostMapping("/getSeatInRoom")
+	public ResponseEntity<?> GetSeatInRoom(@RequestBody String requestStr) throws JsonProcessingException {
+		GetSeatInRoomRequest request = new GetSeatInRoomRequest();
 		// DecodeRequest
 		try {
-			request = new ObjectMapper().readValue(requestStr, new TypeReference<GetRoomInfoDetailRequest>() {
+			request = new ObjectMapper().readValue(requestStr, new TypeReference<GetSeatInRoomRequest>() {
 			});
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
@@ -71,7 +79,7 @@ public class GetRoomInfoDetailController {
 		}
 
 		try {
-			GetRoomInfoDetailResponse response = new GetRoomInfoDetailResponse();
+			List<RoomSeat> response = new ArrayList<>();
 
 			service.execute(request, response);
 

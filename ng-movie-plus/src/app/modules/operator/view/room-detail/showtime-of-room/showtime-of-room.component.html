@@ -1,0 +1,15 @@
+<ng-container *ngIf="!loadingData; else loadingTem"></ng-container>
+<nz-descriptions nzBordered nzLayout="vertical">
+  <nz-descriptions-item nzTitle="Show Time">
+    <div nz-row [nzGutter]="[16, 24]">
+      <ng-container *ngFor="let item of showTimeData$">
+        <div nz-col class="gutter-row" [nzSpan]="8">
+          {{ item | json }}
+        </div>
+      </ng-container>
+    </div>
+  </nz-descriptions-item>
+</nz-descriptions>
+<ng-template #loadingTem>
+    <nz-spin nzSimple></nz-spin>
+</ng-template>

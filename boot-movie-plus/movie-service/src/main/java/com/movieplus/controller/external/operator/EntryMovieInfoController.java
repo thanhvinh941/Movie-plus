@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.common.exception.ClientException;
 import com.movieplus.config.common.util.GeneratorUtil;
-import com.movieplus.config.common.util.GeneratorUtil.ExternalAPI.ExternalApiResponse;
 import com.movieplus.domain.common.MessageManager;
 import com.movieplus.domain.payload.EntryMovieInfoRequest;
 import com.movieplus.domain.service.EntryMovieInfoService;
@@ -30,7 +30,7 @@ public class EntryMovieInfoController {
 	private final MessageManager messageManager;
 
 	@PostMapping("/entryMovieInfo")
-	public ResponseEntity<ExternalApiResponse<String>> doEntryMovieInfo(@RequestBody String requestStr) {
+	public ResponseEntity<?> doEntryMovieInfo(@RequestBody String requestStr) throws JsonProcessingException {
 		EntryMovieInfoRequest request = new EntryMovieInfoRequest();
 		// DecodeRequest
 		try {

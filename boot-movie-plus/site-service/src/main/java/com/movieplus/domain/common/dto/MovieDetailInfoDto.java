@@ -1,10 +1,16 @@
 package com.movieplus.domain.common.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.movieplus.config.security.view.View;
 
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDetailInfoDto {
 	private String id;
 	private String movieName;
