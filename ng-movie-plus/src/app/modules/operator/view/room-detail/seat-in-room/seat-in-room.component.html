@@ -1,0 +1,30 @@
+<nz-descriptions nzBordered nzLayout="vertical">
+  <nz-descriptions-item nzTitle="Room Seats">
+    <div
+      nz-row
+      *ngFor="let roomSeat of roomSeatData$ | keyvalue; index as i;"
+      nzJustify="center"
+      [nzGutter]="[2, 2]"
+    >
+      <ng-container *ngFor="let data of $any(roomSeat.value)">
+        <room-seat-master
+          [style]="{ 'max-width': 'none' }"
+          nz-col
+          [nzSpan]="data['seatMaster']['seatSize']"
+          [form]="
+            getRoomSeatStatus(
+              data['seatMaster']['seatRow']!,
+              data['seatMaster']['seatColume']!
+            )!
+          "
+          [seatColunm]="data['seatMaster']['seatColume']!"
+          [seatRow]="data['seatMaster']['seatRow']!"
+          [isDisplayOption]="false"
+          [stylesObj]="{ 'min-width': '80px' }"
+        >
+        </room-seat-master>
+      </ng-container>
+    </div>
+  </nz-descriptions-item>
+</nz-descriptions>
+<button (click)="addRow()">add row</button>

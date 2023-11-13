@@ -11,13 +11,4 @@ import lombok.Data;
 public class GenreTypeDto {
 	private String id;
 	private String displayName;
-	
-	@JsonView(View.Admin.class)
-	private LocalDateTime registTime;
-	@JsonView(View.Admin.class)
-	private LocalDateTime updateTime;
-	@JsonView(View.Admin.class)
-	private String updateUser;
-	@JsonView(View.Admin.class)
-	private Integer delFlg;
 }

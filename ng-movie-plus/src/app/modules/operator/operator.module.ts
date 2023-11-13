@@ -21,6 +21,8 @@ import { ChargeInfoDetailComponent } from './view/charge-info-detail/charge-info
 import { SiteInfoCreateComponent } from './view/site-info-create/site-info-create.component';
 import { TransferAlphabet } from 'src/app/common/custom-pipe/TransferAlphabet';
 import { SeatMasterComponent } from './view/room-detail/seat-master/seat-master.component';
+import { ShowtimeOfRoomComponent } from './view/room-detail/showtime-of-room/showtime-of-room.component';
+import { SeatInRoomComponent } from './view/room-detail/seat-in-room/seat-in-room.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { SeatMasterComponent } from './view/room-detail/seat-master/seat-master.
     SiteInfoCreateComponent,
     TransferAlphabet,
     SeatMasterComponent,
+    ShowtimeOfRoomComponent,
+    SeatInRoomComponent,
   ],
   imports: [
     CommonModule,
@@ -49,6 +53,6 @@ import { SeatMasterComponent } from './view/room-detail/seat-master/seat-master.
     NgZorroAntdModule,
     FormsModule,
     ReactiveFormsModule,
-  ],
+  ],providers: [ShowtimeOfRoomComponent]
 })
 export class OperatorModule {}

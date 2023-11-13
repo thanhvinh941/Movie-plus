@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.common.exception.ClientException;
 import com.movieplus.config.common.repository.CustomRepository;
 import com.movieplus.config.common.util.GeneratorUtil;
-import com.movieplus.config.common.util.GeneratorUtil.ExternalAPI.ExternalApiResponse;
 import com.movieplus.domain.common.MessageManager;
 
 import lombok.Getter;
@@ -68,7 +68,7 @@ public class DynamicEntityController {
 
 	@RequestMapping(path = "/getDynamicEntity", method = RequestMethod.POST)
 	@ResponseBody
-	public String getDynamicEntity(@RequestBody String requestStr) {
+	public String getDynamicEntity(@RequestBody String requestStr) throws JsonProcessingException {
 		final String[] logTitle = { "getDynamicEntity" };
 		GetDynamicEntityRequest request = new GetDynamicEntityRequest();
 		// DecodeRequest
@@ -96,8 +96,7 @@ public class DynamicEntityController {
 	}
 
 	@RequestMapping(path = "/entryDynamicEntity", method = RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<ExternalApiResponse<String>> entryDynamicEntity(@RequestBody String requestStr) {
+	public ResponseEntity<?> entryDynamicEntity(@RequestBody String requestStr) throws JsonProcessingException {
 		final String[] logTitle = { "entryDynamicEntity" };
 		EntryDynamicEntityRequest request = new EntryDynamicEntityRequest();
 		// DecodeRequest
@@ -124,8 +123,7 @@ public class DynamicEntityController {
 	}
 
 	@RequestMapping(path = "/changeDynamicEntity", method = RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<ExternalApiResponse<String>> changeDynamicEntity(@RequestBody String requestStr) {
+	public ResponseEntity<?> changeDynamicEntity(@RequestBody String requestStr) throws JsonProcessingException {
 		final String[] logTitle = { "changeDynamicEntity" };
 		ChangeDynamicEntityRequest request = new ChangeDynamicEntityRequest();
 		// DecodeRequest
@@ -151,8 +149,7 @@ public class DynamicEntityController {
 	}
 
 	@RequestMapping(path = "/deleteDynamicEntity", method = RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<ExternalApiResponse<Boolean>> deleteDynamicEntity(@RequestBody String requestStr) {
+	public ResponseEntity<?> deleteDynamicEntity(@RequestBody String requestStr) throws JsonProcessingException {
 		final String[] logTitle = { "deleteDynamicEntity" };
 		UDeleteDynamicEntityRequest request = new UDeleteDynamicEntityRequest();
 		// DecodeRequest

@@ -14,9 +14,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movieplus.config.common.constant.EndPointConstant;
 import com.movieplus.config.common.exception.ClientException;
 import com.movieplus.config.common.util.GeneratorUtil;
 import com.movieplus.domain.common.MessageManager;
+import com.movieplus.domain.common.dto.MovieDetailInfoDto;
 import com.movieplus.domain.service.GetRoomInfoDetailService;
 
 import jakarta.persistence.Column;
@@ -30,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping(EndPointConstant.EXTERNAL_PATH_URI + EndPointConstant.PREFIX_ADMIN )
 public class GetRoomInfoDetailController {
 	private final String[] logTitle = { "GetRoomInfoDetail" };
 	private final MessageManager messageManager;
@@ -53,48 +55,6 @@ public class GetRoomInfoDetailController {
 		private LocalDateTime updateTime;
 		private String updateUser;
 		private Integer delFlg;
-		private List<ShowTime> showTimes;
-		private List<RoomSeat> roomSeats;
-		
-		@Getter
-		@Setter
-		public static class ShowTime {
-			private String id;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime startTime;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime endTime;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime registTime;
-			@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-			private LocalDateTime updateTime;
-			private String updateUser;
-			private Byte delFlg;
-		}
-		
-		@Getter
-		@Setter
-		public static class RoomSeat {
-			private String id;
-			private SeatMaster seatMaster;
-		}
-		
-		@Getter
-		@Setter
-		public static class SeatMaster {
-			private String id;
-			private Integer seatRow;
-			private Integer seatColume;
-			private Integer seatSize;
-			private SeatGradle seatGradle;
-		}
-		
-		@Getter
-		@Setter
-		public static class SeatGradle {
-			private String id;
-			private String seatGradeName;
-		}
 	}
 	
 	@PostMapping("/getRoomInfoDetail")

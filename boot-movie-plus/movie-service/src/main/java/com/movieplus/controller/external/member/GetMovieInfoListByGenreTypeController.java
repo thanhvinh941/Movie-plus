@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieplus.config.common.util.GeneratorUtil;
@@ -35,7 +36,7 @@ public class GetMovieInfoListByGenreTypeController {
 	}
 
 	@PostMapping("/getMovieInfoList")
-	public String getAllListMovies(@RequestBody String requestStr) {
+	public String getAllListMovies(@RequestBody String requestStr) throws JsonProcessingException {
 		GetMovieInfoListByGenreTypeRequest request = new GetMovieInfoListByGenreTypeRequest();
 		// DecodeRequest
 		try {

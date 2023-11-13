@@ -36,27 +36,25 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-              <ng-container *ngIf="genreType$ | async; let genreTypeItems">
-                <nz-form-label [nzSpan]="6" nzFor="genreTypes"
-                  >Genre type</nz-form-label
+              <nz-form-label [nzSpan]="6" nzFor="genreTypes"
+                >Genre type</nz-form-label
+              >
+              <nz-form-control [nzSpan]="14">
+                <nz-select
+                  id="genreTypes"
+                  [nzMode]="'multiple'"
+                  [nzPlaceHolder]="'Choose Genre Type'"
+                  formControlName="genreTypeIds"
+                  [nzNotFoundContent]="'Genre Type not found'"
                 >
-                <nz-form-control [nzSpan]="14">
-                  <nz-select
-                    id="genreTypes"
-                    [nzMode]="'multiple'"
-                    [nzPlaceHolder]="'Choose Genre Type'"
-                    formControlName="genreTypeIds"
-                    [nzNotFoundContent]="'Genre Type not found'"
+                  <nz-option
+                    *ngFor="let item of genreType$"
+                    [nzLabel]="item.displayName"
+                    [nzValue]="item.id"
                   >
-                    <nz-option
-                      *ngFor="let item of genreTypeItems"
-                      [nzLabel]="item.displayName"
-                      [nzValue]="item.id"
-                    >
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </ng-container>
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
             </nz-form-item>
             <nz-form-item>
               <nz-form-label [nzSpan]="6" nzFor="durationMin"

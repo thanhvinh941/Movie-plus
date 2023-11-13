@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.movieplus.config.common.repository.CustomRepository;
 import com.movieplus.config.common.util.GeneratorUtil;
 import com.movieplus.domain.common.dto.DirectorDto;
 import com.movieplus.domain.common.dto.GenreTypeDto;
@@ -27,11 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 public class GetMovieDetailInfoService {
 
 	private final String CLASS_NAME = "GetMovieDetailInfoService";
-	private final GenreTypeService genreTypeService;
-	private final MovieInfoService movieInfoService;
-	private final MovieGenreService movieGenreService;
-	private final MovieTrailerService movieTrailerService;
-
+	private final CustomRepository customRepository;
+	
 	public MovieDetailInfoDto getMovieDetailInfo(String movieId) {
 		MovieDetailInfoDto movieDetailInfoDto = new MovieDetailInfoDto();
 		List<MovieInfo> movieInfos = getMovieInfo(movieId);
@@ -73,107 +71,33 @@ public class GetMovieDetailInfoService {
 		return movieDetailInfoDto;
 	}
 
-//	private List<StarInfoDTO> getStarInfo(List<String> starIds) {
-//		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-//
-//		String conditionStr = null;
-//		if (!starIds.isEmpty()) {
-//			conditionStr = String.format(" id in (%s)", GeneratorCommonUtil.joiningListString(starIds));
-//		}
-//		apiRequest.setConditionStr(conditionStr);
-//		try {
-//			return starInfoService.getStarInfo(apiRequest);
-//		} catch (Exception e) {
-//			log.error("{} ERROR call getStarInfo", CLASS_NAME, e);
-//		}
-//		return List.of();
-//	}
-
-//	private List<DirectorInfoDTO> getDirectorInfo(List<String> directorIds) {
-//		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-//
-//		String conditionStr = null;
-//		if (!directorIds.isEmpty()) {
-//			conditionStr = String.format(" id in (%s)", GeneratorCommonUtil.joiningListString(directorIds));
-//		}
-//		apiRequest.setConditionStr(conditionStr);
-//		try {
-//			return directorInfoService.getDirectorInfo(apiRequest);
-//		} catch (Exception e) {
-//			log.error("{} ERROR call getGenreType", CLASS_NAME, e);
-//		}
-//		return List.of();
-//	}
-
 	private List<GenreType> getGenreType(List<String> genresTypeIds) {
-		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-
 		String conditionStr = null;
 		if (!genresTypeIds.isEmpty()) {
 			conditionStr = String.format(" id in (%s)", GeneratorUtil.joiningListString(genresTypeIds));
 		}
-		apiRequest.setConditionStr(conditionStr);
-		apiRequest.setOrderBys(Map.of("order_score" ,"ASC"));
 		try {
-			return genreTypeService.getGenreType(apiRequest);
+			return customRepository.selectByCondition(GenreType.class, conditionStr, Map.of("order_score" ,"ASC"), null, null, false);
 		} catch (Exception e) {
-			log.error("{} ERROR call getGenreType", CLASS_NAME, e);
+			log.error("{} ERROR call getMovieGenre", CLASS_NAME, e);
 		}
 		return List.of();
 	}
 
-//	private List<MovieStar> getMovieStar(String movieInfoId) {
-//		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-//
-//		String conditionStr = null;
-//		conditionStr = String.format(" movie_id = '%s'", movieInfoId);
-//		apiRequest.setConditionStr(conditionStr);
-//
-//		try {
-//			return movieStarService.getMovieStar(apiRequest);
-//		} catch (Exception e) {
-//			log.error("{} ERROR call getMovieStar", CLASS_NAME, e);
-//		}
-//		return List.of();
-//	}
-//
-//	private List<MovieDirector> getMovieDirector(String movieInfoId) {
-//		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-//
-//		String conditionStr = null;
-//		conditionStr = String.format(" movie_id = '%s'", movieInfoId);
-//		apiRequest.setConditionStr(conditionStr);
-//
-//		try {
-//			return movieDirectorService.getMovieDirector(apiRequest);
-//		} catch (Exception e) {
-//			log.error("{} ERROR call getMovieDirector", CLASS_NAME, e);
-//		}
-//		return List.of();
-//	}
-
 	private List<MovieTrailer> getMovieTrailer(String movieInfoId) {
-		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-
-		String conditionStr = null;
-		conditionStr = String.format(" movie_id = '%s'", movieInfoId);
-		apiRequest.setConditionStr(conditionStr);
-
+		String conditionStr = String.format(" movie_id = '%s'", movieInfoId);
 		try {
-			return movieTrailerService.getMovieTrailer(apiRequest);
+			return customRepository.selectByCondition(MovieTrailer.class, conditionStr);
 		} catch (Exception e) {
-			log.error("{} ERROR call getMovieTrailer", CLASS_NAME, e);
+			log.error("{} ERROR call getMovieGenre", CLASS_NAME, e);
 		}
 		return List.of();
 	}
 
 	private List<MovieGenre> getMovieGenre(String movieInfoId) {
-		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-
 		String conditionStr = String.format(" movie_id = '%s'", movieInfoId);
-		apiRequest.setConditionStr(conditionStr);
 		try {
-			return movieGenreService.getMovieGenre(apiRequest);
+			return customRepository.selectByCondition(MovieGenre.class, conditionStr);
 		} catch (Exception e) {
 			log.error("{} ERROR call getMovieGenre", CLASS_NAME, e);
 		}
@@ -181,14 +105,9 @@ public class GetMovieDetailInfoService {
 	}
 
 	private List<MovieInfo> getMovieInfo(String movieId) {
-		GetInternalApiRequest apiRequest = new GetInternalApiRequest();
-
-		String conditionStr = null;
-		conditionStr = String.format(" id = '%s'", movieId);
-		apiRequest.setConditionStr(conditionStr);
-
+		String conditionStr = String.format(" id = '%s'", movieId);
 		try {
-			return movieInfoService.getMovieInfo(apiRequest);
+			return customRepository.selectByCondition(MovieInfo.class, conditionStr);
 		} catch (Exception e) {
 			log.error("{} ERROR call getMovieInfo", CLASS_NAME, e);
 		}

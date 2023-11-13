@@ -87,13 +87,12 @@ public class GeneratorUtil {
 		@Getter
 		@Setter
 		public static class ApiResponse {
-
 			private Object data;
 			private int status;
 			private List<String> errors;
 		}
 
-		public static String getResponseBodySuccess(Object data) {
+		public static String createSuccessResponse(Object data) {
 			ApiResponse response = new ApiResponse();
 			response.setData(data);
 			response.setStatus(1);
@@ -102,7 +101,7 @@ public class GeneratorUtil {
 			return ObjectMapperUtil.writeValueAsString(response);
 		}
 
-		public static String getResponseBodyError(List<String> errors) {
+		public static String createErrorClientResponse(List<String> errors) {
 			ApiResponse response = new ApiResponse();
 			response.setData(null);
 			response.setStatus(0);

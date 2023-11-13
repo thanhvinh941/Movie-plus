@@ -19,15 +19,6 @@
     </nz-descriptions-item>
   </nz-descriptions>
   <nz-descriptions nzBordered nzLayout="vertical">
-    <nz-descriptions-item nzTitle="Show Time">
-      <div nz-row [nzGutter]="[16, 24]">
-        <ng-container *ngFor="let item of roomInfo$['showTimes']">
-          <div nz-col class="gutter-row" [nzSpan]="12">
-            {{item | json}}
-          </div>
-        </ng-container>
-      </div>
-    </nz-descriptions-item>
     <nz-descriptions-item nzTitle="Room Seats">
       <div
         nz-row
@@ -61,9 +52,11 @@
         </ng-container>
       </div>
     </nz-descriptions-item>
-
   </nz-descriptions>
 </nz-card>
+<app-showtime-of-room #showtimeOfRoomComp></app-showtime-of-room>
+<app-seat-in-room #seatInRoomComp></app-seat-in-room>
+
 <ng-template #extraTpl>
   <nz-space>
     <button
@@ -97,16 +90,33 @@
     <nz-spin [nzSpinning]="isSpinningShowTime">
       <form [formGroup]="showTimeForm">
         <nz-form-item>
-          <nz-form-label [nzSpan]="6" nzFor="movieId"
-            >Movie Name</nz-form-label
-          >
+          <nz-form-label [nzSpan]="6" nzFor="movieId">Movie Name</nz-form-label>
           <nz-form-control [nzSpan]="14">
-            <input
+            <nz-select
+              formControlName="movieId"
+              nzShowSearch
+              nzAllowClear
+              [nzServerSearch]="true"
+              (nzOnSearch)="handleSearch($event)"
+            >
+            <ng-container *ngIf="!optionLoading; else loadOption">
+              <ng-container *ngFor="let option of optionList">
+                <nz-option
+                  nzLabel="{{ option.name }}"
+                  nzValue="{{ option.id }}"
+                ></nz-option>
+              </ng-container>
+            </ng-container>
+            </nz-select>
+            <ng-template #loadOption>
+              <nz-skeleton></nz-skeleton> 
+            </ng-template>
+            <!-- <input
               nz-input
               formControlName="movieId"
               type="text"
               id="movieId"
-            />
+            /> -->
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -118,7 +128,7 @@
               [nzFormat]="dateFormat"
               formControlName="startTime"
               id="startTime"
-              nzShowTime = "true"
+              nzShowTime="true"
               [nzDateRender]="tplRender"
             ></nz-date-picker>
           </nz-form-control>
@@ -132,7 +142,7 @@
               [nzFormat]="dateFormat"
               formControlName="endTime"
               id="endTime"
-              nzShowTime = "true"
+              nzShowTime="true"
               [nzDateRender]="tplRender"
             ></nz-date-picker>
           </nz-form-control>

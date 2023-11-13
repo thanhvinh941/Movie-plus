@@ -1,9 +1,11 @@
 package com.movieplus.config.common.repository;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +18,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.movieplus.config.common.exception.ClientException;
 import com.movieplus.config.common.util.XYZUtil;
 import com.movieplus.domain.common.MessageManager;
@@ -35,7 +41,8 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomRepositoryImpl implements CustomRepository {
 
 	private final String[] logTitle = { "CustomRepository" };
-
+	private static String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	
 	@PersistenceContext
 	private EntityManager entityManager;
 	private final MessageManager messageManager;
@@ -55,13 +62,6 @@ public class CustomRepositoryImpl implements CustomRepository {
 		} else {
 			return value.toString();
 		}
-	}
-
-	@Override
-	public List<?> selectByCondition(Class<?> targetTable, String conditionStr, Map<String, String> orderBys,
-			Integer limit, Integer offset, boolean isForUpdate) throws Exception {
-		return selectByCondition(targetTable.getSimpleName(), conditionStr, XYZUtil.getFieldNames(targetTable),
-				orderBys, limit, offset, isForUpdate);
 	}
 
 	@SuppressWarnings("serial")
@@ -98,19 +98,6 @@ public class CustomRepositoryImpl implements CustomRepository {
 
 		try {
 			List<?> resultList = selectSql.getResultList();
-			
-			Class<?> entityClass = null;
-			try {
-				entityClass = Class.forName(tableName);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			
-			if(listFields.get(0).equals("*")) {
-				listFields.remove(0);
-				listFields.addAll(XYZUtil.getFieldNames(entityClass));
-			}
-			
 			return resultList.stream().map(r -> {
 				if (listFields.size() > 1) {
 					Map<String, Object> map = new HashMap<>();
@@ -136,20 +123,54 @@ public class CustomRepositoryImpl implements CustomRepository {
 			throw new Exception(messageManager.getMessage("SQL_Unknow_Exception", null));
 		}
 	}
+	
+	@SuppressWarnings("serial")
+	public <T> List<T> selectByCondition(Class<T> targetTable, String conditionStr,
+			Map<String, String> orderBys, Integer limit, Integer offset, boolean isForUpdate) throws Exception {
+		String tableName = targetTable.getSimpleName();
+		String sqlQuery = String.format("SELECT * FROM %s", XYZUtil.convertSnake(tableName));
 
-	@Override
-	public List<?> selectByCondition(Class<?> targetTable, String conditionStr) throws Exception {
-		return selectByCondition(targetTable, conditionStr, null, null, null, false);
+		if (!StringUtils.isBlank(conditionStr)) {
+			sqlQuery += String.format(" WHERE %s", conditionStr);
+		}
+
+		if (!CollectionUtils.isEmpty(orderBys)) {
+			String orderbyStr = "";
+			for (Map.Entry<String, String> entry : orderBys.entrySet()) {
+				orderbyStr += XYZUtil.convertSnake(entry.getKey()) + " " + entry.getValue() + ", ";
+			}
+			orderbyStr += StringUtils.removeEnd(orderbyStr, ", ");
+			sqlQuery += String.format(" ORDER BY %s", orderbyStr);
+		}
+
+		if (limit != null && limit > 0) {
+			sqlQuery += String.format(" LIMIT %s", limit);
+			if (offset != null && offset > 0) {
+				sqlQuery += String.format(" OFFSET %s", offset);
+			}
+		}
+
+		if (isForUpdate) {
+			sqlQuery += " FOR UPDATE";
+		}
+
+		Query selectSql = entityManager.createNativeQuery(sqlQuery, targetTable);
+
+		try {
+			return selectSql.getResultList();
+		} catch (Exception e) {
+			log.error("{} ERROR execute: {}", logTitle, e);
+			if (e instanceof SQLGrammarException) {
+				Object[] datas = { tableName };
+				throw new ClientException(messageManager.getMessage("SQL_Grammar_Exception", datas));
+			}
+			throw new Exception(messageManager.getMessage("SQL_Unknow_Exception", null));
+		}
 	}
 
 	@Override
 	public List<?> selectByCondition(String tableName, String conditionStr, List<String> listFields) throws Exception {
 		return selectByCondition(tableName, conditionStr, listFields, null, null, null, false);
-	}
-
-	@Override
-	public List<?> selectByCondition(Class<?> targetTable) throws Exception {
-		return selectByCondition(targetTable.getSimpleName(), null, null, null, null, null, false);
 	}
 
 	@Override
@@ -170,7 +191,6 @@ public class CustomRepositoryImpl implements CustomRepository {
 
 	@Override
 	@Modifying
-	@Transactional
 	public String insertRecords(String tableName, Map<String, Object> records) throws Exception {
 		Date nowStamp = new Date();
 		String columes = "id, ";
@@ -178,6 +198,9 @@ public class CustomRepositoryImpl implements CustomRepository {
 		String uuidStr = UUID.randomUUID().toString();
 		String id = nowStamp.getTime() + uuidStr.substring(12);
 		for (Map.Entry<String, Object> entry : records.entrySet()) {
+			if(Objects.isNull(entry.getValue())) {
+				continue;
+			}
 			columes = StringUtils.join(columes, XYZUtil.convertSnake(entry.getKey()) + ",");
 			values = StringUtils.join(values, "?,");
 		}
@@ -191,6 +214,9 @@ public class CustomRepositoryImpl implements CustomRepository {
 		int index = 1;
 		insertSql.setParameter(index, id);
 		for (Object value : records.values()) {
+			if(Objects.isNull(value)) {
+				continue;
+			}
 			index += 1;
 			insertSql.setParameter(index, value);
 		}
@@ -211,7 +237,6 @@ public class CustomRepositoryImpl implements CustomRepository {
 
 	@Override
 	@Modifying
-	@Transactional
 	public String updateRecords(String tableName, Map<String, Object> records, String id) throws Exception {
 		String setValue = "";
 		if(Objects.isNull(id)) {
@@ -256,6 +281,47 @@ public class CustomRepositoryImpl implements CustomRepository {
 		}
 		
 		return true;
+	}
+
+	@Override
+	@Modifying
+	public String insertRecords(Object entity) throws Exception {
+		String tableName = entity.getClass().getSimpleName();
+		Map<String, Object> records = initObjectMapper().convertValue(entity, Map.class);
+		return insertRecords(tableName, records);
+	}
+
+	@Override
+	public <T> List<T> selectByCondition(Class<T> targetTable, String conditionStr) throws Exception {
+		return selectByCondition(targetTable, conditionStr, null, null, null, false);
+	}
+
+	@Override
+	public <T> List<T> selectByCondition(Class<T> targetTable) throws Exception {
+		return selectByCondition(targetTable, null);
+	}
+	
+	private static ObjectMapper initObjectMapper() {
+		JavaTimeModule javaTimeModule = new JavaTimeModule();
+		javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeCustomSerializer());
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(javaTimeModule);
+		return objectMapper;
+	}
+	
+	public static class LocalDateTimeCustomSerializer extends JsonSerializer<LocalDateTime> {
+
+		@Override
+		public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+			try {
+				DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+				gen.writeString(value.format(dateFormatter));
+			} catch (DateTimeParseException e) {
+				System.err.println(e);
+				gen.writeString("");
+			}
+		}
+		
 	}
 
 }

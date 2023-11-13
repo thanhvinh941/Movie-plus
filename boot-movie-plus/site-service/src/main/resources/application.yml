@@ -46,7 +46,7 @@ management:
     enabled-by-default: true
 
 micro-service:
-  movie-service:
+  movie-service: http://localhost:8083
   user-service:
   site-service:
   booking-service:

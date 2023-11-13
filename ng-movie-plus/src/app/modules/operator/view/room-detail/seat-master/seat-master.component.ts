@@ -6,10 +6,7 @@ import { FormGroup } from '@angular/forms';
   templateUrl: './seat-master.component.html',
   styleUrls: ['./seat-master.component.css'],
 })
-export class SeatMasterComponent implements OnInit{
-  ngOnInit(): void {
-    console.log(this.form.value)
-  }
+export class SeatMasterComponent{
   @Input() form!: FormGroup;
   @Input() seatRow!: number;
   @Input() seatColunm!: number;

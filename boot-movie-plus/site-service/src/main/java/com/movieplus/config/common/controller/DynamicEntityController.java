@@ -78,20 +78,20 @@ public class DynamicEntityController {
 		} catch (Exception e) {
 			log.error("{} DecodeRequest fail: ", logTitle, e);
 			String errorMessage = messageManager.getMessage("DECODE_FAIL", logTitle);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(errorMessage));
+			return GeneratorUtil.InternalAPI.createErrorClientResponse(List.of(errorMessage));
 		}
 
 		try {
 			List<?> resultList = customRepository.selectByCondition(request.getTableName(), request.getConditionStr(),
 					request.getListFields(), request.getOrderBys(), request.getLimit(), request.offset,
 					request.isForUpdate());
-			return GeneratorUtil.InternalAPI.getResponseBodySuccess(resultList);
+			return GeneratorUtil.InternalAPI.createSuccessResponse(resultList);
 		} catch (ClientException e) {
 			log.error("{} ClientException fail: ", logTitle, e);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.createErrorClientResponse(List.of(e.getMessage()));
 		} catch (Exception e) {
 			log.error("{} Exception fail: ", logTitle, e);
-			return GeneratorUtil.InternalAPI.getResponseBodyError(List.of(e.getMessage()));
+			return GeneratorUtil.InternalAPI.createErrorClientResponse(List.of(e.getMessage()));
 		}
 	}
 

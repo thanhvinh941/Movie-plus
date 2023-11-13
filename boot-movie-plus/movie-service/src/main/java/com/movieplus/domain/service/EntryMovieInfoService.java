@@ -1,7 +1,6 @@
 package com.movieplus.domain.service;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.movieplus.config.common.repository.CustomRepository;
 import com.movieplus.domain.common.upload.UploadUtil;
 import com.movieplus.domain.common.upload.UploadUtil.UploadFileRequest;
 import com.movieplus.domain.entity.MovieGenre;
@@ -22,11 +22,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EntryMovieInfoService {
 	
-	private final MovieInfoService movieInfoService;
-	private final MovieTrailerService movieTrailerService;
-	private final MovieGenreService movieGenreService;
 	private final UploadUtil uploadUtil;
-	
+	private final CustomRepository customRepository;
 	
 	@Transactional
 	public String execute(EntryMovieInfoRequest request) throws Exception {
@@ -37,7 +34,7 @@ public class EntryMovieInfoService {
 		movieInfo.setBanners(getBanners(request.getBanners()));
 		movieInfo.setDelFlg(new Byte("0"));
 		movieInfo.setUpdateUser("dummy user");
-		String movieId = movieInfoService.save(List.of(movieInfo)).get(0);
+		String movieId = customRepository.insertRecords(movieInfo);
 		List<MovieTrailer> movieTrailers = request.getTrailers().stream()
 				.map((trailer) -> {
 					MovieTrailer movieTrailer = new MovieTrailer();
@@ -47,7 +44,9 @@ public class EntryMovieInfoService {
 				})
 				.toList();
 		try {
-			movieTrailerService.save(movieTrailers);
+			for(MovieTrailer mt: movieTrailers) {
+				customRepository.insertRecords(mt);
+			}
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
@@ -61,7 +60,9 @@ public class EntryMovieInfoService {
 				})
 				.toList();
 		try {
-			movieGenreService.save(movieGenres);
+			for(MovieGenre mg: movieGenres) {
+				customRepository.insertRecords(mg);
+			}
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
